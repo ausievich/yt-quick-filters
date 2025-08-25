@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "YouTrack Quick Filters",
+  "version": "2.0.0",
+  "description": "Add quick filter buttons to YouTrack boards. Create filters via a modal.",
+  "permissions": ["storage"],
+  "host_permissions": ["https://portal.smartcat.ai/youtrack/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://portal.smartcat.ai/youtrack/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
