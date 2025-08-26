@@ -87,24 +87,6 @@
         window.removeEventListener('scroll', closeMenu, true);
     }
 
-    function closeMenu() {
-        var m = document.getElementById('ytqf-menu');
-        if (m) m.remove();
-        document.removeEventListener('click', closeMenu, true);
-        document.removeEventListener('contextmenu', closeMenu, true);
-        window.removeEventListener('blur', closeMenu);
-        window.removeEventListener('scroll', closeMenu, true);
-    }
-
-    function closeMenu() {
-        var m = document.getElementById('ytqf-menu');
-        if (m) m.remove();
-        document.removeEventListener('click', closeMenu, true);
-        document.removeEventListener('contextmenu', closeMenu, true);
-        window.removeEventListener('blur', closeMenu);
-        window.removeEventListener('scroll', closeMenu, true);
-    }
-
     function showContextMenu(x, y, item, idx) {
         closeMenu();
 
