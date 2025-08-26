@@ -184,10 +184,12 @@
     function render(bar, data, _editModeNotUsed) {
         bar.innerHTML = '';
 
-        var title = document.createElement('span');
-        title.textContent = 'Quick Filters:';
-        title.style.cssText = 'margin-right:6px;color:#536079;font:600 12px system-ui,-apple-system,Segoe UI,Roboto,sans-serif;';
-        bar.appendChild(title);
+        // Add filter
+        var add = document.createElement('button');
+        add.className = 'btn ghost';
+        add.textContent = 'Add filter...';
+        add.onclick = function () { openModal(); };
+        bar.appendChild(add);
 
         var q = currentQuery().trim();
 
@@ -221,14 +223,6 @@
         clr.onclick = function () { setQuery(''); };
         bar.appendChild(clr);
 
-        // + Add filter
-        var add = document.createElement('button');
-        add.className = 'btn ghost';
-        add.textContent = '+ Add filter';
-        add.onclick = function () { openModal(); };
-        bar.appendChild(add);
-
-        // (кнопку Edit полностью убрали)
     }
 
 
