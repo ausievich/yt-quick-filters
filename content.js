@@ -166,13 +166,6 @@
     function render(bar, data, _editModeNotUsed) {
         bar.innerHTML = '';
 
-        // Add filter
-        var add = document.createElement('button');
-        add.className = 'btn ghost';
-        add.textContent = 'Add filter...';
-        add.onclick = function () { openModal(); };
-        bar.appendChild(add);
-
         var q = currentQuery().trim();
 
         data.forEach(function (it, idx) {
@@ -204,6 +197,13 @@
         clr.textContent = 'Clear';
         clr.onclick = function () { setQuery(''); };
         bar.appendChild(clr);
+
+        // Add filter
+        var add = document.createElement('button');
+        add.className = 'btn ghost';
+        add.textContent = 'Add filter...';
+        add.onclick = function () { openModal(); };
+        bar.appendChild(add);
 
     }
 
