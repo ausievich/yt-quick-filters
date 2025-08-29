@@ -11,6 +11,7 @@
         "*://*youtrack*/*",   
         "*://*/youtrack/*"
       ],
+      "css": ["styles.css"],
       "js": ["content.js"],
       "run_at": "document_idle"
     }
