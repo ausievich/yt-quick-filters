@@ -96,7 +96,11 @@
     var css = '' +
         /* toolbar & buttons */
         '#ytqf-bar{display:inline-flex;align-items:center;gap:4px;margin-right:12px}' +
-        '#ytqf-bar .btn{position:relative;display:inline-flex;align-items:center;justify-content:center;height:24px;padding:0 12px;margin-right:4px;border-radius:4px;border:1px solid #d0d6e0;cursor:pointer;background:#fff;font:500 12px system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#1F2326;line-height:22px;overflow:hidden}' +
+        // Более высокиий вариант
+        '#ytqf-bar .btn{position:relative;display:inline-flex;align-items:center;justify-content:center;padding:4px 12px;margin-right:4px;border-radius:4px;border:1px solid #d0d6e0;cursor:pointer;background:#fff;font:500 12px system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#1F2326;line-height:20px;overflow:hidden}' +
+        // Более системный вариант
+        //'#ytqf-bar .btn{position:relative;display:inline-flex;align-items:center;justify-content:center;height:24px;padding:0 12px;margin-right:4px;border-radius:4px;border:1px solid #d0d6e0;cursor:pointer;background:#fff;font:500 12px system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#1F2326;line-height:22px;overflow:hidden}' +
+
 
         /* hover тонкая синяя обводка */
         '#ytqf-bar .btn:hover{border-color:rgb(128,198,255)}' +
