@@ -1,10 +1,7 @@
 (() => {
     const KEY = 'ytQuickFilters'; // [{label, query}]
     const dfl = [
-        { label: 'Костя',  query: 'Assignee: k.kochetov' },
-        { label: 'Толя',   query: 'Assignee: a.usievich' },
-        { label: 'Руслан', query: 'Assignee: r.sibgatullin' },
-        { label: 'Алла',   query: 'Assignee: a.alekseeva' }
+        { label: 'My Tasks',  query: 'Assignee: me' }
     ];
 
     function get(key) {
@@ -261,9 +258,9 @@
             bar.appendChild(b);
         });
 
-        // Clear
+        // Clear (не имеет состояния active)
         var clr = document.createElement('button');
-        clr.className = 'btn' + (q === '' ? ' active' : '');
+        clr.className = 'btn ghost'; // всегда как "второстепенная"
         clr.textContent = 'Clear';
         clr.onclick = function () { setQuery(''); };
         bar.appendChild(clr);
@@ -293,8 +290,8 @@
             '<div class="card">' +
             '<div class="hdr">' + title + '</div>' +
             '<div class="body">' +
-            '<label>Name</label><input id="ytqf-name" placeholder="Например: Костя" value="' + nameVal + '">' +
-            '<label>Query</label><input id="ytqf-query" placeholder="Assignee: k.kochetov" value="' + queryVal + '">' +
+            '<label>Name</label><input id="ytqf-name" placeholder="For example: My tasks" value="' + nameVal + '">' +
+            '<label>Query</label><input id="ytqf-query" placeholder="Assignee: me" value="' + queryVal + '">' +
             '</div>' +
             '<div class="f">' +
             '<button id="ytqf-cancel">Cancel</button>' +
