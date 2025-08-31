@@ -180,9 +180,9 @@
     color: rgb(31, 35, 38);
     background: rgb(255, 255, 255);
     box-sizing: border-box;
-    margin-bottom: calc(8px * 2);
-    height: calc(8px * 3);
-    line-height: calc(8px * 3);
+    margin-bottom: 16px;
+    height: 24px;
+    line-height: 24px;
 }
 
 #ytqf-modal input:focus {
@@ -198,15 +198,15 @@
     padding: 16px 32px 32px;
     background: rgb(255, 255, 255);
     display: flex;
-    gap: calc(8px);
+    gap: 8px;
     justify-content: flex-end;
 }
 
 #ytqf-modal .f button {
     display: inline-block;
     box-sizing: border-box;
-    height: calc(8px * 3);
-    padding: 0 calc(8px * 2);
+    height: 24px;
+    padding: 0 16px;
     cursor: pointer;
     text-decoration: none;
     color: rgb(31, 35, 38);
@@ -214,7 +214,7 @@
     outline: 0;
     font-family: system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, sans-serif;
     font-size: 12px;
-    line-height: calc(8px * 3);
+    line-height: 24px;
     transition: none;
     background-color: rgb(255, 255, 255);
     box-shadow: inset 0 0 0 1px rgb(197, 209, 219);

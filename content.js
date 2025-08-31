@@ -5,13 +5,13 @@
     ];
 
     function get(key) {
-        return new Promise(function (resolve) {
-            chrome.storage.sync.get(key, function (v) { resolve(v[key]); });
+        return new Promise((resolve) => {
+            chrome.storage.sync.get(key, (v) => resolve(v[key]));
         });
     }
 
     function set(obj) {
-        return new Promise(function (resolve) {
+        return new Promise((resolve) => {
             chrome.storage.sync.set(obj, resolve);
         });
     }
@@ -182,7 +182,7 @@
             '<div class="card">' +
             '<div class="hdr">' + title + '</div>' +
             '<div class="body">' +
-            '<label>Name</label><input id="ytqf-name" placeholder="For example: My tasks" value="' + nameVal + '">' +
+            '<label>Name</label><input id="ytqf-name" placeholder="My tasks" value="' + nameVal + '">' +
             '<label>Query</label><input id="ytqf-query" placeholder="Assignee: me" value="' + queryVal + '">' +
             '</div>' +
             '<div class="f">' +

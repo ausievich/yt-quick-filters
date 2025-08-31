@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "YouTrack Quick Filters",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "Add quick filter buttons to YouTrack boards. Create filters via a modal.",
   "permissions": ["storage"],
   "content_scripts": [
