@@ -198,9 +198,30 @@
         modal.querySelector('#ytqf-cancel').onclick = close;
 
         // Save / Create
-        modal.querySelector('#ytqf-save').onclick = async function () {
-            var name = modal.querySelector('#ytqf-name').value.trim();
-            var query = modal.querySelector('#ytqf-query').value.trim();
+        var saveBtn = modal.querySelector('#ytqf-save');
+        var nameInput = modal.querySelector('#ytqf-name');
+        var queryInput = modal.querySelector('#ytqf-query');
+
+        function validateForm() {
+            var name = nameInput.value.trim();
+            var query = queryInput.value.trim();
+            var isValid = name && query;
+            
+            saveBtn.disabled = !isValid;
+            nameInput.classList.toggle('error', !name);
+            queryInput.classList.toggle('error', !query);
+        }
+
+        // Initial validation
+        validateForm();
+
+        // Add input listeners for real-time validation
+        nameInput.addEventListener('input', validateForm);
+        queryInput.addEventListener('input', validateForm);
+
+        saveBtn.onclick = async function () {
+            var name = nameInput.value.trim();
+            var query = queryInput.value.trim();
             if (!name || !query) return;
 
             var arr = (await get(KEY)) || dfl;

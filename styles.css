@@ -13,28 +13,10 @@
     max-width: 60%; /* Ограничиваем ширину, оставляя место для других элементов */
     min-width: 200px; /* Минимальная ширина для удобства */
 }
-/*
-#ytqf-bar .btn {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4px 12px;
-    margin-right: 4px;
-    border-radius: 4px;
-    border: 1px solid #d0d6e0;
-    cursor: pointer;
-    background: #fff;
-    font: 500 12px system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-    color: #1F2326;
-    line-height: 20px;
-    overflow: hidden;
-}
-*/
 
-/* Alternative: More systematic approach
+
+/* Button Styles
    ========================================================================== */
-
 #ytqf-bar .btn {
     position: relative;
     display: inline-flex;
@@ -126,84 +108,144 @@
    ========================================================================== */
 #ytqf-modal-backdrop {
     position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.25);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
     z-index: 99998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #ytqf-modal {
     position: fixed;
-    inset: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(223, 229, 235);
+    border-radius: 4px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 99998;
+    flex-direction: column;
+    cursor: default;
+    min-height: calc(8px * 15);
+    overflow-wrap: break-word;
+    width: calc(8px * 58);
+    box-shadow: 0 4px 24px rgba(0, 28, 54, 0.1), 0 2px 6px rgba(0, 28, 54, 0.04);
+    z-index: 99999;
 }
 
 #ytqf-modal .card {
-    min-width: 420px;
-    max-width: 90vw;
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 #ytqf-modal .hdr {
-    padding: 14px 16px;
-    font: 600 16px system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-    border-bottom: 1px solid #f0f2f5;
+    padding: 32px 32px 16px;
+    background: rgb(255, 255, 255);
+    font: 600 24px system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, sans-serif;
+    color: rgb(31, 35, 38);
+    margin: 0;
 }
 
 #ytqf-modal .body {
-    padding: 14px 16px;
+    padding: 8px 32px 8px;
+    flex: 1;
+    overflow-y: auto;
 }
 
 #ytqf-modal label {
     display: block;
-    font: 600 12px system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-    color: #536079;
-    margin: 10px 0 6px;
+    margin-bottom: calc(8px);
+    font: 500 12px system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, sans-serif;
+    color: rgb(115, 117, 119);
 }
 
 #ytqf-modal input {
     width: 100%;
+    padding: calc(8px) calc(8px * 2);
+    border: 1px solid rgb(197, 209, 219);
+    border-radius: 4px;
+    font: 14px system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, sans-serif;
+    color: rgb(31, 35, 38);
+    background: rgb(255, 255, 255);
     box-sizing: border-box;
-    padding: 8px 10px;
-    border: 1px solid #d0d6e0;
-    border-radius: 8px;
-    font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    margin-bottom: calc(8px * 2);
+    height: calc(8px * 3);
+    line-height: calc(8px * 3);
+}
+
+#ytqf-modal input:focus {
+    outline: none;
+    border-color: rgb(128, 198, 255);
+}
+
+#ytqf-modal input.error {
+    background-color: rgb(255, 255, 255);
 }
 
 #ytqf-modal .f {
+    padding: 16px 32px 32px;
+    background: rgb(255, 255, 255);
     display: flex;
-    gap: 8px;
+    gap: calc(8px);
     justify-content: flex-end;
-    padding: 12px 16px;
-    border-top: 1px solid #f0f2f5;
 }
 
 #ytqf-modal .f button {
-    padding: 8px 12px;
-    border-radius: 10px;
-    border: 1px solid #d0d6e0;
-    background: #fff;
+    display: inline-block;
+    box-sizing: border-box;
+    height: calc(8px * 3);
+    padding: 0 calc(8px * 2);
     cursor: pointer;
+    text-decoration: none;
+    color: rgb(31, 35, 38);
+    border: 0;
+    outline: 0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, sans-serif;
+    font-size: 12px;
+    line-height: calc(8px * 3);
+    transition: none;
+    background-color: rgb(255, 255, 255);
+    box-shadow: inset 0 0 0 1px rgb(197, 209, 219);
+    border-radius: 4px;
+    margin: 0;
+    position: relative;
+    z-index: 1;
 }
 
-#ytqf-modal .f .primary {
-    background: #1a73e8;
-    color: #fff;
-    border-color: #1a73e8;
+#ytqf-modal .f button:hover {
+    background-color: rgb(235, 246, 255);
+    z-index: 3;
+    box-shadow: inset 0 0 0 1px rgb(128, 198, 255);
 }
 
-/* Note: .danger class is not currently used in modal footer
-   but kept for potential future use (e.g., delete button) */
-/*
-#ytqf-modal .f .danger {
-    background: #ffe8e8;
-    border-color: #ffd2d2;
-    color: #b00020;
-    margin-right: auto;
+#ytqf-modal .f button.primary {
+    background-color: rgb(0, 128, 229);
+    box-shadow: none;
+    color: rgb(255, 255, 255);
 }
-*/
+
+#ytqf-modal .f button.primary:hover {
+    background-color: rgb(0, 112, 204);
+    box-shadow: none;
+}
+
+#ytqf-modal .f button:disabled {
+    background-color: rgb(245, 245, 245);
+    box-shadow: inset 0 0 0 1px rgb(232, 232, 232);
+    color: rgb(153, 153, 153);
+    cursor: not-allowed;
+    z-index: 0;
+}
+
+#ytqf-modal .f button.primary:disabled {
+    background-color: rgb(245, 245, 245);
+    box-shadow: inset 0 0 0 1px rgb(232, 232, 232);
+    color: rgb(153, 153, 153);
+}
+
+
