@@ -7,12 +7,13 @@
     "128": "icons/logo_128.png"
   },
   "permissions": ["storage"],
+  "host_permissions": [
+    "https://*/*youtrack*/*"
+  ],
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "include_globs": [
-        "*://*youtrack*/*",   
-        "*://*/youtrack/*"
+      "matches": [
+        "https://*/*youtrack*/*"
       ],
       "css": ["styles.css"],
       "js": ["content.js"],
