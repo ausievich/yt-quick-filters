@@ -4,11 +4,11 @@
 
 Add quick filter buttons to YouTrack Agile Boards — just like Jira has had for years.
 
-👉 [Install from Chrome Web Store](https://chromewebstore.google.com/detail/iaddgmcajdiblafjfhloadmphkbplddo)
+[Install from Chrome Web Store](https://chromewebstore.google.com/detail/iaddgmcajdiblafjfhloadmphkbplddo)
 
 ---
 
-## ✨ Features
+## Features
 
 - Create and manage your own quick filters (e.g. by assignee, state, or any search query).
 - Apply them with a single click — no need to type search strings every time.
@@ -19,7 +19,7 @@ This extension brings a long-requested feature (see JetBrains request [JT-38623]
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 <img src="screenshots/onboarding1.png" width="600">
 <img src="screenshots/onboarding2.png" width="600">
@@ -27,7 +27,7 @@ This extension brings a long-requested feature (see JetBrains request [JT-38623]
 
 ---
 
-## 🚀 Installation
+## Installation
 
 1. Get the extension from the [Chrome Web Store](https://chromewebstore.google.com/detail/iaddgmcajdiblafjfhloadmphkbplddo).
 2. Open any Agile board in YouTrack.
@@ -35,7 +35,7 @@ This extension brings a long-requested feature (see JetBrains request [JT-38623]
 
 ---
 
-## 🛠 Development
+## Development
 
 Clone the repo:
 
@@ -51,7 +51,7 @@ Load the extension manually:
 
 ---
 
-## 🙌 Motivation
+## Motivation
 
 - Jira has had quick filters for ages ([docs](https://support.atlassian.com/jira-service-management-cloud/docs/create-quick-filters-for-your-board/)).
 - YouTrack users have been requesting the same feature for almost 10 years:
@@ -62,7 +62,7 @@ So I decided to just build it myself 🙂
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome!  
 If you’d like to improve styles, fix bugs, or add new features:
