@@ -1,4 +1,13 @@
 (() => {
+    // Проверяем, что мы на YouTrack сайте
+    const isYouTrack = location.hostname.toLowerCase().includes('youtrack') || 
+                      location.pathname.includes('/youtrack/') ||
+                      location.pathname.includes('/agiles/');
+    
+    if (!isYouTrack) {
+        return;
+    }
+    
     const KEY = 'ytQuickFilters'; // [{label, query}]
     const dfl = [
         { label: 'My Tasks',  query: 'Assignee: me' }

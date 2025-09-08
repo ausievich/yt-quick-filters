@@ -6,14 +6,11 @@
   "icons": {
     "128": "icons/logo_128.png"
   },
-  "permissions": ["storage"],
-  "host_permissions": [
-    "https://*/*youtrack*/*"
-  ],
+  "permissions": ["storage", "activeTab"],
   "content_scripts": [
     {
       "matches": [
-        "https://*/*youtrack*/*"
+        "https://*/*"
       ],
       "css": ["styles.css"],
       "js": ["content.js"],
