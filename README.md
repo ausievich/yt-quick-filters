@@ -58,7 +58,7 @@ Load the extension manually:
     - [YouTrack support forum thread](https://youtrack-support.jetbrains.com/hc/en-us/community/posts/115000751664-Agile-board-Quick-Filters)
     - [Feature request in YouTrack itself](https://youtrack.jetbrains.com/issue/JT-38623/)
 
-So I decided to just build it myself 🙂
+So I decided to just build it myself 
 
 ---
 
