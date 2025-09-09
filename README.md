@@ -83,8 +83,12 @@ You can sponsor this project via platforms:
 [![GitHub Sponsors](https://img.shields.io/badge/Sponsor-GitHub-blue?logo=github-sponsors)](https://github.com/sponsors/ausievich)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-yellow?logo=buy-me-a-coffee)](https://buymeacoffee.com/ausievich)
 
+Or via crypto:
 
-
+- **BTC**: `184qYAbHcg32judCoEDFdmCSswwtkWfcNt`
+- **ETH**: `0x5beB59B4eEa7F54cef899e1F005290Cc2f95B803`
+- **USDT (TRC20)**: `THrWDtujkZEvCxtkcpyMiBkQSnfjGDrMGV`
+- **TON**: `UQBB87sg5wEYumQdo69sfstGPauh4dEN5gylqU995dYb1Brt`
 ---
 
 ## 📄 License
