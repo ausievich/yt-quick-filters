@@ -1,13 +1,4 @@
 (() => {
-    // Check if we are on a YouTrack site
-    const isYouTrack = location.hostname.toLowerCase().includes('youtrack') || 
-                      location.pathname.includes('/youtrack/') ||
-                      location.pathname.includes('/agiles/');
-    
-    if (!isYouTrack) {
-        return;
-    }
-    
     const KEY = 'ytQuickFilters'; // [{label, query}]
     const dfl = [
         { label: 'My Tasks',  query: 'Assignee: me' }
@@ -38,8 +29,6 @@
         }
         location.assign(u.toString());
     }
-
-
 
     function mountToolbar() {
         return document.querySelector('.yt-agile-board__toolbar[data-test="yt-agile-board-toolbar"]') ||
@@ -128,9 +117,6 @@
         }, 0);
     }
 
-
-
-
     function render(bar, data, _editModeNotUsed) {
         bar.innerHTML = '';
 
@@ -174,7 +160,6 @@
         bar.appendChild(add);
 
     }
-
 
     async function openModal(nameInit, queryInit, idx) {
         var modal = document.createElement('div');
@@ -245,8 +230,6 @@
             if (bar) render(bar, arr, false);
         };
     }
-
-
 
     async function inject() {
         if (document.getElementById('ytqf-bar')) return;
