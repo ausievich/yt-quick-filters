@@ -10,8 +10,8 @@
     flex-wrap: wrap;
     gap: 4px;
     margin-right: 12px;
-    max-width: 60%; /* Ограничиваем ширину, оставляя место для других элементов */
-    min-width: 200px; /* Минимальная ширина для удобства */
+    max-width: 60%; /* Limit width, leaving space for other elements */
+    min-width: 200px; /* Minimum width for convenience */
 }
 
 

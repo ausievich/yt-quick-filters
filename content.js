@@ -1,5 +1,5 @@
 (() => {
-    // Проверяем, что мы на YouTrack сайте
+    // Check if we are on a YouTrack site
     const isYouTrack = location.hostname.toLowerCase().includes('youtrack') || 
                       location.pathname.includes('/youtrack/') ||
                       location.pathname.includes('/agiles/');
@@ -93,12 +93,12 @@
         };
         menu.appendChild(miDup);
 
-        // separator (если у тебя уже добавлен стиль .sep в css)
+        // separator (if you already have .sep style in css)
         var sep = document.createElement('div');
         sep.className = 'sep';
         menu.appendChild(sep);
 
-        // Delete (без confirm)
+        // Delete (without confirm)
         var miDel = document.createElement('div');
         miDel.className = 'mi danger';
         miDel.textContent = 'Delete';
@@ -114,7 +114,7 @@
 
         document.body.appendChild(menu);
 
-        // позиционирование
+        // positioning
         var w = menu.offsetWidth, h = menu.offsetHeight;
         var vw = window.innerWidth, vh = window.innerHeight;
         menu.style.left = Math.min(x, vw - w - 8) + 'px';
@@ -146,10 +146,10 @@
             lbl.textContent = it.label;
             b.appendChild(lbl);
 
-            // левый клик — применяем фильтр
+            // left click — apply filter
             b.onclick = function () { setQuery(it.query); };
 
-            // правый клик — контекстное меню (edit/delete)
+            // right click — context menu (edit/delete)
             b.addEventListener('contextmenu', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -159,9 +159,9 @@
             bar.appendChild(b);
         });
 
-        // Clear (не имеет состояния active)
+        // Clear (does not have active state)
         var clr = document.createElement('button');
-        clr.className = 'btn ghost'; // всегда как "второстепенная"
+        clr.className = 'btn ghost'; // always as "secondary"
         clr.textContent = 'Clear';
         clr.onclick = function () { setQuery(''); };
         bar.appendChild(clr);
