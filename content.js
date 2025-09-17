@@ -1,8 +1,19 @@
 (() => {
-    const KEY = 'ytQuickFilters'; // [{label, query}]
+    const KEY_PREFIX = 'ytQuickFilters_'; // Префикс для доска-специфичных ключей
     const dfl = [
         { label: 'My Tasks',  query: 'Assignee: me' }
     ];
+
+    // Извлекаем ID доски из URL
+    function getBoardId() {
+        const match = location.pathname.match(/\/agiles\/([^\/]+)/);
+        return match ? match[1] : 'default';
+    }
+
+    // Получаем ключ для текущей доски
+    function getStorageKey() {
+        return KEY_PREFIX + getBoardId();
+    }
 
     function get(key) {
         return new Promise((resolve) => {
@@ -29,6 +40,8 @@
         }
         location.assign(u.toString());
     }
+
+
 
     function mountToolbar() {
         return document.querySelector('.yt-agile-board__toolbar[data-test="yt-agile-board-toolbar"]') ||
@@ -74,28 +87,30 @@
         miDup.textContent = 'Duplicate';
         miDup.onclick = async function (e) {
             e.stopPropagation(); closeMenu();
-            var arr = (await get(KEY)) || dfl;
+            var key = getStorageKey();
+            var arr = (await get(key)) || dfl;
             arr.splice(idx + 1, 0, { label: uniqueLabel(item.label, arr), query: item.query });
-            await set({ [KEY]: arr });
+            await set({ [key]: arr });
             var bar = document.getElementById('ytqf-bar');
             if (bar) render(bar, arr, false);
         };
         menu.appendChild(miDup);
 
-        // separator (if you already have .sep style in css)
+        // separator (если у тебя уже добавлен стиль .sep в css)
         var sep = document.createElement('div');
         sep.className = 'sep';
         menu.appendChild(sep);
 
-        // Delete (without confirm)
+        // Delete (без confirm)
         var miDel = document.createElement('div');
         miDel.className = 'mi danger';
         miDel.textContent = 'Delete';
         miDel.onclick = async function (e) {
             e.stopPropagation(); closeMenu();
-            var arr = (await get(KEY)) || dfl;
+            var key = getStorageKey();
+            var arr = (await get(key)) || dfl;
             arr.splice(idx, 1);
-            await set({ [KEY]: arr });
+            await set({ [key]: arr });
             var bar = document.getElementById('ytqf-bar');
             if (bar) render(bar, arr, false);
         };
@@ -103,7 +118,7 @@
 
         document.body.appendChild(menu);
 
-        // positioning
+        // позиционирование
         var w = menu.offsetWidth, h = menu.offsetHeight;
         var vw = window.innerWidth, vh = window.innerHeight;
         menu.style.left = Math.min(x, vw - w - 8) + 'px';
@@ -116,6 +131,9 @@
             window.addEventListener('scroll', closeMenu, true);
         }, 0);
     }
+
+
+
 
     function render(bar, data, _editModeNotUsed) {
         bar.innerHTML = '';
@@ -132,10 +150,10 @@
             lbl.textContent = it.label;
             b.appendChild(lbl);
 
-            // left click — apply filter
+            // левый клик — применяем фильтр
             b.onclick = function () { setQuery(it.query); };
 
-            // right click — context menu (edit/delete)
+            // правый клик — контекстное меню (edit/delete)
             b.addEventListener('contextmenu', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -145,9 +163,9 @@
             bar.appendChild(b);
         });
 
-        // Clear (does not have active state)
+        // Clear (не имеет состояния active)
         var clr = document.createElement('button');
-        clr.className = 'btn ghost'; // always as "secondary"
+        clr.className = 'btn ghost'; // всегда как "второстепенная"
         clr.textContent = 'Clear';
         clr.onclick = function () { setQuery(''); };
         bar.appendChild(clr);
@@ -160,6 +178,7 @@
         bar.appendChild(add);
 
     }
+
 
     async function openModal(nameInit, queryInit, idx) {
         var modal = document.createElement('div');
@@ -218,18 +237,21 @@
             var query = queryInput.value.trim();
             if (!name || !query) return;
 
-            var arr = (await get(KEY)) || dfl;
+            var key = getStorageKey();
+            var arr = (await get(key)) || dfl;
             if (isEdit && idx > -1 && idx < arr.length) {
                 arr[idx] = { label: name, query: query };
             } else {
                 arr.push({ label: name, query: query });
             }
-            await set({ [KEY]: arr });
+            await set({ [key]: arr });
             close();
             var bar = document.getElementById('ytqf-bar');
             if (bar) render(bar, arr, false);
         };
     }
+
+
 
     async function inject() {
         if (document.getElementById('ytqf-bar')) return;
@@ -238,7 +260,8 @@
         var bar = document.createElement('div');
         bar.id = 'ytqf-bar';
         host.insertBefore(bar, host.firstChild);
-        var data = (await get(KEY)) || dfl;
+        var key = getStorageKey();
+        var data = (await get(key)) || dfl;
         render(bar, data, false);
     }
 
