@@ -16,9 +16,11 @@ export const FilterModal: React.FC<ModalProps> = ({
   const [isValid, setIsValid] = useState(false);
 
   useEffect(() => {
-    setName(initialName);
-    setQuery(initialQuery);
-  }, [initialName, initialQuery]);
+    if (isOpen) {
+      setName(initialName);
+      setQuery(initialQuery);
+    }
+  }, [isOpen, isEdit, initialName, initialQuery]);
 
   useEffect(() => {
     setIsValid(name.trim() !== '' && query.trim() !== '');
