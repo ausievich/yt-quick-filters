@@ -1,0 +1,4 @@
+/* Import all component styles */
+@import './components/FilterBar.css';
+@import './components/ContextMenu.css';
+@import './components/FilterModal.css';
