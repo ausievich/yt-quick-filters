@@ -12,8 +12,8 @@
         "https://*/agiles/*",
         "https://*.youtrack.cloud/*"
       ],
-      "css": ["styles.css"],
-      "js": ["content.js"],
+      "css": ["dist/content.css"],
+      "js": ["dist/content.js"],
       "run_at": "document_idle"
     }
   ]
