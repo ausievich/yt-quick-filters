@@ -60,7 +60,7 @@ npm run build
 ### Load the extension manually:
 1. Open `chrome://extensions/`
 2. Enable **Developer mode**
-3. Click **Load unpacked** and select the `dist/` folder (after running `npm run build`)
+3. Click **Load unpacked** and select this repo folder
 
 ---
 
