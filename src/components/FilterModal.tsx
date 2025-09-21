@@ -9,7 +9,9 @@ export const FilterModal: React.FC<ModalProps> = ({
   initialQuery = '',
   index,
   onClose,
-  onSave
+  onSave,
+  onDelete,
+  onDuplicate
 }) => {
   const [name, setName] = useState(initialName);
   const [query, setQuery] = useState(initialQuery);
@@ -55,6 +57,20 @@ export const FilterModal: React.FC<ModalProps> = ({
     }
   };
 
+  const handleDelete = () => {
+    if (onDelete && typeof index === 'number') {
+      onDelete(index);
+      onClose();
+    }
+  };
+
+  const handleDuplicate = () => {
+    if (onDuplicate && typeof index === 'number') {
+      onDuplicate(index);
+      onClose();
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -91,17 +107,35 @@ export const FilterModal: React.FC<ModalProps> = ({
           </div>
           
           <div className="f">
-            <button id="ytqf-cancel" onClick={onClose}>
-              Cancel
-            </button>
-            <button 
-              className="primary" 
-              id="ytqf-save" 
-              onClick={handleSave}
-              disabled={!isValid}
-            >
-              {isEdit ? 'Save' : 'Create'}
-            </button>
+            <div className="f-left">
+              <button 
+                className="primary" 
+                id="ytqf-save" 
+                onClick={handleSave}
+                disabled={!isValid}
+              >
+                {isEdit ? 'Save' : 'Create'}
+              </button>
+              <button id="ytqf-cancel" onClick={onClose}>
+                Cancel
+              </button>
+            </div>
+            {isEdit && onDelete && onDuplicate && typeof index === 'number' && (
+              <div className="f-right">
+                <button 
+                  className="duplicate-btn" 
+                  onClick={handleDuplicate}
+                >
+                  Duplicate
+                </button>
+                <button 
+                  className="delete-btn" 
+                  onClick={handleDelete}
+                >
+                  Delete
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

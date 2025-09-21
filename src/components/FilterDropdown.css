@@ -1,0 +1,308 @@
+/* FilterDropdown Component Styles - YouTrack inspired */
+
+.filter-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.filter-dropdown__button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  padding: 0 8px;
+  margin-right: 4px;
+  border-radius: 4px;
+  border: 1px solid #d0d6e0;
+  cursor: pointer;
+  background: #fff;
+  font: 500 12px system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  color: #1F2326;
+  line-height: 22px;
+  overflow: hidden;
+  min-width: 120px;
+  box-sizing: border-box;
+  transition: all 0.15s ease-out;
+}
+
+.filter-dropdown__button:hover {
+  border-color: rgb(128, 198, 255);
+}
+
+.filter-dropdown__button:focus {
+  background: #EBF6FF;
+  outline: none;
+}
+
+.filter-dropdown__button--open {
+  border-color: #0080E5;
+  background: #EBF6FF;
+}
+
+.filter-dropdown__button-content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.filter-dropdown__button-text {
+  flex: 1;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.filter-dropdown__icon {
+  flex-shrink: 0;
+  color: rgb(132, 150, 173);
+  transition: transform 0.15s ease-out;
+}
+
+.filter-dropdown__button--open .filter-dropdown__icon {
+  transform: rotate(180deg);
+}
+
+.filter-dropdown__popup {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background: #ffffff;
+  border: 1px solid rgb(223, 229, 235);
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 28, 54, 0.1), 0 1px 2px rgba(0, 28, 54, 0.04);
+  z-index: 1000;
+  min-width: 280px;
+  max-width: 400px;
+  overflow-y: auto;
+  box-sizing: border-box;
+  overscroll-behavior: contain;
+}
+
+.filter-dropdown__search {
+  position: relative;
+  display: flex;
+  margin: 0;
+  padding-right: 8px;
+  padding-left: calc(8px * 5.5);
+  border-bottom: 1px solid rgb(197, 209, 219);
+  color: rgb(31, 35, 38);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.filter-dropdown__search-icon {
+  position: absolute;
+  left: calc(8px * 2);
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgb(132, 150, 173);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.filter-dropdown__search-input {
+  width: 100%;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: rgb(31, 35, 38);
+  background: transparent;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.filter-dropdown__search-input:focus {
+  outline: none;
+}
+
+.filter-dropdown__search-input::placeholder {
+  color: rgb(64, 99, 128);
+}
+
+.filter-dropdown__search-clear {
+  position: absolute;
+  right: calc(8px * 2);
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: rgb(132, 150, 173);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filter-dropdown__search-clear:hover {
+  color: rgb(31, 35, 38);
+  background: rgb(235, 246, 255);
+}
+
+.filter-dropdown__list {
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.filter-dropdown__item {
+  display: flex;
+  align-items: center;
+  padding: 3px calc(8px * 2) 5px;
+  cursor: pointer;
+  transition: background-color 0.15s ease-out;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  line-height: calc(8px * 3);
+  color: rgb(31, 35, 38);
+  outline: 0px;
+}
+
+.filter-dropdown__item:hover {
+  background: rgb(235, 246, 255);
+}
+
+.filter-dropdown__item--selected {
+  background: rgb(212, 237, 255);
+}
+
+.filter-dropdown__item--current {
+  background: rgb(212, 237, 255);
+  font-weight: 500;
+}
+
+.filter-dropdown__item--current:hover {
+  background: rgb(212, 237, 255);
+}
+
+.filter-dropdown__item--empty {
+  color: rgb(64, 99, 128);
+  cursor: default;
+}
+
+.filter-dropdown__item--empty:hover {
+  background: none;
+}
+
+.filter-dropdown__item-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 8px;
+}
+
+.filter-dropdown__item-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  line-height: 20px;
+  color: rgb(31, 35, 38);
+}
+
+.filter-dropdown__item-edit {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: rgb(132, 150, 173);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.15s ease-out;
+}
+
+.filter-dropdown__item:hover .filter-dropdown__item-edit {
+  opacity: 1;
+}
+
+.filter-dropdown__item-edit:hover {
+  color: rgb(255, 0, 140);
+}
+
+.filter-dropdown__toolbar {
+  padding: 8px;
+  border-top: 1px solid rgb(223, 229, 235);
+  background: rgb(247, 249, 250);
+}
+
+.filter-dropdown__toolbar-button {
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: color 0.3s ease-out, background-color 0.3s ease-out, box-shadow 0.3s ease-out, -webkit-box-shadow 0.3s ease-out;
+  text-decoration: none;
+  border: 0;
+  border-radius: 4px;
+  outline: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  line-height: calc(8px * 3.5);
+  color: rgb(15, 91, 153);
+  width: 100%;
+  text-align: left;
+  background-color: transparent;
+  box-shadow: none;
+  height: calc(8px * 4);
+  margin: 8px 0;
+  padding: 0 calc(8px * 2);
+}
+
+.filter-dropdown__toolbar-button:hover {
+  color: rgb(255, 0, 140);
+}
+
+/* Scrollbar styling for the list */
+.filter-dropdown__list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.filter-dropdown__list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.filter-dropdown__list::-webkit-scrollbar-thumb {
+  background: rgb(197, 209, 219);
+  border-radius: 3px;
+}
+
+.filter-dropdown__list::-webkit-scrollbar-thumb:hover {
+  background: rgb(132, 150, 173);
+}
+
+/* Animation for dropdown opening */
+.filter-dropdown__popup {
+  animation: filterDropdownFadeIn 0.15s ease-out;
+}
+
+@keyframes filterDropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

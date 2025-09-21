@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Filter } from '../types';
 import { StorageService } from '../services/storage';
 import { UtilsService } from '../services/utils';
-import { FilterBar } from './FilterBar';
+import { FilterDropdown } from './FilterDropdown';
 import { FilterModal } from './FilterModal';
 import { ContextMenu } from './ContextMenu';
 
@@ -131,14 +131,15 @@ export const QuickFiltersApp: React.FC = () => {
   const handleModalClose = useCallback(() => {
     setModal({
       isOpen: false,
-      isEdit: false
+      isEdit: false,
+      index: undefined
     });
   }, []);
 
   const handleModalSave = useCallback(async (name: string, query: string, index?: number) => {
     try {
-      if (modal.isEdit && typeof index === 'number') {
-        await storageService.updateFilter(index, { label: name, query });
+      if (modal.isEdit && typeof modal.index === 'number') {
+        await storageService.updateFilter(modal.index, { label: name, query });
       } else {
         await storageService.addFilter({ label: name, query });
       }
@@ -147,17 +148,18 @@ export const QuickFiltersApp: React.FC = () => {
     } catch (error) {
       console.error('Failed to save filter:', error);
     }
-  }, [modal.isEdit, storageService, loadFilters, handleModalClose]);
+  }, [modal.isEdit, modal.index, storageService, loadFilters, handleModalClose]);
 
   return (
     <>
-      <FilterBar
+      <FilterDropdown
         filters={filters}
         currentQuery={currentQuery}
         onFilterClick={handleFilterClick}
         onAddFilter={handleAddFilter}
         onClearFilter={handleClearFilter}
         onContextMenu={handleContextMenu}
+        onEditFilter={handleEditFilter}
       />
       
       {contextMenu.isOpen && contextMenu.item && (
@@ -181,6 +183,15 @@ export const QuickFiltersApp: React.FC = () => {
         index={modal.index}
         onClose={handleModalClose}
         onSave={handleModalSave}
+        onDelete={handleDeleteFilter}
+        onDuplicate={(index) => {
+          if (typeof modal.index === 'number') {
+            const filter = filters[modal.index];
+            if (filter) {
+              handleDuplicateFilter(filter, modal.index);
+            }
+          }
+        }}
       />
     </>
   );
