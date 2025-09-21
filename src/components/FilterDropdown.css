@@ -94,13 +94,14 @@
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
   font-size: 14px;
   line-height: 20px;
+  height: 33px;
+  box-sizing: border-box;
 }
 
 .filter-dropdown__search-icon {
   position: absolute;
   left: calc(8px * 2);
-  top: 50%;
-  transform: translateY(-50%);
+  top: 7px;
   color: rgb(132, 150, 173);
   pointer-events: none;
   z-index: 1;
@@ -118,6 +119,7 @@
   background: transparent;
   box-sizing: border-box;
   outline: none;
+  height: 100%;
 }
 
 .filter-dropdown__search-input:focus {
@@ -125,7 +127,7 @@
 }
 
 .filter-dropdown__search-input::placeholder {
-  color: rgb(64, 99, 128);
+  color: rgb(132, 150, 173);
 }
 
 .filter-dropdown__search-clear {
@@ -197,6 +199,10 @@
 
 .filter-dropdown__item--empty:hover {
   background: none;
+}
+
+.filter-dropdown__item--clear {
+  border-top: 1px solid rgb(223, 229, 235);
 }
 
 .filter-dropdown__item-content {
