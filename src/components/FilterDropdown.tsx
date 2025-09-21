@@ -150,7 +150,7 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
   return (
     <div className="filter-dropdown" ref={dropdownRef}>
       <button
-        className={`filter-dropdown__button ${isOpen ? 'filter-dropdown__button--open' : ''}`}
+        className={`filter-dropdown__button ${isOpen ? 'filter-dropdown__button--open' : ''} ${currentFilter ? 'filter-dropdown__button--active' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
         onKeyDown={handleKeyDown}
         aria-haspopup="listbox"
