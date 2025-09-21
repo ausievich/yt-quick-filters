@@ -232,9 +232,9 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
                 
                 {/* Clear option */}
                 <div
-                  className={`filter-dropdown__item ${currentQuery === '' ? 'filter-dropdown__item--current' : ''} ${selectedIndex === filteredFilters.length ? 'filter-dropdown__item--selected' : ''}`}
+                  className={`filter-dropdown__item ${selectedIndex === filteredFilters.length ? 'filter-dropdown__item--selected' : ''}`}
                   role="option"
-                  aria-selected={currentQuery === ''}
+                  aria-selected={false}
                   onClick={handleClearClick}
                 >
                   <div className="filter-dropdown__item-content">
