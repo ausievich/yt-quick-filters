@@ -3,6 +3,7 @@
 .filter-dropdown {
   position: relative;
   display: inline-block;
+  margin-right: 4px;
 }
 
 .filter-dropdown__button {
@@ -30,7 +31,6 @@
 }
 
 .filter-dropdown__button:hover {
-  background-color: rgb(235, 246, 255);
   z-index: 3;
   box-shadow: inset 0 0 0 1px rgb(128, 198, 255);
 }

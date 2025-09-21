@@ -4,7 +4,7 @@ const KEY_PREFIX = 'ytQuickFilters_';
 const LEGACY_KEY = 'ytQuickFilters'; // Old single key for all boards
 const MIGRATION_KEY = 'ytQuickFilters_migration_done'; // Flag to track migration
 const DEFAULT_FILTERS: Filter[] = [
-  { label: 'My Tasks', query: 'Assignee: me' }
+  { label: 'My Tasks', query: 'Assignee: me', showInToolbar: true }
 ];
 
 export class StorageService {

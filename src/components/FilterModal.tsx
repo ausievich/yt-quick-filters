@@ -7,6 +7,7 @@ export const FilterModal: React.FC<ModalProps> = ({
   isEdit,
   initialName = '',
   initialQuery = '',
+  initialShowInToolbar = false,
   index,
   onClose,
   onSave,
@@ -15,14 +16,16 @@ export const FilterModal: React.FC<ModalProps> = ({
 }) => {
   const [name, setName] = useState(initialName);
   const [query, setQuery] = useState(initialQuery);
+  const [showInToolbar, setShowInToolbar] = useState(initialShowInToolbar);
   const [isValid, setIsValid] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
       setName(initialName);
       setQuery(initialQuery);
+      setShowInToolbar(initialShowInToolbar);
     }
-  }, [isOpen, isEdit, initialName, initialQuery]);
+  }, [isOpen, isEdit, initialName, initialQuery, initialShowInToolbar]);
 
   useEffect(() => {
     setIsValid(name.trim() !== '' && query.trim() !== '');
@@ -47,7 +50,7 @@ export const FilterModal: React.FC<ModalProps> = ({
 
   const handleSave = () => {
     if (isValid) {
-      onSave(name.trim(), query.trim(), index);
+      onSave(name.trim(), query.trim(), showInToolbar, index);
     }
   };
 
@@ -104,6 +107,16 @@ export const FilterModal: React.FC<ModalProps> = ({
               onKeyDown={handleInputKeyDown}
               className={query.trim() === '' ? 'error' : ''}
             />
+            
+            <div className="checkbox-container">
+              <input
+                id="ytqf-show-in-toolbar"
+                type="checkbox"
+                checked={showInToolbar}
+                onChange={(e) => setShowInToolbar(e.target.checked)}
+              />
+              <label htmlFor="ytqf-show-in-toolbar">Show in toolbar</label>
+            </div>
           </div>
           
           <div className="f">

@@ -7,8 +7,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   currentQuery,
   onFilterClick,
   onAddFilter,
-  onClearFilter,
-  onContextMenu
+  onClearFilter
 }) => {
   return (
     <>
@@ -17,20 +16,11 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           key={index}
           className={`btn ${currentQuery === filter.query ? 'active' : ''}`}
           title={filter.query}
-          onClick={() => onFilterClick(filter.query)}
-          onContextMenu={(e) => onContextMenu(e, filter, index)}
+          onClick={() => onFilterClick(filter.query, 'toolbar')}
         >
           <span className="lbl">{filter.label}</span>
         </button>
       ))}
-      
-      <button className="btn ghost" onClick={onClearFilter}>
-        Clear
-      </button>
-      
-      <button className="btn ghost" onClick={onAddFilter}>
-        Add filter...
-      </button>
     </>
   );
 };

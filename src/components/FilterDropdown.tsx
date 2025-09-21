@@ -5,11 +5,11 @@ import './FilterDropdown.css';
 interface FilterDropdownProps {
   filters: Filter[];
   currentQuery: string;
-  onFilterClick: (query: string) => void;
+  onFilterClick: (query: string, source: 'dropdown' | 'toolbar') => void;
   onAddFilter: () => void;
   onClearFilter: () => void;
-  onContextMenu: (e: React.MouseEvent, item: Filter, index: number) => void;
   onEditFilter: (item: Filter, index: number) => void;
+  filterSource?: 'dropdown' | 'toolbar' | null;
 }
 
 export const FilterDropdown: React.FC<FilterDropdownProps> = ({
@@ -18,8 +18,8 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
   onFilterClick,
   onAddFilter,
   onClearFilter,
-  onContextMenu,
-  onEditFilter
+  onEditFilter,
+  filterSource
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -29,7 +29,10 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
 
   // Find current filter
   const currentFilter = filters.find(filter => filter.query === currentQuery);
-  const displayText = currentFilter ? currentFilter.label : 'Board filters';
+  
+  // Always show "Board filters" - never active
+  const displayText = 'Board filters';
+  const isDropdownActive = false;
 
   // Filter filters based on search query
   const filteredFilters = filters.filter(filter =>
@@ -94,7 +97,7 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
       case 'Enter':
         e.preventDefault();
         if (selectedIndex >= 0 && selectedIndex < filteredFilters.length) {
-          onFilterClick(filteredFilters[selectedIndex].query);
+          onFilterClick(filteredFilters[selectedIndex].query, 'dropdown');
           setIsOpen(false);
           setSearchQuery('');
           setSelectedIndex(-1);
@@ -110,7 +113,7 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
   };
 
   const handleFilterSelect = (filter: Filter) => {
-    onFilterClick(filter.query);
+    onFilterClick(filter.query, 'dropdown');
     setIsOpen(false);
     setSearchQuery('');
     setSelectedIndex(-1);
@@ -132,11 +135,6 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
     setSelectedIndex(-1);
   };
 
-  const handleContextMenuClick = (e: React.MouseEvent, filter: Filter, index: number) => {
-    e.preventDefault();
-    e.stopPropagation();
-    onContextMenu(e, filter, index);
-  };
 
   const handleEditClick = (e: React.MouseEvent, filter: Filter, index: number) => {
     e.preventDefault();
@@ -150,7 +148,7 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
   return (
     <div className="filter-dropdown" ref={dropdownRef}>
       <button
-        className={`filter-dropdown__button ${isOpen ? 'filter-dropdown__button--open' : ''} ${currentFilter ? 'filter-dropdown__button--active' : ''}`}
+        className={`filter-dropdown__button ${isOpen ? 'filter-dropdown__button--open' : ''} ${isDropdownActive ? 'filter-dropdown__button--active' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
         onKeyDown={handleKeyDown}
         aria-haspopup="listbox"
@@ -210,7 +208,6 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
                       role="option"
                       aria-selected={isCurrent}
                       onClick={() => handleFilterSelect(filter)}
-                      onContextMenu={(e) => handleContextMenuClick(e, filter, originalIndex)}
                     >
                       <div className="filter-dropdown__item-content">
                         <span className="filter-dropdown__item-label" title={filter.query}>

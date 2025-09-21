@@ -3,35 +3,22 @@ import { Filter } from '../types';
 import { StorageService } from '../services/storage';
 import { UtilsService } from '../services/utils';
 import { FilterDropdown } from './FilterDropdown';
+import { FilterBar } from './FilterBar';
 import { FilterModal } from './FilterModal';
-import { ContextMenu } from './ContextMenu';
-
-interface ContextMenuState {
-  isOpen: boolean;
-  x: number;
-  y: number;
-  item: Filter | null;
-  index: number;
-}
 
 interface ModalState {
   isOpen: boolean;
   isEdit: boolean;
   initialName?: string;
   initialQuery?: string;
+  initialShowInToolbar?: boolean;
   index?: number;
 }
 
 export const QuickFiltersApp: React.FC = () => {
   const [filters, setFilters] = useState<Filter[]>([]);
   const [currentQuery, setCurrentQuery] = useState('');
-  const [contextMenu, setContextMenu] = useState<ContextMenuState>({
-    isOpen: false,
-    x: 0,
-    y: 0,
-    item: null,
-    index: -1
-  });
+  const [filterSource, setFilterSource] = useState<'dropdown' | 'toolbar' | null>(null);
   const [modal, setModal] = useState<ModalState>({
     isOpen: false,
     isEdit: false
@@ -50,21 +37,38 @@ export const QuickFiltersApp: React.FC = () => {
   }, [storageService]);
 
   const updateCurrentQuery = useCallback(() => {
-    setCurrentQuery(utilsService.getCurrentQuery());
-  }, [utilsService]);
+    const query = utilsService.getCurrentQuery();
+    setCurrentQuery(query);
+    
+    // Determine filter source based on current query and available filters
+    if (query) {
+      const toolbarFilters = filters.filter(filter => filter.showInToolbar);
+      const isInToolbar = toolbarFilters.some(filter => filter.query === query);
+      setFilterSource(isInToolbar ? 'toolbar' : 'dropdown');
+    } else {
+      setFilterSource(null);
+    }
+  }, [utilsService, filters]);
 
   useEffect(() => {
     loadFilters();
     updateCurrentQuery();
   }, [loadFilters, updateCurrentQuery]);
 
-  const handleFilterClick = useCallback((query: string) => {
+  // Update filter source when filters change
+  useEffect(() => {
+    updateCurrentQuery();
+  }, [filters, updateCurrentQuery]);
+
+  const handleFilterClick = useCallback((query: string, source: 'dropdown' | 'toolbar') => {
     utilsService.setQuery(query);
+    setFilterSource(source);
     updateCurrentQuery();
   }, [utilsService, updateCurrentQuery]);
 
   const handleClearFilter = useCallback(() => {
     utilsService.setQuery('');
+    setFilterSource(null);
     updateCurrentQuery();
   }, [utilsService, updateCurrentQuery]);
 
@@ -75,58 +79,34 @@ export const QuickFiltersApp: React.FC = () => {
     });
   }, []);
 
-  const handleContextMenu = useCallback((e: React.MouseEvent, item: Filter, index: number) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setContextMenu({
-      isOpen: true,
-      x: e.clientX,
-      y: e.clientY,
-      item,
-      index
-    });
-  }, []);
-
-  const closeContextMenu = useCallback(() => {
-    setContextMenu({
-      isOpen: false,
-      x: 0,
-      y: 0,
-      item: null,
-      index: -1
-    });
-  }, []);
-
   const handleEditFilter = useCallback((item: Filter, index: number) => {
-    closeContextMenu();
     setModal({
       isOpen: true,
       isEdit: true,
       initialName: item.label,
       initialQuery: item.query,
+      initialShowInToolbar: item.showInToolbar || false,
       index
     });
-  }, [closeContextMenu]);
+  }, []);
 
   const handleDuplicateFilter = useCallback(async (item: Filter, index: number) => {
-    closeContextMenu();
     try {
       await storageService.duplicateFilter(index);
       await loadFilters();
     } catch (error) {
       console.error('Failed to duplicate filter:', error);
     }
-  }, [closeContextMenu, storageService, loadFilters]);
+  }, [storageService, loadFilters]);
 
   const handleDeleteFilter = useCallback(async (index: number) => {
-    closeContextMenu();
     try {
       await storageService.deleteFilter(index);
       await loadFilters();
     } catch (error) {
       console.error('Failed to delete filter:', error);
     }
-  }, [closeContextMenu, storageService, loadFilters]);
+  }, [storageService, loadFilters]);
 
   const handleModalClose = useCallback(() => {
     setModal({
@@ -136,12 +116,12 @@ export const QuickFiltersApp: React.FC = () => {
     });
   }, []);
 
-  const handleModalSave = useCallback(async (name: string, query: string, index?: number) => {
+  const handleModalSave = useCallback(async (name: string, query: string, showInToolbar: boolean, index?: number) => {
     try {
       if (modal.isEdit && typeof modal.index === 'number') {
-        await storageService.updateFilter(modal.index, { label: name, query });
+        await storageService.updateFilter(modal.index, { label: name, query, showInToolbar });
       } else {
-        await storageService.addFilter({ label: name, query });
+        await storageService.addFilter({ label: name, query, showInToolbar });
       }
       await loadFilters();
       handleModalClose();
@@ -150,28 +130,31 @@ export const QuickFiltersApp: React.FC = () => {
     }
   }, [modal.isEdit, modal.index, storageService, loadFilters, handleModalClose]);
 
+  // Separate filters for toolbar and dropdown
+  const toolbarFilters = filters.filter(filter => filter.showInToolbar);
+  const dropdownFilters = filters; // All filters are shown in dropdown
+
   return (
     <>
+      {/* FilterDropdown always first (leftmost) */}
       <FilterDropdown
-        filters={filters}
+        filters={dropdownFilters}
         currentQuery={currentQuery}
         onFilterClick={handleFilterClick}
         onAddFilter={handleAddFilter}
         onClearFilter={handleClearFilter}
-        onContextMenu={handleContextMenu}
         onEditFilter={handleEditFilter}
+        filterSource={filterSource}
       />
       
-      {contextMenu.isOpen && contextMenu.item && (
-        <ContextMenu
-          x={contextMenu.x}
-          y={contextMenu.y}
-          item={contextMenu.item}
-          index={contextMenu.index}
-          onEdit={handleEditFilter}
-          onDuplicate={handleDuplicateFilter}
-          onDelete={handleDeleteFilter}
-          onClose={closeContextMenu}
+      {/* Show FilterBar after FilterDropdown if there are filters with showInToolbar: true */}
+      {toolbarFilters.length > 0 && (
+        <FilterBar
+          filters={toolbarFilters}
+          currentQuery={currentQuery}
+          onFilterClick={handleFilterClick}
+          onAddFilter={handleAddFilter}
+          onClearFilter={handleClearFilter}
         />
       )}
       
@@ -180,6 +163,7 @@ export const QuickFiltersApp: React.FC = () => {
         isEdit={modal.isEdit}
         initialName={modal.initialName}
         initialQuery={modal.initialQuery}
+        initialShowInToolbar={modal.initialShowInToolbar}
         index={modal.index}
         onClose={handleModalClose}
         onSave={handleModalSave}
