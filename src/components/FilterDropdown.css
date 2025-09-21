@@ -241,9 +241,8 @@
 }
 
 .filter-dropdown__toolbar {
-  padding: 8px;
+  padding: 0;
   border-top: 1px solid rgb(223, 229, 235);
-  background: rgb(247, 249, 250);
 }
 
 .filter-dropdown__toolbar-button {
@@ -251,7 +250,7 @@
   display: inline-block;
   box-sizing: border-box;
   cursor: pointer;
-  transition: color 0.3s ease-out, background-color 0.3s ease-out, box-shadow 0.3s ease-out, -webkit-box-shadow 0.3s ease-out;
+  transition: none;
   text-decoration: none;
   border: 0;
   border-radius: 4px;
@@ -264,9 +263,9 @@
   text-align: left;
   background-color: transparent;
   box-shadow: none;
-  height: calc(8px * 4);
+  height: 32px;
   margin: 8px 0;
-  padding: 0 calc(8px * 2);
+  padding: 0 16px;
 }
 
 .filter-dropdown__toolbar-button:hover {
