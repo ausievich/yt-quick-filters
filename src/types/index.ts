@@ -25,6 +25,7 @@ export interface ModalProps {
   index?: number;
   onClose: () => void;
   onSave: (name: string, query: string, showInToolbar: boolean, index?: number) => void;
+  onPreview?: (name: string, query: string, showInToolbar: boolean, index?: number) => void;
   onDelete?: (index: number) => void;
   onDuplicate?: (index: number) => void;
 }

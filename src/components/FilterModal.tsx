@@ -11,6 +11,7 @@ export const FilterModal: React.FC<ModalProps> = ({
   index,
   onClose,
   onSave,
+  onPreview,
   onDelete,
   onDuplicate
 }) => {
@@ -30,6 +31,13 @@ export const FilterModal: React.FC<ModalProps> = ({
   useEffect(() => {
     setIsValid(name.trim() !== '' && query.trim() !== '');
   }, [name, query]);
+
+  // Preview changes when showInToolbar changes (only for edit mode)
+  useEffect(() => {
+    if (isValid && isEdit) {
+      handlePreview();
+    }
+  }, [showInToolbar, isEdit]);
 
   // Global keyboard handler for ESC key
   useEffect(() => {
@@ -51,6 +59,12 @@ export const FilterModal: React.FC<ModalProps> = ({
   const handleSave = () => {
     if (isValid) {
       onSave(name.trim(), query.trim(), showInToolbar, index);
+    }
+  };
+
+  const handlePreview = () => {
+    if (onPreview && name.trim() && query.trim()) {
+      onPreview(name.trim(), query.trim(), showInToolbar, index);
     }
   };
 

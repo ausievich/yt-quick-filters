@@ -96,13 +96,15 @@ export const QuickFiltersApp: React.FC = () => {
     }
   }, [storageService, loadFilters]);
 
-  const handleModalClose = useCallback(() => {
+  const handleModalClose = useCallback(async () => {
+    // Restore original filters when closing modal
+    await loadFilters();
     setModal({
       isOpen: false,
       isEdit: false,
       index: undefined
     });
-  }, []);
+  }, [loadFilters]);
 
   const handleModalSave = useCallback(async (name: string, query: string, showInToolbar: boolean, index?: number) => {
     try {
@@ -117,6 +119,20 @@ export const QuickFiltersApp: React.FC = () => {
       console.error('Failed to save filter:', error);
     }
   }, [modal.isEdit, modal.index, storageService, loadFilters, handleModalClose]);
+
+  const handleModalPreview = useCallback(async (name: string, query: string, showInToolbar: boolean, index?: number) => {
+    try {
+      if (modal.isEdit && typeof modal.index === 'number') {
+        // For edit mode only, temporarily update the filter for preview
+        const updatedFilters = [...filters];
+        updatedFilters[modal.index] = { label: name, query, showInToolbar };
+        setFilters(updatedFilters);
+      }
+      // For create mode, do nothing - no preview
+    } catch (error) {
+      console.error('Failed to preview filter:', error);
+    }
+  }, [modal.isEdit, modal.index, filters]);
 
   // Separate filters for toolbar and dropdown
   const toolbarFilters = filters.filter(filter => filter.showInToolbar);
@@ -152,6 +168,7 @@ export const QuickFiltersApp: React.FC = () => {
         index={modal.index}
         onClose={handleModalClose}
         onSave={handleModalSave}
+        onPreview={handleModalPreview}
         onDelete={handleDeleteFilter}
         onDuplicate={(index) => {
           if (typeof modal.index === 'number') {
