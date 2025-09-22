@@ -45,11 +45,16 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('click', handleClickOutside);
+    }
+    
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('click', handleClickOutside);
     };
-  }, []);
+  }, [isOpen]);
 
   // Focus search input when dropdown opens
   useEffect(() => {
