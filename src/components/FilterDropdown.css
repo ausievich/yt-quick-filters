@@ -162,8 +162,8 @@
 }
 
 .filter-dropdown__search-clear:hover {
-  color: rgb(31, 35, 38);
-  background: rgb(235, 246, 255);
+  color: rgb(255, 0, 140);
+  background: none;
 }
 
 .filter-dropdown__list {
@@ -209,6 +209,8 @@
 .filter-dropdown__item--empty {
   color: rgb(64, 99, 128);
   cursor: default;
+  height: 32px;
+  box-sizing: border-box;
 }
 
 .filter-dropdown__item--empty:hover {

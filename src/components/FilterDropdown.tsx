@@ -182,7 +182,10 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
             {searchQuery && (
               <button
                 className="filter-dropdown__search-clear"
-                onClick={() => setSearchQuery('')}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSearchQuery('');
+                }}
                 type="button"
               >
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
