@@ -36,16 +36,12 @@
 }
 
 .filter-dropdown__button:focus {
-  background-color: rgb(235, 246, 255);
   outline: none;
   z-index: 4;
-  box-shadow: inset 0 0 0 1px rgb(128, 198, 255);
 }
 
 .filter-dropdown__button--open {
-  background-color: rgb(235, 246, 255);
   z-index: 2;
-  box-shadow: inset 0 0 0 1px rgb(0, 128, 229);
 }
 
 .filter-dropdown__button--active {
