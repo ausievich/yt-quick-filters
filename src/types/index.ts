@@ -15,16 +15,6 @@ export interface BoardInfo {
   storageKey: string;
 }
 
-export interface ContextMenuProps {
-  x: number;
-  y: number;
-  item: Filter;
-  index: number;
-  onEdit: (item: Filter, index: number) => void;
-  onDuplicate: (item: Filter, index: number) => void;
-  onDelete: (index: number) => void;
-  onClose: () => void;
-}
 
 export interface ModalProps {
   isOpen: boolean;
@@ -43,8 +33,6 @@ export interface FilterBarProps {
   filters: Filter[];
   currentQuery: string;
   onFilterClick: (query: string, source: 'dropdown' | 'toolbar') => void;
-  onAddFilter: () => void;
-  onClearFilter: () => void;
 }
 
 export interface FilterDropdownProps {
@@ -54,5 +42,4 @@ export interface FilterDropdownProps {
   onAddFilter: () => void;
   onClearFilter: () => void;
   onEditFilter: (item: Filter, index: number) => void;
-  filterSource?: 'dropdown' | 'toolbar' | null;
 }

@@ -18,7 +18,6 @@ interface ModalState {
 export const QuickFiltersApp: React.FC = () => {
   const [filters, setFilters] = useState<Filter[]>([]);
   const [currentQuery, setCurrentQuery] = useState('');
-  const [filterSource, setFilterSource] = useState<'dropdown' | 'toolbar' | null>(null);
   const [modal, setModal] = useState<ModalState>({
     isOpen: false,
     isEdit: false
@@ -39,16 +38,7 @@ export const QuickFiltersApp: React.FC = () => {
   const updateCurrentQuery = useCallback(() => {
     const query = utilsService.getCurrentQuery();
     setCurrentQuery(query);
-    
-    // Determine filter source based on current query and available filters
-    if (query) {
-      const toolbarFilters = filters.filter(filter => filter.showInToolbar);
-      const isInToolbar = toolbarFilters.some(filter => filter.query === query);
-      setFilterSource(isInToolbar ? 'toolbar' : 'dropdown');
-    } else {
-      setFilterSource(null);
-    }
-  }, [utilsService, filters]);
+  }, [utilsService]);
 
   useEffect(() => {
     loadFilters();
@@ -62,13 +52,11 @@ export const QuickFiltersApp: React.FC = () => {
 
   const handleFilterClick = useCallback((query: string, source: 'dropdown' | 'toolbar') => {
     utilsService.setQuery(query);
-    setFilterSource(source);
     updateCurrentQuery();
   }, [utilsService, updateCurrentQuery]);
 
   const handleClearFilter = useCallback(() => {
     utilsService.setQuery('');
-    setFilterSource(null);
     updateCurrentQuery();
   }, [utilsService, updateCurrentQuery]);
 
@@ -144,7 +132,6 @@ export const QuickFiltersApp: React.FC = () => {
         onAddFilter={handleAddFilter}
         onClearFilter={handleClearFilter}
         onEditFilter={handleEditFilter}
-        filterSource={filterSource}
       />
       
       {/* Show FilterBar after FilterDropdown if there are filters with showInToolbar: true */}
@@ -153,8 +140,6 @@ export const QuickFiltersApp: React.FC = () => {
           filters={toolbarFilters}
           currentQuery={currentQuery}
           onFilterClick={handleFilterClick}
-          onAddFilter={handleAddFilter}
-          onClearFilter={handleClearFilter}
         />
       )}
       

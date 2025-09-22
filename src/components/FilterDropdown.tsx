@@ -9,7 +9,6 @@ interface FilterDropdownProps {
   onAddFilter: () => void;
   onClearFilter: () => void;
   onEditFilter: (item: Filter, index: number) => void;
-  filterSource?: 'dropdown' | 'toolbar' | null;
 }
 
 export const FilterDropdown: React.FC<FilterDropdownProps> = ({
@@ -18,8 +17,7 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
   onFilterClick,
   onAddFilter,
   onClearFilter,
-  onEditFilter,
-  filterSource
+  onEditFilter
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -27,12 +25,9 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Find current filter
-  const currentFilter = filters.find(filter => filter.query === currentQuery);
-  
-  // Always show "Board filters" - never active
+  // Always show "Board filters" - active only when dropdown is open
   const displayText = 'Board filters';
-  const isDropdownActive = false;
+  const isDropdownActive = isOpen;
 
   // Filter filters based on search query
   const filteredFilters = filters.filter(filter =>

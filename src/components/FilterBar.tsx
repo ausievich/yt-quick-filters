@@ -5,9 +5,7 @@ import './FilterBar.css';
 export const FilterBar: React.FC<FilterBarProps> = ({
   filters,
   currentQuery,
-  onFilterClick,
-  onAddFilter,
-  onClearFilter
+  onFilterClick
 }) => {
   return (
     <>
