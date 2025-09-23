@@ -2,7 +2,7 @@ import React from 'react';
 import { FilterBarProps } from '../types';
 import './FilterBar.css';
 
-export const FilterBar: React.FC<FilterBarProps> = ({
+export const FilterBar = React.memo<FilterBarProps>(({
   filters,
   currentQuery,
   onFilterClick
@@ -21,4 +21,4 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       ))}
     </>
   );
-};
+});

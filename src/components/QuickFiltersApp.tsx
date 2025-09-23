@@ -45,7 +45,7 @@ export const QuickFiltersApp: React.FC = () => {
     updateCurrentQuery();
   }, [loadFilters, updateCurrentQuery]);
 
-  // Update filter source when filters change
+  // Update current query when filters change
   useEffect(() => {
     updateCurrentQuery();
   }, [filters, updateCurrentQuery]);

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Filter } from '../types';
 import './FilterDropdown.css';
 
@@ -11,7 +11,7 @@ interface FilterDropdownProps {
   onEditFilter: (item: Filter, index: number) => void;
 }
 
-export const FilterDropdown: React.FC<FilterDropdownProps> = ({
+export const FilterDropdown = React.memo<FilterDropdownProps>(({
   filters,
   currentQuery,
   onFilterClick,
@@ -29,10 +29,12 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
   const displayText = 'Board filters';
   const isDropdownActive = isOpen;
 
-  // Filter filters based on search query
-  const filteredFilters = filters.filter(filter =>
-    filter.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    filter.query.toLowerCase().includes(searchQuery.toLowerCase())
+  // Filter filters based on search query (memoized for performance)
+  const filteredFilters = useMemo(() => 
+    filters.filter(filter =>
+      filter.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      filter.query.toLowerCase().includes(searchQuery.toLowerCase())
+    ), [filters, searchQuery]
   );
 
   // Handle click outside to close dropdown
@@ -82,14 +84,14 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
         break;
       case 'ArrowDown':
         e.preventDefault();
-        const totalItems = filteredFilters.length + 1; // +1 for Clear option
+        const totalItems = filteredFilters.length;
         setSelectedIndex(prev => 
           prev < totalItems - 1 ? prev + 1 : 0
         );
         break;
       case 'ArrowUp':
         e.preventDefault();
-        const totalItemsUp = filteredFilters.length + 1; // +1 for Clear option
+        const totalItemsUp = filteredFilters.length;
         setSelectedIndex(prev => 
           prev > 0 ? prev - 1 : totalItemsUp - 1
         );
@@ -98,12 +100,6 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
         e.preventDefault();
         if (selectedIndex >= 0 && selectedIndex < filteredFilters.length) {
           onFilterClick(filteredFilters[selectedIndex].query, 'dropdown');
-          setIsOpen(false);
-          setSearchQuery('');
-          setSelectedIndex(-1);
-        } else if (selectedIndex === filteredFilters.length) {
-          // Clear option selected
-          onClearFilter();
           setIsOpen(false);
           setSearchQuery('');
           setSelectedIndex(-1);
@@ -230,17 +226,6 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
                   );
                 })}
                 
-                {/* Clear option */}
-                <div
-                  className={`filter-dropdown__item filter-dropdown__item--clear ${selectedIndex === filteredFilters.length ? 'filter-dropdown__item--selected' : ''}`}
-                  role="option"
-                  aria-selected={false}
-                  onClick={handleClearClick}
-                >
-                  <div className="filter-dropdown__item-content">
-                    <span className="filter-dropdown__item-label">Clear</span>
-                  </div>
-                </div>
               </>
             ) : (
               <div className="filter-dropdown__item filter-dropdown__item--empty">
@@ -257,9 +242,16 @@ export const FilterDropdown: React.FC<FilterDropdownProps> = ({
             >
               New filter...
             </button>
+            <button
+              className="filter-dropdown__toolbar-button filter-dropdown__toolbar-button--clear"
+              onClick={handleClearClick}
+              type="button"
+            >
+              Clear
+            </button>
           </div>
         </div>
       )}
     </div>
   );
-};
+});

@@ -267,6 +267,7 @@
 }
 
 .filter-dropdown__toolbar {
+  display: flex;
   padding: 0;
   border-top: 1px solid rgb(223, 229, 235);
 }
@@ -285,7 +286,7 @@
   font-size: 14px;
   line-height: calc(8px * 3.5);
   color: rgb(15, 91, 153);
-  width: 100%;
+  flex: 1;
   text-align: left;
   background-color: transparent;
   box-shadow: none;
@@ -296,6 +297,10 @@
 
 .filter-dropdown__toolbar-button:hover {
   color: rgb(255, 0, 140);
+}
+
+.filter-dropdown__toolbar-button--clear {
+  margin-left: 0;
 }
 
 /* Scrollbar styling for the list */

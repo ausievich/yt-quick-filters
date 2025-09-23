@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ModalProps } from '../types';
 import './FilterModal.css';
 
-export const FilterModal: React.FC<ModalProps> = ({
+export const FilterModal = React.memo<ModalProps>(({
   isOpen,
   isEdit,
   initialName = '',
@@ -168,4 +168,4 @@ export const FilterModal: React.FC<ModalProps> = ({
       </div>
     </>
   );
-};
+});
