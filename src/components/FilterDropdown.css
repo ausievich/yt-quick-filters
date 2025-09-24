@@ -169,6 +169,7 @@
 .filter-dropdown__list {
   max-height: 300px;
   overflow-y: auto;
+  padding: 8px 0;
 }
 
 .filter-dropdown__item {

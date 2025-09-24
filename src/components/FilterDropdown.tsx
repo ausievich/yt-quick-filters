@@ -25,9 +25,12 @@ export const FilterDropdown = React.memo<FilterDropdownProps>(({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Always show "Board filters" - active only when dropdown is open
-  const displayText = 'Board filters';
-  const isDropdownActive = isOpen;
+  // Determine display text and active state based on current filter
+  const currentFilter = filters.find(filter => filter.query === currentQuery);
+  const isFilterFromDropdown = currentFilter && !currentFilter.showInToolbar;
+  
+  const displayText = isFilterFromDropdown ? currentFilter.label : 'Board filters';
+  const isDropdownActive = isOpen || isFilterFromDropdown;
 
   // Filter filters based on search query (memoized for performance)
   const filteredFilters = useMemo(() => 
