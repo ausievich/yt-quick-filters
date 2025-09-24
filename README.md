@@ -37,14 +37,27 @@ This extension brings a long-requested feature (see JetBrains request [JT-38623]
 
 ## Development
 
-Clone the repo:
+### Prerequisites
+- Node.js 16+ 
+- npm or yarn
 
+### Setup
 ```bash
+# Clone the repo
 git clone https://github.com/ausievich/yt-quick-filters.git
 cd yt-quick-filters
-```
-Load the extension manually:
 
+# Install dependencies
+npm install
+
+# Type checking
+npm run type-check
+
+# Production build
+npm run build
+```
+
+### Load the extension manually:
 1. Open `chrome://extensions/`
 2. Enable **Developer mode**
 3. Click **Load unpacked** and select this repo folder
@@ -78,7 +91,7 @@ Please try to keep code style consistent and test your changes locally before PR
 
 ## Support
 
-You can sponsor this project via platforms:
+You can support this project via platforms:
 
 [![GitHub Sponsors](https://img.shields.io/badge/Sponsor-GitHub-blue?logo=github-sponsors)](https://github.com/sponsors/ausievich)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-yellow?logo=buy-me-a-coffee)](https://buymeacoffee.com/ausievich)
