@@ -187,6 +187,7 @@
   font-size: 14px;
   line-height: calc(8px * 3);
   color: rgb(31, 35, 38);
+  font-weight: normal;
   outline: 0px;
 }
 
@@ -200,7 +201,7 @@
 
 .filter-dropdown__item--current {
   background: rgb(212, 237, 255);
-  font-weight: 500;
+  font-weight: normal;
 }
 
 .filter-dropdown__item--current:hover {
@@ -242,6 +243,7 @@
   font-size: 14px;
   line-height: 20px;
   color: rgb(31, 35, 38);
+  font-weight: normal;
 }
 
 .filter-dropdown__item-edit {
