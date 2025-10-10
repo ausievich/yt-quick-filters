@@ -14,7 +14,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       <button className="btn ghost" onClick={onAddFilter}>
         Add filter...
       </button>
-      
+
       {filters.map((filter, index) => (
         <button
           key={index}
