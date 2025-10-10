@@ -11,6 +11,10 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 }) => {
   return (
     <>
+      <button className="btn ghost" onClick={onAddFilter}>
+        Add filter...
+      </button>
+      
       {filters.map((filter, index) => (
         <button
           key={index}
@@ -22,11 +26,6 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           <span className="lbl">{filter.label}</span>
         </button>
       ))}
-      
-      
-      <button className="btn ghost" onClick={onAddFilter}>
-        Add filter...
-      </button>
     </>
   );
 };
