@@ -40,6 +40,5 @@ export interface FilterBarProps {
   currentQuery: string;
   onFilterClick: (query: string) => void;
   onAddFilter: () => void;
-  onClearFilter: () => void;
   onContextMenu: (e: React.MouseEvent, item: Filter, index: number) => void;
 }

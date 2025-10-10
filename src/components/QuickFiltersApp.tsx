@@ -59,14 +59,14 @@ export const QuickFiltersApp: React.FC = () => {
   }, [loadFilters, updateCurrentQuery]);
 
   const handleFilterClick = useCallback((query: string) => {
-    utilsService.setQuery(query);
+    // Если кликнули по уже активному фильтру, отключаем его (как Clear)
+    if (currentQuery === query) {
+      utilsService.setQuery('');
+    } else {
+      utilsService.setQuery(query);
+    }
     updateCurrentQuery();
-  }, [utilsService, updateCurrentQuery]);
-
-  const handleClearFilter = useCallback(() => {
-    utilsService.setQuery('');
-    updateCurrentQuery();
-  }, [utilsService, updateCurrentQuery]);
+  }, [utilsService, updateCurrentQuery, currentQuery]);
 
   const handleAddFilter = useCallback(() => {
     setModal({
@@ -156,7 +156,6 @@ export const QuickFiltersApp: React.FC = () => {
         currentQuery={currentQuery}
         onFilterClick={handleFilterClick}
         onAddFilter={handleAddFilter}
-        onClearFilter={handleClearFilter}
         onContextMenu={handleContextMenu}
       />
       
