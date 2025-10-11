@@ -16,7 +16,7 @@ export function useQueryParams() {
       }
     });
 
-    observer.observe(document, {
+    observer.observe(document.documentElement, {
       childList: true,
       subtree: true,
       attributes: true,
