@@ -39,6 +39,10 @@ export const QuickFiltersApp: React.FC = () => {
 
   const storageService = StorageService.getInstance();
   const utilsService = UtilsService.getInstance();
+  
+  // Use custom hook for working with query parameters
+  const { getParam } = useQueryParams();
+  const currentQuery = getParam('query') || '';
 
   // Use custom hook for working with query parameters
   const { getParam } = useQueryParams();
