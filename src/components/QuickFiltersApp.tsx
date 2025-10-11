@@ -43,10 +43,6 @@ export const QuickFiltersApp: React.FC = () => {
   
   // State to hold the DOM node for the portal
   const [portalTarget, setPortalTarget] = useState<Element | null>(null);
-  
-  // Use custom hook for working with query parameters
-  const { getParam } = useQueryParams();
-  const currentQuery = getParam('query') || '';
 
   // Use custom hook for working with query parameters
   const { getParam } = useQueryParams();
