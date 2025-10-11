@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Filter } from '../types';
 import { StorageService } from '../services/storage';
 import { UtilsService } from '../services/utils';
+import { useQueryParams } from '../hooks/useQueryParams';
 import { FilterBar } from './FilterBar';
 import { FilterModal } from './FilterModal';
 import { ContextMenu } from './ContextMenu';
@@ -24,7 +25,6 @@ interface ModalState {
 
 export const QuickFiltersApp: React.FC = () => {
   const [filters, setFilters] = useState<Filter[]>([]);
-  const [currentQuery, setCurrentQuery] = useState('');
   const [contextMenu, setContextMenu] = useState<ContextMenuState>({
     isOpen: false,
     x: 0,
@@ -39,6 +39,10 @@ export const QuickFiltersApp: React.FC = () => {
 
   const storageService = StorageService.getInstance();
   const utilsService = UtilsService.getInstance();
+  
+  // Use custom hook for working with query parameters
+  const { getParam } = useQueryParams();
+  const currentQuery = getParam('query') || '';
 
   const loadFilters = useCallback(async () => {
     try {
@@ -49,24 +53,18 @@ export const QuickFiltersApp: React.FC = () => {
     }
   }, [storageService]);
 
-  const updateCurrentQuery = useCallback(() => {
-    setCurrentQuery(utilsService.getCurrentQuery());
-  }, [utilsService]);
-
   useEffect(() => {
     loadFilters();
-    updateCurrentQuery();
-  }, [loadFilters, updateCurrentQuery]);
+  }, [loadFilters]);
 
   const handleFilterClick = useCallback((query: string) => {
-    utilsService.setQuery(query);
-    updateCurrentQuery();
-  }, [utilsService, updateCurrentQuery]);
-
-  const handleClearFilter = useCallback(() => {
-    utilsService.setQuery('');
-    updateCurrentQuery();
-  }, [utilsService, updateCurrentQuery]);
+    // If clicked on already active filter, deactivate it (toggle)
+    if (utilsService.normalizeQuery(currentQuery) === utilsService.normalizeQuery(query)) {
+      utilsService.setQuery('');
+    } else {
+      utilsService.setQuery(query);
+    }
+  }, [utilsService, currentQuery]);
 
   const handleAddFilter = useCallback(() => {
     setModal({
@@ -149,14 +147,16 @@ export const QuickFiltersApp: React.FC = () => {
     }
   }, [modal.isEdit, storageService, loadFilters, handleModalClose]);
 
+  // Determine active filter based on current query
+  const activeFilter = utilsService.findActiveFilter(filters, currentQuery);
+
   return (
     <>
       <FilterBar
         filters={filters}
-        currentQuery={currentQuery}
+        activeFilter={activeFilter}
         onFilterClick={handleFilterClick}
         onAddFilter={handleAddFilter}
-        onClearFilter={handleClearFilter}
         onContextMenu={handleContextMenu}
       />
       

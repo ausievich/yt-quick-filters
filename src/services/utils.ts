@@ -8,10 +8,6 @@ export class UtilsService {
     return UtilsService.instance;
   }
 
-  public getCurrentQuery(): string {
-    return new URL(location.href).searchParams.get('query') || '';
-  }
-
   public setQuery(query: string): void {
     const url = new URL(location.href);
     if (query && query.trim()) {
@@ -34,7 +30,26 @@ export class UtilsService {
     return element;
   }
 
-  public escapeHtml(text: string): string {
-    return text.replace(/"/g, '&quot;');
+
+  /**
+   * Normalizes query for comparison - removes extra spaces and converts to lowercase
+   */
+  public normalizeQuery(query: string): string {
+    return query.trim().replace(/\s+/g, ' ').toLowerCase();
+  }
+
+  /**
+   * Finds active filter by current query
+   */
+  public findActiveFilter<T extends { query: string }>(filters: T[], currentQuery: string): T | null {
+    const normalizedCurrentQuery = this.normalizeQuery(currentQuery);
+    
+    for (const filter of filters) {
+      if (this.normalizeQuery(filter.query) === normalizedCurrentQuery) {
+        return filter;
+      }
+    }
+    
+    return null;
   }
 }
