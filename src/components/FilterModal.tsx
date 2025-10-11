@@ -19,6 +19,13 @@ export const FilterModal: React.FC<ModalProps> = ({
     if (isOpen) {
       setName(initialName);
       setQuery(initialQuery);
+      // Focus on the name input when modal opens
+      setTimeout(() => {
+        const nameInput = document.getElementById('ytqf-name');
+        if (nameInput) {
+          nameInput.focus();
+        }
+      }, 0);
     }
   }, [isOpen, isEdit, initialName, initialQuery]);
 

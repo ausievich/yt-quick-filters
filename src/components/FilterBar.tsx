@@ -4,18 +4,21 @@ import './FilterBar.css';
 
 export const FilterBar: React.FC<FilterBarProps> = ({
   filters,
-  currentQuery,
+  activeFilter,
   onFilterClick,
   onAddFilter,
-  onClearFilter,
   onContextMenu
 }) => {
   return (
     <>
+      <button className="btn ghost" onClick={onAddFilter}>
+        Add filter...
+      </button>
+      
       {filters.map((filter, index) => (
         <button
           key={index}
-          className={`btn ${currentQuery === filter.query ? 'active' : ''}`}
+          className={`btn ${activeFilter === filter ? 'active' : ''}`}
           title={filter.query}
           onClick={() => onFilterClick(filter.query)}
           onContextMenu={(e) => onContextMenu(e, filter, index)}
@@ -23,14 +26,6 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           <span className="lbl">{filter.label}</span>
         </button>
       ))}
-      
-      <button className="btn ghost" onClick={onClearFilter}>
-        Clear
-      </button>
-      
-      <button className="btn ghost" onClick={onAddFilter}>
-        Add filter...
-      </button>
     </>
   );
 };
