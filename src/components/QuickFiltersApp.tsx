@@ -85,15 +85,13 @@ export const QuickFiltersApp: React.FC = () => {
     const targetElement = findTargetElement();
     if (targetElement) {
       setPortalTarget(targetElement);
-      return;
     }
 
-    // If not found, wait for DOM changes
+    // Keep observing DOM changes to reattach after SPA navigation
     const observer = new MutationObserver(() => {
       const targetElement = findTargetElement();
       if (targetElement) {
         setPortalTarget(targetElement);
-        observer.disconnect();
       }
     });
 
