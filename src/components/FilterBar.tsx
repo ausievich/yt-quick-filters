@@ -4,7 +4,7 @@ import './FilterBar.css';
 
 export const FilterBar: React.FC<FilterBarProps> = ({
   filters,
-  currentQuery,
+  activeFilter,
   onFilterClick,
   onAddFilter,
   onContextMenu
@@ -18,7 +18,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       {filters.map((filter, index) => (
         <button
           key={index}
-          className={`btn ${currentQuery === filter.query ? 'active' : ''}`}
+          className={`btn ${activeFilter === filter ? 'active' : ''}`}
           title={filter.query}
           onClick={() => onFilterClick(filter.query)}
           onContextMenu={(e) => onContextMenu(e, filter, index)}
