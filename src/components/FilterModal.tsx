@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ModalProps } from '../types';
 import './FilterModal.css';
 
@@ -14,17 +14,15 @@ export const FilterModal: React.FC<ModalProps> = ({
   const [name, setName] = useState(initialName);
   const [query, setQuery] = useState(initialQuery);
   const [isValid, setIsValid] = useState(false);
+  const nameInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isOpen) {
       setName(initialName);
       setQuery(initialQuery);
-      // Focus on the name input when modal opens
+      // Focus on name input when modal opens
       setTimeout(() => {
-        const nameInput = document.getElementById('ytqf-name');
-        if (nameInput) {
-          nameInput.focus();
-        }
+        nameInputRef.current?.focus();
       }, 0);
     }
   }, [isOpen, isEdit, initialName, initialQuery]);
@@ -76,6 +74,7 @@ export const FilterModal: React.FC<ModalProps> = ({
           <div className="body">
             <label>Name</label>
             <input
+              ref={nameInputRef}
               id="ytqf-name"
               type="text"
               placeholder="My tasks"

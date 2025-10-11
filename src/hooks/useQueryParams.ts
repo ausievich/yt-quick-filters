@@ -18,9 +18,7 @@ export function useQueryParams() {
 
     observer.observe(document.documentElement, {
       childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['href', 'src', 'data-*']
+      subtree: true
     });
 
     // Also listen to standard navigation events
