@@ -2,10 +2,20 @@
 #ytqf-bar {
   display: inline-flex;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* Prevent wrapping in portal */
   gap: 4px;
   margin-right: 12px;
   max-width: 60%; /* Limit width, leaving space for other elements */
+}
+
+/* Integration into YouTrack top bar */
+#ytqf-filter-container #ytqf-bar {
+  margin-left: 0; /* No left margin, container handles spacing */
+  margin-right: 0; /* Remove right margin when in portal */
+  max-width: none; /* Remove width limit when in portal */
+  display: inline-flex; /* Force inline-flex layout */
+  align-items: center; /* Vertical alignment */
+  flex-wrap: nowrap; /* Prevent wrapping */
 }
 
 #ytqf-bar .btn {
@@ -24,6 +34,9 @@
   color: #1F2326;
   line-height: 22px;
   overflow: hidden;
+  white-space: nowrap; /* Prevent text wrapping */
+  flex-shrink: 0; /* Prevent button shrinking */
+  transition: all 0.15s ease; /* Smooth transitions */
 }
 
 /* Hover states */

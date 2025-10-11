@@ -10,7 +10,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   onContextMenu
 }) => {
   return (
-    <>
+    <div id="ytqf-bar">
       <button className="btn ghost" onClick={onAddFilter}>
         Add filter...
       </button>
@@ -26,6 +26,6 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           <span className="lbl">{filter.label}</span>
         </button>
       ))}
-    </>
+    </div>
   );
 };
