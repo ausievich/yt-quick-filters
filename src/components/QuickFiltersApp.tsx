@@ -45,7 +45,7 @@ export const QuickFiltersApp: React.FC = () => {
   const [portalTarget, setPortalTarget] = useState<Element | null>(null);
 
   // Use custom hook for working with query parameters
-  const { getParam } = useQueryParams();
+  const { getParam, pathname } = useQueryParams();
   const currentQuery = getParam('query') || '';
 
   const loadFilters = useCallback(async () => {
@@ -99,9 +99,10 @@ export const QuickFiltersApp: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Reload filters when pathname changes (board change)
   useEffect(() => {
     loadFilters();
-  }, [loadFilters]);
+  }, [pathname, loadFilters]);
 
   const handleFilterClick = useCallback((query: string) => {
     // If clicked on already active filter, deactivate it (toggle)
