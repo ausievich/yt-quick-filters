@@ -6,26 +6,29 @@ import { useState, useEffect, useMemo } from 'react';
  */
 export function useQueryParams() {
   const [search, setSearch] = useState(() => window.location.search);
+  const [pathname, setPathname] = useState(() => window.location.pathname);
 
   useEffect(() => {
     // Track URL changes through DOM mutations (YouTrack's method)
     const observer = new MutationObserver(() => {
       const currentSearch = window.location.search;
-      if (currentSearch !== search) {
+      const currentPathname = window.location.pathname;
+      
+      if (currentSearch !== search || currentPathname !== pathname) {
         setSearch(currentSearch);
+        setPathname(currentPathname);
       }
     });
 
     observer.observe(document.documentElement, {
       childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['href', 'src', 'data-*']
+      subtree: true
     });
 
     // Also listen to standard navigation events
     const handleLocationChange = () => {
       setSearch(window.location.search);
+      setPathname(window.location.pathname);
     };
 
     window.addEventListener('popstate', handleLocationChange);
@@ -34,7 +37,7 @@ export function useQueryParams() {
       observer.disconnect();
       window.removeEventListener('popstate', handleLocationChange);
     };
-  }, [search]);
+  }, [search, pathname]);
 
   const params = useMemo(() => new URLSearchParams(search), [search]);
 
@@ -43,6 +46,7 @@ export function useQueryParams() {
   return { 
     getParam, 
     params,
-    search 
+    search,
+    pathname
   };
 }
