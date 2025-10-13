@@ -18,19 +18,6 @@ export class UtilsService {
     location.assign(url.toString());
   }
 
-  public findToolbar(): Element | null {
-    return document.querySelector('.yt-agile-board__toolbar[data-test="yt-agile-board-toolbar"]') ||
-           document.querySelector('.yt-agile-board__toolbar');
-  }
-
-  public createElement(tag: string, className?: string, id?: string): HTMLElement {
-    const element = document.createElement(tag);
-    if (className) element.className = className;
-    if (id) element.id = id;
-    return element;
-  }
-
-
   /**
    * Normalizes query for comparison - removes extra spaces and converts to lowercase
    */
