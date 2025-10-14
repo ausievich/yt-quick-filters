@@ -69,10 +69,10 @@ export const DaysInStatus: React.FC<DaysInStatusProps> = ({ issueId, onDataLoade
 
   return (
     <div className="days-in-status">
-      <div className={`days-in-status__tag ${createdColorClass}`} title={`Created: ${new Date(data.created).toLocaleString()}`}>
+      <div className={`days-in-status__tag ${createdColorClass}`} title={`Created: ${new Date(data.created).toLocaleDateString()}`}>
         {daysSinceCreated}
       </div>
-      <div className={`days-in-status__tag ${updatedColorClass}`} title={`Updated: ${new Date(data.updated).toLocaleString()}`}>
+      <div className={`days-in-status__tag ${updatedColorClass}`} title={`Updated: ${new Date(data.updated).toLocaleDateString()}`}>
         {daysSinceUpdated}
       </div>
     </div>

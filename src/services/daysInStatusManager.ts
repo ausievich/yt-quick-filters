@@ -6,6 +6,7 @@ export class DaysInStatusManager {
   private static instance: DaysInStatusManager;
   private observer: MutationObserver | null = null;
   private mountedComponents: Map<string, { root: any; element: HTMLElement }> = new Map();
+  private isEnabled: boolean = true;
 
   public static getInstance(): DaysInStatusManager {
     if (!DaysInStatusManager.instance) {
@@ -44,7 +45,30 @@ export class DaysInStatusManager {
     this.mountedComponents.clear();
   }
 
+  public setEnabled(enabled: boolean): void {
+    this.isEnabled = enabled;
+    
+    if (enabled) {
+      // Re-scan and add components
+      this.scanAndAddDaysInStatus();
+    } else {
+      // Hide all components
+      this.hideAllComponents();
+    }
+  }
+
+  private hideAllComponents(): void {
+    this.mountedComponents.forEach(({ root }) => {
+      root.unmount();
+    });
+    this.mountedComponents.clear();
+  }
+
   private scanAndAddDaysInStatus(): void {
+    if (!this.isEnabled) {
+      return;
+    }
+    
     const cards = this.findIssueCards();
     console.log(`DaysInStatusManager: Found ${cards.length} cards`);
     

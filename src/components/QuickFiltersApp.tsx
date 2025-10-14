@@ -28,6 +28,7 @@ interface ModalState {
 
 export const QuickFiltersApp: React.FC = () => {
   const [filters, setFilters] = useState<Filter[]>([]);
+  const [showDaysInStatus, setShowDaysInStatus] = useState<boolean>(false);
   const [contextMenu, setContextMenu] = useState<ContextMenuState>({
     isOpen: false,
     x: 0,
@@ -61,6 +62,16 @@ export const QuickFiltersApp: React.FC = () => {
     }
   }, [storageService]);
 
+  const loadDaysInStatusState = useCallback(async () => {
+    try {
+      const enabled = await storageService.getDaysInStatusEnabled();
+      setShowDaysInStatus(enabled);
+      daysInStatusManager.setEnabled(enabled);
+    } catch (error) {
+      console.error('Failed to load days in status state:', error);
+    }
+  }, [storageService, daysInStatusManager]);
+
   // Effect to find the target element for the portal
   useEffect(() => {
     const findTargetElement = () => {
@@ -92,7 +103,8 @@ export const QuickFiltersApp: React.FC = () => {
   // Reload filters when pathname changes (board change)
   useEffect(() => {
     loadFilters();
-  }, [pathname, loadFilters]);
+    loadDaysInStatusState();
+  }, [pathname, loadFilters, loadDaysInStatusState]);
 
   // Initialize DaysInStatusManager
   useEffect(() => {
@@ -192,6 +204,19 @@ export const QuickFiltersApp: React.FC = () => {
     }
   }, [modal.isEdit, storageService, loadFilters, handleModalClose]);
 
+  // Handle toggle days in status
+  const handleToggleDaysInStatus = useCallback(async () => {
+    const newState = !showDaysInStatus;
+    setShowDaysInStatus(newState);
+    daysInStatusManager.setEnabled(newState);
+    
+    try {
+      await storageService.setDaysInStatusEnabled(newState);
+    } catch (error) {
+      console.error('Failed to save days in status state:', error);
+    }
+  }, [showDaysInStatus, daysInStatusManager, storageService]);
+
   // Determine active filter based on current query
   const activeFilter = utilsService.findActiveFilter(filters, currentQuery);
 
@@ -205,6 +230,8 @@ export const QuickFiltersApp: React.FC = () => {
             onFilterClick={handleFilterClick}
             onAddFilter={handleAddFilter}
             onContextMenu={handleContextMenu}
+            showDaysInStatus={showDaysInStatus}
+            onToggleDaysInStatus={handleToggleDaysInStatus}
           />,
           portalTarget
         )
@@ -215,6 +242,8 @@ export const QuickFiltersApp: React.FC = () => {
           onFilterClick={handleFilterClick}
           onAddFilter={handleAddFilter}
           onContextMenu={handleContextMenu}
+          showDaysInStatus={showDaysInStatus}
+          onToggleDaysInStatus={handleToggleDaysInStatus}
         />
       )}
       
