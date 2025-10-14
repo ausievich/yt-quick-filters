@@ -8,6 +8,7 @@ import { useQueryParams } from '../hooks/useQueryParams';
 import { FilterBar } from './FilterBar';
 import { FilterModal } from './FilterModal';
 import { ContextMenu } from './ContextMenu';
+import { DaysInStatusManager } from '../services/daysInStatusManager';
 
 interface ContextMenuState {
   isOpen: boolean;
@@ -42,6 +43,7 @@ export const QuickFiltersApp: React.FC = () => {
   const storageService = StorageService.getInstance();
   const utilsService = UtilsService.getInstance();
   const versionService = YouTrackVersionService.getInstance();
+  const daysInStatusManager = DaysInStatusManager.getInstance();
   
   // State to hold the DOM node for the portal
   const [portalTarget, setPortalTarget] = useState<Element | null>(null);
@@ -91,6 +93,14 @@ export const QuickFiltersApp: React.FC = () => {
   useEffect(() => {
     loadFilters();
   }, [pathname, loadFilters]);
+
+  // Initialize DaysInStatusManager
+  useEffect(() => {
+    daysInStatusManager.start();
+    return () => {
+      daysInStatusManager.stop();
+    };
+  }, [daysInStatusManager]);
 
   const handleFilterClick = useCallback((query: string) => {
     // If clicked on already active filter, deactivate it (toggle)
