@@ -21,7 +21,9 @@ export const DaysInStatus: React.FC<DaysInStatusProps> = ({ issueId, onDataLoade
         if (cardElement) {
           const result = await simpleService.getDaysInStatusFromDOM(issueId, cardElement);
           setData(result);
-          onDataLoaded?.(result);
+          if (result) {
+            onDataLoaded?.(result);
+          }
         }
       } catch (error) {
         console.error(`❌ Error loading days in status for ${issueId}:`, error);
@@ -44,7 +46,17 @@ export const DaysInStatus: React.FC<DaysInStatusProps> = ({ issueId, onDataLoade
   }
 
   if (!data) {
-    return null;
+    // Show dashes when API data is not available
+    return (
+      <div className="days-in-status">
+        <div className="days-in-status__tag days-in-status__tag--gray" title="No data available">
+          —
+        </div>
+        <div className="days-in-status__tag days-in-status__tag--gray" title="No data available">
+          —
+        </div>
+      </div>
+    );
   }
 
   const currentTime = Date.now();

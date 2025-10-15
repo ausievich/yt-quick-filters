@@ -50,3 +50,8 @@
 .yt-agile-card .days-in-status__tag {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
+
+.days-in-status__tag--gray {
+  background-color: #6c757d;
+  color: white;
+}

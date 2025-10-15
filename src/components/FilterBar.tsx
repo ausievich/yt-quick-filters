@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FilterBarProps } from '../types';
+import { SecureAPIClient } from '../services/secureAPIClient';
 import './FilterBar.css';
 
 export const FilterBar: React.FC<FilterBarProps> = ({
@@ -11,8 +12,53 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   showDaysInStatus,
   onToggleDaysInStatus
 }) => {
+  const [showTokenInput, setShowTokenInput] = useState(false);
+  const [tokenInput, setTokenInput] = useState('');
+  const [hasToken, setHasToken] = useState(false);
+
+  // Check if we have a token on mount
+  React.useEffect(() => {
+    SecureAPIClient.hasValidToken().then(setHasToken);
+  }, []);
+
+  const handleTokenSubmit = async () => {
+    if (tokenInput.trim()) {
+      const success = await SecureAPIClient.saveToken(tokenInput.trim());
+      if (success) {
+        setHasToken(true);
+        setShowTokenInput(false);
+        setTokenInput('');
+      }
+    }
+  };
+
+  const handleClearToken = async () => {
+    const success = await SecureAPIClient.clearToken();
+    if (success) {
+      setHasToken(false);
+    }
+  };
   return (
     <div id="ytqf-bar">
+      {/* Token management - moved to the left */}
+      {!hasToken ? (
+        <button 
+          className="btn ghost" 
+          onClick={() => setShowTokenInput(true)}
+          title="Setup YouTrack API token"
+        >
+          🔑 Setup Token
+        </button>
+      ) : (
+        <button 
+          className="btn active" 
+          onClick={handleClearToken}
+          title="Clear API token"
+        >
+          🔑 Token Set
+        </button>
+      )}
+
       <button 
         className={`btn ${showDaysInStatus ? 'active' : 'ghost'}`} 
         onClick={onToggleDaysInStatus}
@@ -38,6 +84,31 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           <span className="lbl">{filter.label}</span>
         </button>
       ))}
+      
+      {/* Token input modal */}
+      {showTokenInput && (
+        <div className="token-modal">
+          <div className="token-modal-content">
+            <h3>Setup YouTrack API Token</h3>
+            <p>Enter your YouTrack permanent token:</p>
+            <input
+              type="password"
+              value={tokenInput}
+              onChange={(e) => setTokenInput(e.target.value)}
+              placeholder="perm:xxxxx.xxxxx.xxxxx"
+              onKeyPress={(e) => e.key === 'Enter' && handleTokenSubmit()}
+            />
+            <div className="token-modal-buttons">
+              <button onClick={handleTokenSubmit} className="btn active">
+                Save
+              </button>
+              <button onClick={() => setShowTokenInput(false)} className="btn ghost">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
