@@ -8,6 +8,7 @@ import { useQueryParams } from '../hooks/useQueryParams';
 import { FilterBar } from './FilterBar';
 import { FilterModal } from './FilterModal';
 import { ContextMenu } from './ContextMenu';
+import { DaysInStatusButton } from './DaysInStatusButton';
 import { DaysInStatusManager } from '../services/daysInStatusManager';
 
 interface ContextMenuState {
@@ -28,7 +29,6 @@ interface ModalState {
 
 export const QuickFiltersApp: React.FC = () => {
   const [filters, setFilters] = useState<Filter[]>([]);
-  const [showDaysInStatus, setShowDaysInStatus] = useState<boolean>(false);
   const [contextMenu, setContextMenu] = useState<ContextMenuState>({
     isOpen: false,
     x: 0,
@@ -48,6 +48,7 @@ export const QuickFiltersApp: React.FC = () => {
   
   // State to hold the DOM node for the portal
   const [portalTarget, setPortalTarget] = useState<Element | null>(null);
+  const [daysButtonTarget, setDaysButtonTarget] = useState<Element | null>(null);
 
   // Use custom hook for working with query parameters
   const { getParam, pathname } = useQueryParams();
@@ -62,33 +63,32 @@ export const QuickFiltersApp: React.FC = () => {
     }
   }, [storageService]);
 
-  const loadDaysInStatusState = useCallback(async () => {
-    try {
-      const enabled = await storageService.getDaysInStatusEnabled();
-      setShowDaysInStatus(enabled);
-      daysInStatusManager.setEnabled(enabled);
-    } catch (error) {
-      console.error('Failed to load days in status state:', error);
-    }
-  }, [storageService, daysInStatusManager]);
 
-  // Effect to find the target element for the portal
+  // Effect to find the target elements for the portals
   useEffect(() => {
-    const findTargetElement = () => {
-      return versionService.getTargetElement();
+    const findTargetElements = () => {
+      const filterTarget = versionService.getTargetElement();
+      const daysButtonTarget = versionService.getDaysInStatusTargetElement();
+      return { filterTarget, daysButtonTarget };
     };
 
     // Try immediately first
-    const targetElement = findTargetElement();
-    if (targetElement) {
-      setPortalTarget(targetElement);
+    const { filterTarget, daysButtonTarget } = findTargetElements();
+    if (filterTarget) {
+      setPortalTarget(filterTarget);
+    }
+    if (daysButtonTarget) {
+      setDaysButtonTarget(daysButtonTarget);
     }
 
     // Keep observing DOM changes to reattach after SPA navigation
     const observer = new MutationObserver(() => {
-      const targetElement = findTargetElement();
-      if (targetElement) {
-        setPortalTarget(targetElement);
+      const { filterTarget, daysButtonTarget } = findTargetElements();
+      if (filterTarget) {
+        setPortalTarget(filterTarget);
+      }
+      if (daysButtonTarget) {
+        setDaysButtonTarget(daysButtonTarget);
       }
     });
 
@@ -103,8 +103,7 @@ export const QuickFiltersApp: React.FC = () => {
   // Reload filters when pathname changes (board change)
   useEffect(() => {
     loadFilters();
-    loadDaysInStatusState();
-  }, [pathname, loadFilters, loadDaysInStatusState]);
+  }, [pathname, loadFilters]);
 
   // Initialize DaysInStatusManager
   useEffect(() => {
@@ -204,24 +203,21 @@ export const QuickFiltersApp: React.FC = () => {
     }
   }, [modal.isEdit, storageService, loadFilters, handleModalClose]);
 
-  // Handle toggle days in status
-  const handleToggleDaysInStatus = useCallback(async () => {
-    const newState = !showDaysInStatus;
-    setShowDaysInStatus(newState);
-    daysInStatusManager.setEnabled(newState);
-    
-    try {
-      await storageService.setDaysInStatusEnabled(newState);
-    } catch (error) {
-      console.error('Failed to save days in status state:', error);
-    }
-  }, [showDaysInStatus, daysInStatusManager, storageService]);
 
   // Determine active filter based on current query
   const activeFilter = utilsService.findActiveFilter(filters, currentQuery);
 
   return (
     <>
+      {/* Render Days In Status button in toolbar */}
+      {daysButtonTarget && 
+        ReactDOM.createPortal(
+          <DaysInStatusButton />,
+          daysButtonTarget
+        )
+      }
+      
+      {/* Render FilterBar */}
       {portalTarget ? (
         ReactDOM.createPortal(
           <FilterBar
@@ -230,8 +226,6 @@ export const QuickFiltersApp: React.FC = () => {
             onFilterClick={handleFilterClick}
             onAddFilter={handleAddFilter}
             onContextMenu={handleContextMenu}
-            showDaysInStatus={showDaysInStatus}
-            onToggleDaysInStatus={handleToggleDaysInStatus}
           />,
           portalTarget
         )
@@ -242,8 +236,6 @@ export const QuickFiltersApp: React.FC = () => {
           onFilterClick={handleFilterClick}
           onAddFilter={handleAddFilter}
           onContextMenu={handleContextMenu}
-          showDaysInStatus={showDaysInStatus}
-          onToggleDaysInStatus={handleToggleDaysInStatus}
         />
       )}
       
