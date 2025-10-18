@@ -2,7 +2,7 @@
 
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/iaddgmcajdiblafjfhloadmphkbplddo.svg)](https://chromewebstore.google.com/detail/iaddgmcajdiblafjfhloadmphkbplddo)
 
-Add quick filter buttons to YouTrack Agile Boards — just like Jira has had for years.
+Add quick filter buttons to YouTrack Agile Boards. Create filters via a modal.
 
 [Install from Chrome Web Store](https://chromewebstore.google.com/detail/iaddgmcajdiblafjfhloadmphkbplddo)
 
