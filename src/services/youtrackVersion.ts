@@ -16,6 +16,13 @@ export class YouTrackVersionService {
    * First tries new YouTrack version, then falls back to old version
    */
   public getTargetElement(): Element | null {
+    // Check for fallback test flag
+    const forceFallback = localStorage.getItem('ytqf-force-fallback') === 'true';
+    
+    if (forceFallback) {
+      return this.findOldVersionTarget();
+    }
+
     // Try new YouTrack version first
     const newTarget = this.findNewVersionTarget();
     if (newTarget) {
@@ -47,14 +54,13 @@ export class YouTrackVersionService {
   private findOldVersionTarget(): Element | null {
     const toolbar = this.findToolbar();
     if (toolbar) {
-      let filterContainer = toolbar.querySelector('#ytqf-filter-container');
-      if (!filterContainer) {
-        filterContainer = document.createElement('div');
-        filterContainer.id = 'ytqf-filter-container';
-        (filterContainer as HTMLElement).style.cssText = 'display: inline-flex; align-items: center; margin: 8px 0; flex-wrap: wrap;';
-        toolbar.appendChild(filterContainer);
+      let filterBar = toolbar.querySelector('#ytqf-bar');
+      if (!filterBar) {
+        filterBar = document.createElement('div');
+        filterBar.id = 'ytqf-bar';
+        toolbar.insertBefore(filterBar, toolbar.firstChild);
       }
-      return filterContainer;
+      return filterBar;
     }
     return null;
   }
