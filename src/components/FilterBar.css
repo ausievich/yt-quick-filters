@@ -2,20 +2,23 @@
 #ytqf-bar {
   display: inline-flex;
   align-items: center;
-  flex-wrap: nowrap; /* Prevent wrapping in portal */
   gap: 4px;
-  margin-right: 12px;
-  max-width: 60%; /* Limit width, leaving space for other elements */
 }
 
-/* Integration into YouTrack top bar */
+/* Fallback mode (old YouTrack version) - filters in toolbar */
+#ytqf-filter-container {
+  margin-right: 12px; /* Right margin for fallback */
+}
+
 #ytqf-filter-container #ytqf-bar {
-  margin-left: 0; /* No left margin, container handles spacing */
-  margin-right: 0; /* Remove right margin when in portal */
-  max-width: none; /* Remove width limit when in portal */
-  display: inline-flex; /* Force inline-flex layout */
-  align-items: center; /* Vertical alignment */
-  flex-wrap: nowrap; /* Prevent wrapping */
+  flex-wrap: wrap; /* Allow wrapping in fallback mode */
+}
+
+/* Integration into YouTrack top bar (new version) */
+#ytqf-filter-container #ytqf-bar {
+  margin-left: 0;
+  margin-right: 0;
+  flex-wrap: nowrap;
 }
 
 #ytqf-bar .btn {

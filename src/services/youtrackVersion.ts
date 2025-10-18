@@ -54,13 +54,14 @@ export class YouTrackVersionService {
   private findOldVersionTarget(): Element | null {
     const toolbar = this.findToolbar();
     if (toolbar) {
-      let filterBar = toolbar.querySelector('#ytqf-bar');
-      if (!filterBar) {
-        filterBar = document.createElement('div');
-        filterBar.id = 'ytqf-bar';
-        toolbar.insertBefore(filterBar, toolbar.firstChild);
+      // For fallback mode, create a container for React portal
+      let filterContainer = toolbar.querySelector('#ytqf-filter-container');
+      if (!filterContainer) {
+        filterContainer = document.createElement('div');
+        filterContainer.id = 'ytqf-filter-container';
+        toolbar.insertBefore(filterContainer, toolbar.firstChild);
       }
-      return filterBar;
+      return filterContainer;
     }
     return null;
   }
