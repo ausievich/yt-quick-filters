@@ -14,8 +14,8 @@
   flex-wrap: wrap; /* Allow wrapping in fallback mode */
 }
 
-/* Integration into YouTrack top bar (new version) */
-#ytqf-filter-container #ytqf-bar {
+/* Integration into YouTrack top bar (new version) - override fallback styles */
+div.yt-agile-board__top-bar #ytqf-filter-container #ytqf-bar {
   margin-left: 0;
   margin-right: 0;
   flex-wrap: nowrap;
