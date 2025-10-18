@@ -6,12 +6,9 @@
 }
 
 /* Fallback mode (old YouTrack version) - filters in toolbar */
-#ytqf-filter-container {
-  margin-right: 12px; /* Right margin for fallback */
-}
-
-#ytqf-filter-container #ytqf-bar {
+#ytqf-bar {
   flex-wrap: wrap; /* Allow wrapping in fallback mode */
+  margin-right: 12px; /* Right margin for fallback */
 }
 
 /* Integration into YouTrack top bar (new version) - override fallback styles */

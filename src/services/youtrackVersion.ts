@@ -54,12 +54,20 @@ export class YouTrackVersionService {
   private findOldVersionTarget(): Element | null {
     const toolbar = this.findToolbar();
     if (toolbar) {
-      // For fallback mode, create a container for React portal
+      // For fallback mode, create the filter container (like in working version)
       let filterContainer = toolbar.querySelector('#ytqf-filter-container');
       if (!filterContainer) {
         filterContainer = document.createElement('div');
         filterContainer.id = 'ytqf-filter-container';
-        toolbar.insertBefore(filterContainer, toolbar.firstChild);
+        (filterContainer as HTMLElement).style.cssText = 'display: inline-flex; align-items: center;'; // Add basic flex styles if needed, or rely on CSS
+        
+        // Find the ng-transclude element to insert before it
+        const buttonToolbar = toolbar.querySelector('ng-transclude[rg-button-toolbar]');
+        if (buttonToolbar && buttonToolbar.parentNode === toolbar) {
+          toolbar.insertBefore(filterContainer, buttonToolbar);
+        } else {
+          toolbar.insertBefore(filterContainer, toolbar.firstChild);
+        }
       }
       return filterContainer;
     }
