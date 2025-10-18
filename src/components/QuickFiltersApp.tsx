@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Filter } from '../types';
 import { StorageService } from '../services/storage';
 import { UtilsService } from '../services/utils';
+import { YouTrackVersionService } from '../services/youtrackVersion';
 import { useQueryParams } from '../hooks/useQueryParams';
 import { FilterBar } from './FilterBar';
 import { FilterModal } from './FilterModal';
@@ -40,6 +41,7 @@ export const QuickFiltersApp: React.FC = () => {
 
   const storageService = StorageService.getInstance();
   const utilsService = UtilsService.getInstance();
+  const versionService = YouTrackVersionService.getInstance();
   
   // State to hold the DOM node for the portal
   const [portalTarget, setPortalTarget] = useState<Element | null>(null);
@@ -60,21 +62,7 @@ export const QuickFiltersApp: React.FC = () => {
   // Effect to find the target element for the portal
   useEffect(() => {
     const findTargetElement = () => {
-      const topBar = document.querySelector('div.yt-agile-board__top-bar');
-      if (topBar) {
-        const searchPanel = topBar.querySelector('search-query-panel');
-        if (searchPanel) {
-          let filterContainer = topBar.querySelector('#ytqf-filter-container');
-          if (!filterContainer) {
-            filterContainer = document.createElement('div');
-            filterContainer.id = 'ytqf-filter-container';
-            (filterContainer as HTMLElement).style.cssText = 'display: inline-flex; align-items: center; margin-left: 16px;';
-            topBar.insertBefore(filterContainer, searchPanel);
-          }
-          return filterContainer;
-        }
-      }
-      return null;
+      return versionService.getTargetElement();
     };
 
     // Try immediately first
@@ -97,7 +85,7 @@ export const QuickFiltersApp: React.FC = () => {
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, [versionService]);
 
   // Reload filters when pathname changes (board change)
   useEffect(() => {
