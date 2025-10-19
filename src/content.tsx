@@ -38,6 +38,17 @@ class ContentScript {
   }
 }
 
-// Initialize content script
-const contentScript = new ContentScript();
-contentScript.start();
+// Initialize content script with delay to ensure service worker is ready
+const initializeContentScript = () => {
+  // Check if extension is ready
+  if (chrome.runtime?.id) {
+    const contentScript = new ContentScript();
+    contentScript.start();
+  } else {
+    // Retry after a short delay
+    setTimeout(initializeContentScript, 100);
+  }
+};
+
+// Start initialization
+initializeContentScript();
