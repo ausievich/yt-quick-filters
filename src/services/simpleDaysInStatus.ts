@@ -1,8 +1,10 @@
 import { DaysInStatusInfo, IssueInfo } from '../types';
-import { SecureAPIClient } from './secureAPIClient';
+import { LocalStorageAPIClient } from './localStorageAPIClient';
 
 export class SimpleDaysInStatusService {
   private static instance: SimpleDaysInStatusService;
+  private apiClient: LocalStorageAPIClient;
+  private isInitialized: boolean = false;
 
   public static getInstance(): SimpleDaysInStatusService {
     if (!SimpleDaysInStatusService.instance) {
@@ -11,25 +13,41 @@ export class SimpleDaysInStatusService {
     return SimpleDaysInStatusService.instance;
   }
 
+  private constructor() {
+    this.apiClient = LocalStorageAPIClient.getInstance();
+  }
+
+  /**
+   * Initialize the service
+   */
+  public async initialize(): Promise<void> {
+    if (this.isInitialized) {
+      return;
+    }
+    
+    await this.apiClient.initialize();
+    this.isInitialized = true;
+  }
+
   /**
    * Calculate days in status using real data from YouTrack API
    */
   public async getDaysInStatusFromDOM(issueId: string, cardElement: HTMLElement): Promise<DaysInStatusInfo | null> {
-    // Try to get real data from secure API call
+    // Ensure service is initialized
+    await this.initialize();
+    
+    // Try to get real data from localStorage API call
     try {
       const directData = await this.fetchIssueDirectly(issueId);
       if (directData) {
         return {
           issueId,
-          daysInCurrentStatus: 0, // Not used in current implementation
-          statusName: directData.state?.name || 'Unknown',
-          lastStatusChange: directData.created,
           created: directData.created,
           updated: directData.updated
         };
       }
     } catch (error) {
-      // Silent fail
+      console.warn('⚠️ Failed to fetch issue data for', issueId, ':', error);
     }
 
     // Return null if API fails - will show dashes
@@ -37,24 +55,15 @@ export class SimpleDaysInStatusService {
   }
 
   /**
-   * Fetch issue data securely through background script
+   * Fetch issue data using localStorage API client
    */
   private async fetchIssueDirectly(issueId: string): Promise<IssueInfo | null> {
     try {
-      const data = await SecureAPIClient.fetchIssue(issueId);
+      const data = await this.apiClient.fetchIssue(issueId);
       return data;
     } catch (error) {
       return null;
     }
-  }
-
-
-  /**
-   * Extract status name from card element
-   */
-  private extractStatusName(cardElement: HTMLElement): string | undefined {
-    const statusElement = cardElement.querySelector('.yt-agile-card__column-title, .agile-card__column-title, .yt-issue-state, .issue-state');
-    return statusElement?.textContent?.trim();
   }
 
 }

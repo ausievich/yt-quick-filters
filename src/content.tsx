@@ -1,6 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { QuickFiltersApp } from './components/QuickFiltersApp';
+import { LocalStorageTokenManager } from './services/localStorageTokenManager';
 import './styles.css';
 
 class ContentScript {
@@ -22,7 +23,16 @@ class ContentScript {
     this.root.render(<QuickFiltersApp />);
   }
 
-  public start(): void {
+  public async start(): Promise<void> {
+    // Initialize token manager
+    try {
+      const tokenManager = LocalStorageTokenManager.getInstance();
+      await tokenManager.initialize();
+      console.log('🔑 Token manager initialized successfully');
+    } catch (error) {
+      console.warn('⚠️ Failed to initialize token manager:', error);
+    }
+
     // Initial injection
     this.inject();
 
@@ -39,11 +49,11 @@ class ContentScript {
 }
 
 // Initialize content script with delay to ensure service worker is ready
-const initializeContentScript = () => {
+const initializeContentScript = async () => {
   // Check if extension is ready
   if (chrome.runtime?.id) {
     const contentScript = new ContentScript();
-    contentScript.start();
+    await contentScript.start();
   } else {
     // Retry after a short delay
     setTimeout(initializeContentScript, 100);

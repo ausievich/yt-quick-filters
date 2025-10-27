@@ -1,6 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { DaysInStatus } from '../components/DaysInStatus';
+import { SimpleDaysInStatusService } from './simpleDaysInStatus';
 
 export class DaysInStatusManager {
   private static instance: DaysInStatusManager;
@@ -15,8 +16,12 @@ export class DaysInStatusManager {
     return DaysInStatusManager.instance;
   }
 
-  public start(): void {
+  public async start(): Promise<void> {
     console.log('DaysInStatusManager: Starting...');
+    
+    // Initialize the service
+    const service = SimpleDaysInStatusService.getInstance();
+    await service.initialize();
     
     // Initial scan
     this.scanAndAddDaysInStatus();

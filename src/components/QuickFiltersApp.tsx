@@ -107,7 +107,12 @@ export const QuickFiltersApp: React.FC = () => {
 
   // Initialize DaysInStatusManager
   useEffect(() => {
-    daysInStatusManager.start();
+    const initDaysInStatus = async () => {
+      await daysInStatusManager.start();
+    };
+    
+    initDaysInStatus();
+    
     return () => {
       daysInStatusManager.stop();
     };
