@@ -257,11 +257,35 @@ export class LocalStorageTokenManager {
    */
   public async forceRefreshTokenForCurrentDomain(): Promise<boolean> {
     const origin = window.location.origin;
+    console.log('🔄 Force refreshing token for', origin);
+    
+    // First try to extract from localStorage
     const refreshed = await this.extractAndStoreTokenForCurrentDomain();
-    if (!refreshed) {
-      this.tokenMap.delete(origin);
+    if (refreshed) {
+      console.log('✅ Token refreshed from localStorage');
+      return true;
     }
-    return refreshed;
+    
+    // If extraction failed, try to reload from storage
+    console.log('🔄 Token extraction failed, trying to reload from storage...');
+    await this.loadTokensFromStorage();
+    
+    const tokenInfo = this.tokenMap.get(origin);
+    if (tokenInfo) {
+      console.log('✅ Token found in storage, checking expiration...');
+      const now = Date.now();
+      if (tokenInfo.expMs > now) {
+        console.log('✅ Token from storage is still valid');
+        return true;
+      } else {
+        console.log('⚠️ Token from storage is expired');
+        this.tokenMap.delete(origin);
+        await this.saveTokensToStorage();
+      }
+    }
+    
+    console.log('❌ No valid token found for', origin);
+    return false;
   }
 
   /**

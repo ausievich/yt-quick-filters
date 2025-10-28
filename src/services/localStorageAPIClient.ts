@@ -44,9 +44,20 @@ export class LocalStorageAPIClient {
    * Make API request with auto-retry on 401
    */
   private async makeRequestWithRetry(url: string): Promise<APIResponse> {
-    // First attempt
-    const token = this.tokenManager.getTokenForCurrentDomain();
+    // First attempt - try to get token
+    let token = this.tokenManager.getTokenForCurrentDomain();
+    
+    // If no token, try to refresh it
     if (!token) {
+      console.log('🔄 No token found, attempting to refresh...');
+      const refreshed = await this.tokenManager.forceRefreshTokenForCurrentDomain();
+      if (refreshed) {
+        token = this.tokenManager.getTokenForCurrentDomain();
+      }
+    }
+    
+    if (!token) {
+      console.log('❌ No token found for', window.location.origin);
       return { success: false, error: 'No token found' };
     }
 
@@ -61,15 +72,17 @@ export class LocalStorageAPIClient {
     // If 401, refresh token and retry once
     if (response.error?.includes('401')) {
       console.log('🔄 Got 401, refreshing token and retrying...');
-      await this.tokenManager.forceRefreshTokenForCurrentDomain();
+      const refreshed = await this.tokenManager.forceRefreshTokenForCurrentDomain();
       
-      const newToken = this.tokenManager.getTokenForCurrentDomain();
-      if (!newToken) {
-        return { success: false, error: 'No token found after refresh' };
+      if (refreshed) {
+        const newToken = this.tokenManager.getTokenForCurrentDomain();
+        if (newToken) {
+          console.log('📡 Retrying API request with new token');
+          return await this.makeRequest(url, newToken);
+        }
       }
       
-      console.log('📡 Retrying API request with new token');
-      return await this.makeRequest(url, newToken);
+      return { success: false, error: 'No token found after refresh' };
     }
     
     return response;

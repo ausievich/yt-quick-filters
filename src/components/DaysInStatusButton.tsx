@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StorageService } from '../services/storage';
 import { DaysInStatusManager } from '../services/daysInStatusManager';
 import { LocalStorageAPIClient } from '../services/localStorageAPIClient';
+import { LocalStorageTokenManager } from '../services/localStorageTokenManager';
 import './DaysInStatusButton.css';
 
 export const DaysInStatusButton: React.FC = () => {
@@ -10,6 +11,7 @@ export const DaysInStatusButton: React.FC = () => {
 
   const storageService = StorageService.getInstance();
   const daysInStatusManager = DaysInStatusManager.getInstance();
+  const tokenManager = LocalStorageTokenManager.getInstance();
 
   // Check if we have a token on mount
   useEffect(() => {
@@ -51,6 +53,34 @@ export const DaysInStatusButton: React.FC = () => {
 
   const handleToggleDaysInStatus = async () => {
     const newState = !showDaysInStatus;
+    
+    // If enabling days in status, check if we need to refresh token
+    if (newState) {
+      try {
+        // First check if we already have a valid token
+        const hasValidToken = tokenManager.hasValidTokenForCurrentDomain();
+        
+        if (!hasValidToken) {
+          console.log('🔄 No valid token found, attempting to refresh...');
+          const refreshed = await tokenManager.forceRefreshTokenForCurrentDomain();
+          
+          if (refreshed) {
+            console.log('✅ Token refreshed successfully');
+            setHasToken(true);
+          } else {
+            console.log('⚠️ Failed to refresh token, but continuing...');
+            // Still try to enable - maybe token will be available later
+          }
+        } else {
+          console.log('✅ Valid token already available');
+          setHasToken(true);
+        }
+      } catch (error) {
+        console.warn('⚠️ Error checking/refreshing token:', error);
+        // Continue anyway - the API client will handle retries
+      }
+    }
+    
     setShowDaysInStatus(newState);
     daysInStatusManager.setEnabled(newState);
     
