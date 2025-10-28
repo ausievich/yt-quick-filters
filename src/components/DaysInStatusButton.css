@@ -1,5 +1,5 @@
-/* Days In Status Button Styles - matching FilterBar button styles */
-.ytqf-days-button {
+/* Days In Status Button Styles - integrated with FilterBar */
+#ytqf-bar .ytqf-days-button {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -20,35 +20,35 @@
   transition: all 0.15s ease;
 }
 
-.ytqf-days-button:hover {
+#ytqf-bar .ytqf-days-button:hover {
   border-color: rgb(128, 198, 255);
 }
 
-.ytqf-days-button.active {
+#ytqf-bar .ytqf-days-button.active {
   background: #EBF6FF;
   border-color: #0080E5;
   color: #1F2326;
 }
 
-.ytqf-days-button.active:hover {
+#ytqf-bar .ytqf-days-button.active:hover {
   background: #D6EEFF;
   border-color: #0080E5;
 }
 
-.ytqf-days-button:focus {
+#ytqf-bar .ytqf-days-button:focus {
   background: #EBF6FF;
   outline: none;
 }
 
-.ytqf-days-button:focus:not(:active) {
+#ytqf-bar .ytqf-days-button:focus:not(:active) {
   background: #fff;
 }
 
-.ytqf-days-button.active:focus:not(:active) {
+#ytqf-bar .ytqf-days-button.active:focus:not(:active) {
   background: #EBF6FF;
 }
 
-.ytqf-days-button.ghost {
+#ytqf-bar .ytqf-days-button.ghost {
   opacity: 0.75;
 }
 

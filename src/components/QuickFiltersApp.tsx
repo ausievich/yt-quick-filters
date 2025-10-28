@@ -8,7 +8,6 @@ import { useQueryParams } from '../hooks/useQueryParams';
 import { FilterBar } from './FilterBar';
 import { FilterModal } from './FilterModal';
 import { ContextMenu } from './ContextMenu';
-import { DaysInStatusButton } from './DaysInStatusButton';
 import { DaysInStatusManager } from '../services/daysInStatusManager';
 
 interface ContextMenuState {
@@ -48,7 +47,6 @@ export const QuickFiltersApp: React.FC = () => {
   
   // State to hold the DOM node for the portal
   const [portalTarget, setPortalTarget] = useState<Element | null>(null);
-  const [daysButtonTarget, setDaysButtonTarget] = useState<Element | null>(null);
 
   // Use custom hook for working with query parameters
   const { getParam, pathname } = useQueryParams();
@@ -68,27 +66,20 @@ export const QuickFiltersApp: React.FC = () => {
   useEffect(() => {
     const findTargetElements = () => {
       const filterTarget = versionService.getTargetElement();
-      const daysButtonTarget = versionService.getDaysInStatusTargetElement();
-      return { filterTarget, daysButtonTarget };
+      return { filterTarget };
     };
 
     // Try immediately first
-    const { filterTarget, daysButtonTarget } = findTargetElements();
+    const { filterTarget } = findTargetElements();
     if (filterTarget) {
       setPortalTarget(filterTarget);
-    }
-    if (daysButtonTarget) {
-      setDaysButtonTarget(daysButtonTarget);
     }
 
     // Keep observing DOM changes to reattach after SPA navigation
     const observer = new MutationObserver(() => {
-      const { filterTarget, daysButtonTarget } = findTargetElements();
+      const { filterTarget } = findTargetElements();
       if (filterTarget) {
         setPortalTarget(filterTarget);
-      }
-      if (daysButtonTarget) {
-        setDaysButtonTarget(daysButtonTarget);
       }
     });
 
@@ -214,14 +205,6 @@ export const QuickFiltersApp: React.FC = () => {
 
   return (
     <>
-      {/* Render Days In Status button in toolbar */}
-      {daysButtonTarget && 
-        ReactDOM.createPortal(
-          <DaysInStatusButton />,
-          daysButtonTarget
-        )
-      }
-      
       {/* Render FilterBar */}
       {portalTarget ? (
         ReactDOM.createPortal(

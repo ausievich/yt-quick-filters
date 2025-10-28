@@ -79,25 +79,4 @@ export class YouTrackVersionService {
            document.querySelector('.yt-agile-board__toolbar');
   }
 
-  /**
-   * Find toolbar element specifically for Days In Status button
-   * Always looks for the padded toolbar element
-   */
-  public getDaysInStatusTargetElement(): Element | null {
-    const toolbar = document.querySelector('.yt-agile-board__toolbar.yt-agile-board__toolbar-padded');
-    if (toolbar) {
-      // Create or find the days in status button container
-      let buttonContainer = toolbar.querySelector('#ytqf-days-button-container');
-      if (!buttonContainer) {
-        buttonContainer = document.createElement('div');
-        buttonContainer.id = 'ytqf-days-button-container';
-        (buttonContainer as HTMLElement).style.cssText = 'display: inline-flex; align-items: center; margin-right: 8px;';
-        
-        // Insert at the beginning of the toolbar
-        toolbar.insertBefore(buttonContainer, toolbar.firstChild);
-      }
-      return buttonContainer;
-    }
-    return null;
-  }
 }
