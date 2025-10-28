@@ -61,7 +61,7 @@ export class LocalStorageAPIClient {
     // If 401, refresh token and retry once
     if (response.error?.includes('401')) {
       console.log('🔄 Got 401, refreshing token and retrying...');
-      await this.tokenManager.initialize();
+      await this.tokenManager.forceRefreshTokenForCurrentDomain();
       
       const newToken = this.tokenManager.getTokenForCurrentDomain();
       if (!newToken) {
@@ -84,10 +84,7 @@ export class LocalStorageAPIClient {
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
       };
-      
-      console.log('📡 Request headers:', headers);
-      console.log('🔑 Using token:', token.substring(0, 20) + '...');
-      
+            
       const response = await fetch(url, {
         method: 'GET',
         headers,

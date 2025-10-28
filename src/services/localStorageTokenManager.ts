@@ -253,6 +253,18 @@ export class LocalStorageTokenManager {
   }
 
   /**
+   * Force refresh token for current domain
+   */
+  public async forceRefreshTokenForCurrentDomain(): Promise<boolean> {
+    const origin = window.location.origin;
+    const refreshed = await this.extractAndStoreTokenForCurrentDomain();
+    if (!refreshed) {
+      this.tokenMap.delete(origin);
+    }
+    return refreshed;
+  }
+
+  /**
    * Setup refresh timers for all stored tokens
    */
   private setupRefreshTimers(): void {
