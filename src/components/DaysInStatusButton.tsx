@@ -22,12 +22,6 @@ export const DaysInStatusButton: React.FC = () => {
         
         const hasValidToken = localStorageClient.hasValidToken();
         setHasToken(hasValidToken);
-        
-        if (hasValidToken) {
-          console.log('🔑 LocalStorage token detected and ready');
-        } else {
-          console.log('⚠️ No localStorage token found');
-        }
       } catch (error) {
         console.warn('Failed to check localStorage token:', error);
         setHasToken(false);
@@ -61,18 +55,13 @@ export const DaysInStatusButton: React.FC = () => {
         const hasValidToken = tokenManager.hasValidTokenForCurrentDomain();
         
         if (!hasValidToken) {
-          console.log('🔄 No valid token found, attempting to refresh...');
           const refreshed = await tokenManager.forceRefreshTokenForCurrentDomain();
           
           if (refreshed) {
-            console.log('✅ Token refreshed successfully');
             setHasToken(true);
-          } else {
-            console.log('⚠️ Failed to refresh token, but continuing...');
-            // Still try to enable - maybe token will be available later
           }
+
         } else {
-          console.log('✅ Valid token already available');
           setHasToken(true);
         }
       } catch (error) {
@@ -90,8 +79,6 @@ export const DaysInStatusButton: React.FC = () => {
       console.error('Failed to save days in status state:', error);
     }
   };
-
-  // No manual token management needed - everything is automatic
 
   return (
     <>
