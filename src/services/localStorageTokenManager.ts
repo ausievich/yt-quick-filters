@@ -41,8 +41,6 @@ export class LocalStorageTokenManager {
       return; // Already initialized
     }
     
-    console.log('🔑 LocalStorageTokenManager: Initializing...');
-    
     // Load existing tokens from storage
     await this.loadTokensFromStorage();
     
@@ -75,9 +73,6 @@ export class LocalStorageTokenManager {
           // Only load non-expired tokens
           if (tokenInfo.expMs > now) {
             this.tokenMap.set(origin, tokenInfo);
-            console.log('🔑 Loaded token from storage for', origin, 'expires at', new Date(tokenInfo.expMs));
-          } else {
-            console.log('🔑 Token expired in storage for', origin);
           }
         }
       }
@@ -93,7 +88,6 @@ export class LocalStorageTokenManager {
     try {
       const tokensObject = Object.fromEntries(this.tokenMap);
       await chrome.storage.local.set({ [LocalStorageTokenManager.STORAGE_KEY]: tokensObject });
-      console.log('💾 Tokens saved to storage:', Object.keys(tokensObject));
     } catch (error) {
       console.error('❌ Failed to save tokens to storage:', error);
     }
@@ -106,11 +100,9 @@ export class LocalStorageTokenManager {
     try {
       const origin = window.location.origin;
       
-      console.log('🔍 Getting token from localStorage for', origin);
       const tokenData = this.extractTokenFromLocalStorage();
       
       if (!tokenData) {
-        console.log('❌ No token found in localStorage');
         return false;
       }
 
@@ -123,7 +115,7 @@ export class LocalStorageTokenManager {
       };
 
       this.tokenMap.set(origin, tokenInfo);
-      console.log('✅ Token stored for', origin, 'token:', tokenData.accessToken.substring(0, 20) + '...');
+      this.setupRefreshTimer(origin, tokenInfo);
       
       // Save to chrome.storage
       await this.saveTokensToStorage();
@@ -152,7 +144,6 @@ export class LocalStorageTokenManager {
               const tokenData = JSON.parse(value);
               if (tokenData.accessToken && tokenData.expires) {
                 tokenCandidates.push({ key, data: tokenData });
-                console.log('🔑 Found token candidate:', key, 'expires:', new Date(tokenData.expires * 1000));
               }
             } catch (parseError) {
               console.warn('⚠️ Failed to parse token data for key:', key, parseError);
@@ -162,18 +153,14 @@ export class LocalStorageTokenManager {
       }
       
       if (tokenCandidates.length === 0) {
-        console.log('🔍 No valid tokens found in localStorage');
         return null;
       }
       
       if (tokenCandidates.length === 1) {
-        console.log('✅ Using single token:', tokenCandidates[0].key);
         return tokenCandidates[0].data;
       }
       
       // Multiple tokens found - choose the best one
-      console.log('🔍 Found multiple tokens, choosing the best one...');
-      
       // Prefer non-zero tokens (avoid 0-0-0-0-0-token)
       const nonZeroTokens = tokenCandidates.filter(c => !c.key.startsWith('0-0-0-0-0'));
       if (nonZeroTokens.length > 0) {
@@ -181,7 +168,6 @@ export class LocalStorageTokenManager {
         const bestToken = nonZeroTokens.reduce((best, current) => 
           current.data.expires > best.data.expires ? current : best
         );
-        console.log('✅ Using non-zero token:', bestToken.key, 'expires:', new Date(bestToken.data.expires * 1000));
         return bestToken.data;
       }
       
@@ -189,7 +175,6 @@ export class LocalStorageTokenManager {
       const bestToken = tokenCandidates.reduce((best, current) => 
         current.data.expires > best.data.expires ? current : best
       );
-      console.log('✅ Using most recent token:', bestToken.key, 'expires:', new Date(bestToken.data.expires * 1000));
       return bestToken.data;
       
     } catch (error) {
@@ -206,9 +191,7 @@ export class LocalStorageTokenManager {
       const configStr = localStorage.getItem('com.jetbrains.youtrack.youtrackConfig');
       if (configStr) {
         const config: YouTrackConfig = JSON.parse(configStr);
-        console.log('🔍 YouTrack config found:', config);
         const contextPath = config.contextPath || '';
-        console.log('🔍 Context path from config:', contextPath);
         return contextPath;
       }
     } catch (error) {
@@ -217,12 +200,9 @@ export class LocalStorageTokenManager {
     
     // Fallback to checking location.pathname
     const pathname = window.location.pathname;
-    console.log('🔍 Current pathname:', pathname);
     if (pathname.startsWith('/youtrack')) {
-      console.log('🔍 Using /youtrack as base path from pathname');
       return '/youtrack';
     }
-    console.log('🔍 No base path found, using empty string');
     return '';
   }
 
@@ -234,11 +214,9 @@ export class LocalStorageTokenManager {
     const tokenInfo = this.tokenMap.get(origin);
     
     if (!tokenInfo) {
-      console.log('❌ No token found for', origin);
       return null;
     }
 
-    console.log('🔑 Using token for', origin, 'token:', tokenInfo.token.substring(0, 20) + '...');
     return tokenInfo.token;
   }
 
@@ -257,34 +235,27 @@ export class LocalStorageTokenManager {
    */
   public async forceRefreshTokenForCurrentDomain(): Promise<boolean> {
     const origin = window.location.origin;
-    console.log('🔄 Force refreshing token for', origin);
     
     // First try to extract from localStorage
     const refreshed = await this.extractAndStoreTokenForCurrentDomain();
     if (refreshed) {
-      console.log('✅ Token refreshed from localStorage');
       return true;
     }
     
     // If extraction failed, try to reload from storage
-    console.log('🔄 Token extraction failed, trying to reload from storage...');
     await this.loadTokensFromStorage();
     
     const tokenInfo = this.tokenMap.get(origin);
     if (tokenInfo) {
-      console.log('✅ Token found in storage, checking expiration...');
       const now = Date.now();
       if (tokenInfo.expMs > now) {
-        console.log('✅ Token from storage is still valid');
         return true;
       } else {
-        console.log('⚠️ Token from storage is expired');
         this.tokenMap.delete(origin);
         await this.saveTokensToStorage();
       }
     }
     
-    console.log('❌ No valid token found for', origin);
     return false;
   }
 
@@ -312,12 +283,10 @@ export class LocalStorageTokenManager {
     
     if (refreshTime > 0) {
       const timer = setTimeout(async () => {
-        console.log('🔄 Refreshing token for', origin);
         await this.refreshTokenForOrigin(origin);
       }, refreshTime);
       
       this.refreshTimeouts.set(origin, timer);
-      console.log('⏰ Token refresh scheduled for', origin, 'in', Math.round(refreshTime / 1000), 'seconds');
     }
   }
 
@@ -329,8 +298,6 @@ export class LocalStorageTokenManager {
     setInterval(async () => {
       await this.cleanupExpiredTokens();
     }, 5 * 60 * 1000);
-    
-    console.log('🧹 Periodic cleanup scheduled every 5 minutes');
   }
 
   /**
@@ -371,12 +338,9 @@ export class LocalStorageTokenManager {
       
       // Check if this is a token update
       if (key.endsWith('-token')) {
-        console.log('🔍 Token update detected in localStorage');
         self.handleTokenUpdate(key, value);
       }
     };
-
-    console.log('👀 Live watcher started for localStorage token updates');
   }
 
   /**
@@ -399,13 +363,8 @@ export class LocalStorageTokenManager {
         this.tokenMap.set(origin, tokenInfo);
         this.setupRefreshTimer(origin, tokenInfo);
         
-        console.log('🔄 Token updated for', origin, 'expires at', new Date(expMs));
-        
         // Save to chrome.storage
         await this.saveTokensToStorage();
-        
-        // Notify background script about token update
-        this.notifyBackgroundScript(tokenInfo);
       }
     } catch (error) {
       console.error('❌ Failed to handle token update:', error);
@@ -413,26 +372,9 @@ export class LocalStorageTokenManager {
   }
 
   /**
-   * Notify background script about token update
-   */
-  private notifyBackgroundScript(tokenInfo: StoredTokenInfo): void {
-    try {
-      chrome.runtime.sendMessage({
-        type: 'TOKEN_UPDATED',
-        token: tokenInfo.token,
-        origin: window.location.origin,
-        basePath: tokenInfo.basePath,
-        expires: tokenInfo.expMs
-      });
-    } catch (error) {
-      console.warn('⚠️ Failed to notify background script:', error);
-    }
-  }
-
-  /**
    * Clean up expired tokens from storage
    */
-  public async cleanupExpiredTokens(): Promise<void> {
+  private async cleanupExpiredTokens(): Promise<void> {
     const now = Date.now();
     const expiredOrigins: string[] = [];
     
@@ -453,7 +395,6 @@ export class LocalStorageTokenManager {
     
     if (expiredOrigins.length > 0) {
       await this.saveTokensToStorage();
-      console.log('🧹 Cleaned up expired tokens for:', expiredOrigins);
     }
   }
 
