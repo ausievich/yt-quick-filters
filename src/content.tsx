@@ -28,7 +28,6 @@ class ContentScript {
     try {
       const tokenManager = LocalStorageTokenManager.getInstance();
       await tokenManager.initialize();
-      console.log('🔑 Token manager initialized successfully');
     } catch (error) {
       console.warn('⚠️ Failed to initialize token manager:', error);
     }

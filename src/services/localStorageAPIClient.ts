@@ -49,7 +49,6 @@ export class LocalStorageAPIClient {
     
     // If no token, try to refresh it
     if (!token) {
-      console.log('🔄 No token found, attempting to refresh...');
       const refreshed = await this.tokenManager.forceRefreshTokenForCurrentDomain();
       if (refreshed) {
         token = this.tokenManager.getTokenForCurrentDomain();
@@ -57,11 +56,9 @@ export class LocalStorageAPIClient {
     }
     
     if (!token) {
-      console.log('❌ No token found for', window.location.origin);
       return { success: false, error: 'No token found' };
     }
 
-    console.log('📡 Making API request to:', url);
     const response = await this.makeRequest(url, token);
     
     // If successful, return
@@ -71,13 +68,11 @@ export class LocalStorageAPIClient {
     
     // If 401, refresh token and retry once
     if (response.error?.includes('401')) {
-      console.log('🔄 Got 401, refreshing token and retrying...');
       const refreshed = await this.tokenManager.forceRefreshTokenForCurrentDomain();
       
       if (refreshed) {
         const newToken = this.tokenManager.getTokenForCurrentDomain();
         if (newToken) {
-          console.log('📡 Retrying API request with new token');
           return await this.makeRequest(url, newToken);
         }
       }
@@ -104,8 +99,6 @@ export class LocalStorageAPIClient {
         credentials: 'include'
       });
       
-      console.log('📡 Response status:', response.status, response.statusText);
-      
       if (response.ok) {
         const data = await response.json();
         return { success: true, data };
@@ -131,9 +124,6 @@ export class LocalStorageAPIClient {
       const baseUrl = this.tokenManager.getApiBaseUrlForCurrentDomain();
       // Use the same fields as the production request
       const url = `${baseUrl}/api/issues/${issueId}?fields=id,created,updated,state,fields`;
-      
-      console.log('🌐 Making API request to:', url);
-      console.log('🌐 Base URL:', baseUrl);
       
       const response = await this.makeRequestWithRetry(url);
       
