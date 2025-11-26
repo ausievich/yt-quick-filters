@@ -64,16 +64,18 @@ export const DaysInStatus: React.FC<DaysInStatusProps> = ({ issueId, onDataLoade
   const daysSinceUpdated = Math.floor((currentTime - data.updated) / (1000 * 60 * 60 * 24));
 
   // Determine color based on age for Created
-  let createdColorClass = 'days-in-status__tag--green';
-  if (daysSinceCreated > 30) {
-    createdColorClass = 'days-in-status__tag--red';
-  } else if (daysSinceCreated > 14) {
-    createdColorClass = 'days-in-status__tag--yellow';
-  }
+  // Temporarily disabled - always use gray for created
+  // let createdColorClass = 'days-in-status__tag--green';
+  // if (daysSinceCreated > 60) {
+  //   createdColorClass = 'days-in-status__tag--red';
+  // } else if (daysSinceCreated > 30) {
+  //   createdColorClass = 'days-in-status__tag--yellow';
+  // }
+  const createdColorClass = 'days-in-status__tag--gray';
 
   // Determine color based on age for Updated
   let updatedColorClass = 'days-in-status__tag--green';
-  if (daysSinceUpdated > 30) {
+  if (daysSinceUpdated > 60) {
     updatedColorClass = 'days-in-status__tag--red';
   } else if (daysSinceUpdated > 14) {
     updatedColorClass = 'days-in-status__tag--yellow';
