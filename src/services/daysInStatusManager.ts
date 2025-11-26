@@ -17,8 +17,6 @@ export class DaysInStatusManager {
   }
 
   public async start(): Promise<void> {
-    console.log('DaysInStatusManager: Starting...');
-    
     // Initialize the service
     const service = SimpleDaysInStatusService.getInstance();
     await service.initialize();
@@ -75,7 +73,6 @@ export class DaysInStatusManager {
     }
     
     const cards = this.findIssueCards();
-    console.log(`DaysInStatusManager: Found ${cards.length} cards`);
     
     cards.forEach(card => {
       const issueId = this.extractIssueIdFromElement(card);
@@ -172,10 +169,7 @@ export class DaysInStatusManager {
     const root = createRoot(container);
     root.render(
       React.createElement(DaysInStatus, {
-        issueId: issueId,
-        onDataLoaded: (data: any) => {
-          console.log(`Days in status for ${issueId}:`, data);
-        }
+        issueId: issueId
       })
     );
 
