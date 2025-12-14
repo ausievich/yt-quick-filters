@@ -404,4 +404,19 @@ export class LocalStorageTokenManager {
   public hasValidTokenForCurrentDomain(): boolean {
     return this.getTokenForCurrentDomain() !== null;
   }
+
+  /**
+   * Check if token is expired or will expire soon
+   */
+  public isTokenExpiredOrExpiringSoon(bufferMs: number = 0): boolean {
+    const origin = window.location.origin;
+    const tokenInfo = this.tokenMap.get(origin);
+    
+    if (!tokenInfo) {
+      return true; // No token = expired
+    }
+    
+    const now = Date.now();
+    return tokenInfo.expMs <= (now + bufferMs);
+  }
 }

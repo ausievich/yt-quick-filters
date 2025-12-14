@@ -1,9 +1,11 @@
 import { DaysInStatusInfo, IssueInfo } from '../types';
 import { LocalStorageAPIClient } from './localStorageAPIClient';
+import { LocalStorageTokenManager } from './localStorageTokenManager';
 
 export class SimpleDaysInStatusService {
   private static instance: SimpleDaysInStatusService;
   private apiClient: LocalStorageAPIClient;
+  private tokenManager: LocalStorageTokenManager;
   private isInitialized: boolean = false;
 
   public static getInstance(): SimpleDaysInStatusService {
@@ -15,10 +17,12 @@ export class SimpleDaysInStatusService {
 
   private constructor() {
     this.apiClient = LocalStorageAPIClient.getInstance();
+    this.tokenManager = LocalStorageTokenManager.getInstance();
   }
 
   /**
    * Initialize the service
+   * Checks and refreshes token if needed (once when function is enabled)
    */
   public async initialize(): Promise<void> {
     if (this.isInitialized) {
@@ -26,6 +30,14 @@ export class SimpleDaysInStatusService {
     }
     
     await this.apiClient.initialize();
+    
+    // Check if token is expired or expiring soon (with 5 second buffer)
+    // If so, refresh it before making requests
+    // This happens once when the function is enabled
+    if (this.tokenManager.isTokenExpiredOrExpiringSoon(5000)) {
+      await this.tokenManager.forceRefreshTokenForCurrentDomain();
+    }
+    
     this.isInitialized = true;
   }
 

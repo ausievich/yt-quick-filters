@@ -44,7 +44,7 @@ export class LocalStorageAPIClient {
    * Make API request with auto-retry on 401
    */
   private async makeRequestWithRetry(url: string): Promise<APIResponse> {
-    // First attempt - try to get token
+    // Get token (should be valid from initialization)
     let token = this.tokenManager.getTokenForCurrentDomain();
     
     // If no token, try to refresh it
@@ -122,33 +122,18 @@ export class LocalStorageAPIClient {
   public async fetchIssue(issueId: string): Promise<IssueInfo | null> {
     try {
       const baseUrl = this.tokenManager.getApiBaseUrlForCurrentDomain();
-      // Use the same fields as the production request
-      const url = `${baseUrl}/api/issues/${issueId}?fields=id,created,updated,state,fields`;
+      // Only request fields we actually use: id, created, updated
+      const url = `${baseUrl}/api/issues/${issueId}?fields=id,created,updated`;
       
       const response = await this.makeRequestWithRetry(url);
       
       if (response.success && response.data) {
         const data = response.data;
         
-        // Extract state from fields array
-        let state: { name: string; id: string } | undefined = undefined;
-        if (data.fields && Array.isArray(data.fields)) {
-          const stateField = data.fields.find((field: any) => 
-            field.projectCustomField?.field?.name === 'State'
-          );
-          if (stateField && stateField.value) {
-            state = {
-              name: stateField.value.name,
-              id: stateField.value.id
-            };
-          }
-        }
-        
         return {
           id: data.id,
           created: data.created || Date.now(),
-          updated: data.updated || Date.now(),
-          state: state
+          updated: data.updated || Date.now()
         };
       } else {
         console.warn('⚠️ Failed to fetch issue data:', response.error);
