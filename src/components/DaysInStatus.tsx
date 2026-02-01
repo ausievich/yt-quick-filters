@@ -59,9 +59,26 @@ export const DaysInStatus: React.FC<DaysInStatusProps> = ({ issueId, onDataLoade
     );
   }
 
-  const currentTime = Date.now();
-  const daysSinceCreated = Math.floor((currentTime - data.created) / (1000 * 60 * 60 * 24));
-  const daysSinceUpdated = Math.floor((currentTime - data.updated) / (1000 * 60 * 60 * 24));
+  /**
+   * Calculate difference in calendar days (not 24-hour periods)
+   * This matches YouTrack's behavior which counts days based on calendar dates in user's timezone
+   */
+  const getDaysDifference = (timestamp: number): number => {
+    const now = new Date();
+    const date = new Date(timestamp);
+    
+    // Set both dates to start of day in local timezone (midnight)
+    // This ensures we count calendar days, not 24-hour periods
+    const nowStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const dateStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    
+    // Calculate difference in milliseconds and convert to days
+    const diffMs = nowStart.getTime() - dateStart.getTime();
+    return Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  };
+
+  const daysSinceCreated = getDaysDifference(data.created);
+  const daysSinceUpdated = getDaysDifference(data.updated);
 
   // Determine color based on age for Created
   // Temporarily disabled - always use gray for created
