@@ -2,8 +2,7 @@
 
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/iaddgmcajdiblafjfhloadmphkbplddo.svg)](https://chromewebstore.google.com/detail/iaddgmcajdiblafjfhloadmphkbplddo)
 
-Add quick filter buttons to YouTrack Agile Boards. Create filters via a modal.  
-Display Created and Updated tags on cards.
+Add quick filter buttons to YouTrack Agile Boards. Create filters via a modal.
 
 [Install from Chrome Web Store](https://chromewebstore.google.com/detail/iaddgmcajdiblafjfhloadmphkbplddo)
 
@@ -15,7 +14,6 @@ Display Created and Updated tags on cards.
 - Apply them with a single click — no need to type search strings every time.
 - Edit, duplicate, or remove filters via a clean UI.
 - Seamlessly integrated into YouTrack Agile Boards.
-- Display Created and Updated tags on cards.
 
 This extension brings a long-requested feature (see JetBrains request [JT-38623](https://youtrack.jetbrains.com/issue/JT-38623)) directly into YouTrack.
 
@@ -26,7 +24,7 @@ This extension brings a long-requested feature (see JetBrains request [JT-38623]
 <img src="screenshots/onboarding1.png" width="600">
 <img src="screenshots/onboarding2.png" width="600">
 <img src="screenshots/onboarding3.png" width="600">
-<img src="screenshots/onboarding4.png" width="600">
+
 ---
 
 ## Installation
@@ -88,6 +86,15 @@ If you’d like to improve styles, fix bugs, or add new features:
 4. Push to your fork and open a Pull Request
 
 Please try to keep code style consistent and test your changes locally before PR.
+
+---
+
+## Support
+
+You can support this project via platforms:
+
+[![GitHub Sponsors](https://img.shields.io/badge/Sponsor-GitHub-blue?logo=github-sponsors)](https://github.com/sponsors/ausievich)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-yellow?logo=buy-me-a-coffee)](https://buymeacoffee.com/ausievich)
 
 ---
 
