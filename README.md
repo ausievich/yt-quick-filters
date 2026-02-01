@@ -2,7 +2,8 @@
 
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/iaddgmcajdiblafjfhloadmphkbplddo.svg)](https://chromewebstore.google.com/detail/iaddgmcajdiblafjfhloadmphkbplddo)
 
-Add quick filter buttons to YouTrack Agile Boards. Create filters via a modal. Display Created and Updated tags on cards.
+Add quick filter buttons to YouTrack Agile Boards. Create filters via a modal.  
+Display Created and Updated tags on cards.
 
 [Install from Chrome Web Store](https://chromewebstore.google.com/detail/iaddgmcajdiblafjfhloadmphkbplddo)
 
@@ -13,8 +14,8 @@ Add quick filter buttons to YouTrack Agile Boards. Create filters via a modal. D
 - Create and manage your own quick filters (e.g. by assignee, state, or any search query).
 - Apply them with a single click — no need to type search strings every time.
 - Edit, duplicate, or remove filters via a clean UI.
-- Display **Created** and **Updated** tags on cards to form a visual heatmap of activity across the board.
 - Seamlessly integrated into YouTrack Agile Boards.
+- Display Created and Updated tags on cards.
 
 This extension brings a long-requested feature (see JetBrains request [JT-38623](https://youtrack.jetbrains.com/issue/JT-38623)) directly into YouTrack.
 
