@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StorageService } from '../services/storage';
-import { DaysInStatusManager } from '../services/daysInStatusManager';
+import { DaysInStatusUI } from '../services/daysInStatusUI';
 import { LocalStorageAPIClient } from '../services/localStorageAPIClient';
 import { LocalStorageTokenManager } from '../services/localStorageTokenManager';
 import './DaysInStatusButton.css';
@@ -10,7 +10,7 @@ export const DaysInStatusButton: React.FC = () => {
   const [hasToken, setHasToken] = useState(false);
 
   const storageService = StorageService.getInstance();
-  const daysInStatusManager = DaysInStatusManager.getInstance();
+  const daysInStatusUI = DaysInStatusUI.getInstance();
   const tokenManager = LocalStorageTokenManager.getInstance();
 
   // Check if we have a token on mount
@@ -38,13 +38,13 @@ export const DaysInStatusButton: React.FC = () => {
       try {
         const enabled = await storageService.getDaysInStatusEnabled();
         setShowDaysInStatus(enabled);
-        daysInStatusManager.setEnabled(enabled);
+        daysInStatusUI.setEnabled(enabled);
       } catch (error) {
         console.error('Failed to load days in status state:', error);
       }
     };
     loadDaysInStatusState();
-  }, [storageService, daysInStatusManager]);
+  }, [storageService, daysInStatusUI]);
 
   const handleToggleDaysInStatus = async () => {
     const newState = !showDaysInStatus;
@@ -57,19 +57,15 @@ export const DaysInStatusButton: React.FC = () => {
         
         if (!hasValidToken) {
           // Tokens don't match - refresh token from localStorage
-          console.log('🔄 Tokens out of sync, refreshing from localStorage...');
           const refreshed = await tokenManager.refreshTokenForCurrentDomain();
           
           if (refreshed) {
             setHasToken(true);
-            console.log('✅ Token refreshed successfully');
           } else {
-            console.warn('⚠️ Failed to refresh token');
             setHasToken(false);
           }
         } else {
           // Tokens match - we can proceed with requests
-          console.log('✅ Token is in sync, ready to make requests');
           setHasToken(true);
         }
       } catch (error) {
@@ -80,7 +76,7 @@ export const DaysInStatusButton: React.FC = () => {
     }
     
     setShowDaysInStatus(newState);
-    daysInStatusManager.setEnabled(newState);
+    daysInStatusUI.setEnabled(newState);
     
     try {
       await storageService.setDaysInStatusEnabled(newState);

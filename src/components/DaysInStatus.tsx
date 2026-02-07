@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DaysInStatusInfo } from '../types';
-import { SimpleDaysInStatusService } from '../services/simpleDaysInStatus';
+import { DaysInStatusAPI } from '../services/daysInStatusAPI';
 import './DaysInStatus.css';
 
 interface DaysInStatusProps {
@@ -15,11 +15,11 @@ export const DaysInStatus: React.FC<DaysInStatusProps> = ({ issueId, onDataLoade
   useEffect(() => {
     const loadDaysInStatus = async () => {
       try {
-        const simpleService = SimpleDaysInStatusService.getInstance();
+        const apiService = DaysInStatusAPI.getInstance();
         const cardElement = document.querySelector(`[data-issue-id="${issueId}"]`) as HTMLElement;
         
         if (cardElement) {
-          const result = await simpleService.getDaysInStatusFromDOM(issueId, cardElement);
+          const result = await apiService.getDaysInStatusFromDOM(issueId, cardElement);
           setData(result);
           if (result) {
             onDataLoaded?.(result);

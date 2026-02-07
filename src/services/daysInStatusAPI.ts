@@ -2,17 +2,17 @@ import { DaysInStatusInfo, IssueInfo } from '../types';
 import { LocalStorageAPIClient } from './localStorageAPIClient';
 import { LocalStorageTokenManager } from './localStorageTokenManager';
 
-export class SimpleDaysInStatusService {
-  private static instance: SimpleDaysInStatusService;
+export class DaysInStatusAPI {
+  private static instance: DaysInStatusAPI;
   private apiClient: LocalStorageAPIClient;
   private tokenManager: LocalStorageTokenManager;
   private isInitialized: boolean = false;
 
-  public static getInstance(): SimpleDaysInStatusService {
-    if (!SimpleDaysInStatusService.instance) {
-      SimpleDaysInStatusService.instance = new SimpleDaysInStatusService();
+  public static getInstance(): DaysInStatusAPI {
+    if (!DaysInStatusAPI.instance) {
+      DaysInStatusAPI.instance = new DaysInStatusAPI();
     }
-    return SimpleDaysInStatusService.instance;
+    return DaysInStatusAPI.instance;
   }
 
   private constructor() {
@@ -22,7 +22,6 @@ export class SimpleDaysInStatusService {
 
   /**
    * Initialize the service
-   * Checks and refreshes token if needed (once when function is enabled)
    */
   public async initialize(): Promise<void> {
     if (this.isInitialized) {
@@ -30,14 +29,6 @@ export class SimpleDaysInStatusService {
     }
     
     await this.apiClient.initialize();
-    
-    // Check if token is expired or expiring soon (with 5 minute buffer)
-    // Tokens live for 1 hour, so 5 minutes is a reasonable buffer
-    // If so, refresh it before making requests
-    // This happens once when the function is enabled
-    if (this.tokenManager.isTokenExpiredOrExpiringSoon(5 * 60 * 1000)) {
-      await this.tokenManager.refreshTokenForCurrentDomain();
-    }
     
     this.isInitialized = true;
   }

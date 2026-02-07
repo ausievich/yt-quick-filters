@@ -248,21 +248,6 @@ export class LocalStorageTokenManager {
   }
 
   /**
-   * Check if token is expired or will expire soon
-   */
-  public isTokenExpiredOrExpiringSoon(bufferMs: number = 0): boolean {
-    const origin = window.location.origin;
-    const tokenInfo = this.tokenMap.get(origin);
-    
-    if (!tokenInfo) {
-      return true; // No token = expired
-    }
-    
-    const now = Date.now(); // UTC epoch timestamp in milliseconds
-    return tokenInfo.expMs <= (now + bufferMs); // Both are UTC, timezone doesn't matter
-  }
-
-  /**
    * Check if token in JetBrains localStorage (page storage) matches token in extension storage
    * Returns true if tokens match, false if they don't match or if either is missing
    */

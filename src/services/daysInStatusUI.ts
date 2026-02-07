@@ -1,24 +1,24 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { DaysInStatus } from '../components/DaysInStatus';
-import { SimpleDaysInStatusService } from './simpleDaysInStatus';
+import { DaysInStatusAPI } from './daysInStatusAPI';
 
-export class DaysInStatusManager {
-  private static instance: DaysInStatusManager;
+export class DaysInStatusUI {
+  private static instance: DaysInStatusUI;
   private observer: MutationObserver | null = null;
   private mountedComponents: Map<string, { root: any; element: HTMLElement }> = new Map();
   private isEnabled: boolean = true;
 
-  public static getInstance(): DaysInStatusManager {
-    if (!DaysInStatusManager.instance) {
-      DaysInStatusManager.instance = new DaysInStatusManager();
+  public static getInstance(): DaysInStatusUI {
+    if (!DaysInStatusUI.instance) {
+      DaysInStatusUI.instance = new DaysInStatusUI();
     }
-    return DaysInStatusManager.instance;
+    return DaysInStatusUI.instance;
   }
 
   public async start(): Promise<void> {
     // Initialize the service
-    const service = SimpleDaysInStatusService.getInstance();
+    const service = DaysInStatusAPI.getInstance();
     await service.initialize();
     
     // Initial scan
