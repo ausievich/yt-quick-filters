@@ -57,7 +57,7 @@ export const DaysInStatusButton: React.FC = () => {
         if (!isInSync) {
           // Tokens don't match - refresh token from localStorage
           console.log('🔄 Tokens out of sync, refreshing from localStorage...');
-          const refreshed = await tokenManager.forceRefreshTokenForCurrentDomain();
+          const refreshed = await tokenManager.refreshTokenForCurrentDomain();
           
           if (refreshed) {
             setHasToken(true);

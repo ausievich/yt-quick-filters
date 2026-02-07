@@ -49,7 +49,7 @@ export class LocalStorageAPIClient {
     
     // If no token, try to refresh it
     if (!token) {
-      const refreshed = await this.tokenManager.forceRefreshTokenForCurrentDomain();
+      const refreshed = await this.tokenManager.refreshTokenForCurrentDomain();
       if (refreshed) {
         token = this.tokenManager.getTokenForCurrentDomain();
       }
@@ -68,7 +68,7 @@ export class LocalStorageAPIClient {
     
     // If 401, refresh token and retry once
     if (response.error?.includes('401')) {
-      const refreshed = await this.tokenManager.forceRefreshTokenForCurrentDomain();
+      const refreshed = await this.tokenManager.refreshTokenForCurrentDomain();
       
       if (refreshed) {
         const newToken = this.tokenManager.getTokenForCurrentDomain();

@@ -219,9 +219,9 @@ export class LocalStorageTokenManager {
   }
 
   /**
-   * Force refresh token for current domain
+   * Refresh token for current domain from localStorage
    */
-  public async forceRefreshTokenForCurrentDomain(): Promise<boolean> {
+  public async refreshTokenForCurrentDomain(): Promise<boolean> {
     const origin = window.location.origin;
     
     // First try to extract from localStorage

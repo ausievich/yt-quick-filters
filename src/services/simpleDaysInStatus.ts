@@ -35,7 +35,7 @@ export class SimpleDaysInStatusService {
     // If so, refresh it before making requests
     // This happens once when the function is enabled
     if (this.tokenManager.isTokenExpiredOrExpiringSoon(5000)) {
-      await this.tokenManager.forceRefreshTokenForCurrentDomain();
+      await this.tokenManager.refreshTokenForCurrentDomain();
     }
     
     this.isInitialized = true;
