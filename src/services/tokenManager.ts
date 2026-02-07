@@ -250,6 +250,7 @@ export class TokenManager {
   /**
    * Check if token in JetBrains localStorage (page storage) matches token in extension storage
    * Returns true if tokens match, false if they don't match or if either is missing
+   * Optimized: if token in extension storage is not expiring soon, skip localStorage parsing
    */
   public async hasValidToken(): Promise<boolean> {
     try {
@@ -261,6 +262,16 @@ export class TokenManager {
         return false; // No token in extension storage
       }
       
+      const now = Date.now(); // UTC epoch timestamp in milliseconds
+      const bufferMs = 5 * 60 * 1000; // 5 minutes buffer
+      
+      // If token is not expiring soon, we can skip localStorage parsing
+      // Token is still valid, no need to check sync
+      if (storedTokenInfo.expMs > (now + bufferMs)) {
+        return true;
+      }
+      
+      // Token is expiring soon or expired - check sync with localStorage
       // Get token from JetBrains localStorage (page storage)
       const localStorageTokenData = this.extractTokenFromLocalStorage();
       if (!localStorageTokenData) {
