@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { DaysInStatusInfo } from '../types';
 import { DaysInStatusAPI } from '../services/daysInStatusAPI';
-import './DaysInStatus.css';
+import './DaysInStatusTags.css';
 
 interface DaysInStatusProps {
   issueId: string;
   onDataLoaded?: (data: DaysInStatusInfo) => void;
 }
 
-export const DaysInStatus: React.FC<DaysInStatusProps> = ({ issueId, onDataLoaded }) => {
+export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataLoaded }) => {
   const [data, setData] = useState<DaysInStatusInfo | null>(null);
   const [loading, setLoading] = useState(true);
 

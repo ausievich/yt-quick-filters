@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { DaysInStatus } from '../components/DaysInStatus';
+import { DaysInStatusTags } from '../components/DaysInStatusTags';
 import { DaysInStatusAPI } from './daysInStatusAPI';
 
 export class DaysInStatusUI {
@@ -168,7 +168,7 @@ export class DaysInStatusUI {
     // Mount React component
     const root = createRoot(container);
     root.render(
-      React.createElement(DaysInStatus, {
+      React.createElement(DaysInStatusTags, {
         issueId: issueId
       })
     );
