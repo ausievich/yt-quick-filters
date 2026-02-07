@@ -20,7 +20,8 @@ export const DaysInStatusButton: React.FC = () => {
         const localStorageClient = LocalStorageAPIClient.getInstance();
         await localStorageClient.initialize();
         
-        const hasValidToken = tokenManager.hasValidTokenForCurrentDomain();
+        // Check if token is valid (checks if token exists and is in sync)
+        const hasValidToken = await tokenManager.hasValidToken();
         setHasToken(hasValidToken);
       } catch (error) {
         console.warn('Failed to check localStorage token:', error);
@@ -52,9 +53,9 @@ export const DaysInStatusButton: React.FC = () => {
     if (newState) {
       try {
         // First check if token in JetBrains localStorage matches token in extension storage
-        const isInSync = await tokenManager.isTokenInSync();
+        const hasValidToken = await tokenManager.hasValidToken();
         
-        if (!isInSync) {
+        if (!hasValidToken) {
           // Tokens don't match - refresh token from localStorage
           console.log('🔄 Tokens out of sync, refreshing from localStorage...');
           const refreshed = await tokenManager.refreshTokenForCurrentDomain();

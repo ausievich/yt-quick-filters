@@ -248,13 +248,6 @@ export class LocalStorageTokenManager {
   }
 
   /**
-   * Check if we have a valid token for current domain
-   */
-  public hasValidTokenForCurrentDomain(): boolean {
-    return this.getTokenForCurrentDomain() !== null;
-  }
-
-  /**
    * Check if token is expired or will expire soon
    */
   public isTokenExpiredOrExpiringSoon(bufferMs: number = 0): boolean {
@@ -273,7 +266,7 @@ export class LocalStorageTokenManager {
    * Check if token in JetBrains localStorage (page storage) matches token in extension storage
    * Returns true if tokens match, false if they don't match or if either is missing
    */
-  public async isTokenInSync(): Promise<boolean> {
+  public async hasValidToken(): Promise<boolean> {
     try {
       const origin = window.location.origin;
       
