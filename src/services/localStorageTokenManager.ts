@@ -419,4 +419,32 @@ export class LocalStorageTokenManager {
     const now = Date.now();
     return tokenInfo.expMs <= (now + bufferMs);
   }
+
+  /**
+   * Check if token in JetBrains localStorage matches token in extension storage
+   * Returns true if tokens match, false if they don't match or if either is missing
+   */
+  public async isTokenInSync(): Promise<boolean> {
+    try {
+      const origin = window.location.origin;
+      
+      // Get token from extension storage
+      const storedTokenInfo = this.tokenMap.get(origin);
+      if (!storedTokenInfo) {
+        return false; // No token in extension storage
+      }
+      
+      // Get token from JetBrains localStorage
+      const localStorageTokenData = this.extractTokenFromLocalStorage();
+      if (!localStorageTokenData) {
+        return false; // No token in localStorage
+      }
+      
+      // Compare tokens
+      return storedTokenInfo.token === localStorageTokenData.accessToken;
+    } catch (error) {
+      console.error('❌ Error checking token sync:', error);
+      return false;
+    }
+  }
 }

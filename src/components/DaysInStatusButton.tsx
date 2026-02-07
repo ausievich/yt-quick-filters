@@ -48,24 +48,32 @@ export const DaysInStatusButton: React.FC = () => {
   const handleToggleDaysInStatus = async () => {
     const newState = !showDaysInStatus;
     
-    // If enabling days in status, check if we need to refresh token
+    // If enabling days in status, check and sync token before making requests
     if (newState) {
       try {
-        // First check if we already have a valid token
-        const hasValidToken = tokenManager.hasValidTokenForCurrentDomain();
+        // First check if token in JetBrains localStorage matches token in extension storage
+        const isInSync = await tokenManager.isTokenInSync();
         
-        if (!hasValidToken) {
+        if (!isInSync) {
+          // Tokens don't match - refresh token from localStorage
+          console.log('🔄 Tokens out of sync, refreshing from localStorage...');
           const refreshed = await tokenManager.forceRefreshTokenForCurrentDomain();
           
           if (refreshed) {
             setHasToken(true);
+            console.log('✅ Token refreshed successfully');
+          } else {
+            console.warn('⚠️ Failed to refresh token');
+            setHasToken(false);
           }
-
         } else {
+          // Tokens match - we can proceed with requests
+          console.log('✅ Token is in sync, ready to make requests');
           setHasToken(true);
         }
       } catch (error) {
         console.warn('⚠️ Error checking/refreshing token:', error);
+        setHasToken(false);
         // Continue anyway - the API client will handle retries
       }
     }
