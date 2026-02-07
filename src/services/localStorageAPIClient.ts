@@ -145,11 +145,4 @@ export class LocalStorageAPIClient {
     }
   }
 
-  /**
-   * Check if we have a valid token
-   */
-  public hasValidToken(): boolean {
-    return this.tokenManager.hasValidTokenForCurrentDomain();
-  }
-
 }

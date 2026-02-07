@@ -5,12 +5,12 @@
 
 interface TokenData {
   accessToken: string;
-  expires: number; // epoch timestamp
+  expires: number; // epoch timestamp in seconds (UTC)
 }
 
 interface StoredTokenInfo {
   token: string;
-  expMs: number; // expiration time in milliseconds
+  expMs: number; // expiration time in milliseconds (UTC epoch timestamp)
   basePath: string;
 }
 
@@ -49,7 +49,7 @@ export class LocalStorageTokenManager {
   }
 
   /**
-   * Load tokens from chrome.storage
+   * Load tokens from extension storage (chrome.storage.local)
    */
   private async loadTokensFromStorage(): Promise<void> {
     try {
@@ -57,9 +57,9 @@ export class LocalStorageTokenManager {
       const storedTokens = result[LocalStorageTokenManager.STORAGE_KEY] as Record<string, StoredTokenInfo> | undefined;
       
       if (storedTokens) {
-        const now = Date.now();
+        const now = Date.now(); // UTC epoch timestamp in milliseconds
         for (const [origin, tokenInfo] of Object.entries(storedTokens)) {
-          // Only load non-expired tokens
+          // Only load non-expired tokens (both timestamps are in UTC, so timezone doesn't matter)
           if (tokenInfo.expMs > now) {
             this.tokenMap.set(origin, tokenInfo);
           }
@@ -71,7 +71,7 @@ export class LocalStorageTokenManager {
   }
 
   /**
-   * Save tokens to chrome.storage
+   * Save tokens to extension storage (chrome.storage.local)
    */
   private async saveTokensToStorage(): Promise<void> {
     try {
@@ -99,13 +99,13 @@ export class LocalStorageTokenManager {
       
       const tokenInfo: StoredTokenInfo = {
         token: tokenData.accessToken,
-        expMs: tokenData.expires * 1000,
+        expMs: tokenData.expires * 1000, // Convert seconds to milliseconds (both UTC)
         basePath
       };
 
       this.tokenMap.set(origin, tokenInfo);
       
-      // Save to chrome.storage
+      // Save to extension storage
       await this.saveTokensToStorage();
       
       return true;
@@ -235,8 +235,8 @@ export class LocalStorageTokenManager {
     
     const tokenInfo = this.tokenMap.get(origin);
     if (tokenInfo) {
-      const now = Date.now();
-      if (tokenInfo.expMs > now) {
+      const now = Date.now(); // UTC epoch timestamp in milliseconds
+      if (tokenInfo.expMs > now) { // Both are UTC, timezone doesn't matter
         return true;
       } else {
         this.tokenMap.delete(origin);
@@ -265,28 +265,28 @@ export class LocalStorageTokenManager {
       return true; // No token = expired
     }
     
-    const now = Date.now();
-    return tokenInfo.expMs <= (now + bufferMs);
+    const now = Date.now(); // UTC epoch timestamp in milliseconds
+    return tokenInfo.expMs <= (now + bufferMs); // Both are UTC, timezone doesn't matter
   }
 
   /**
-   * Check if token in JetBrains localStorage matches token in extension storage
+   * Check if token in JetBrains localStorage (page storage) matches token in extension storage
    * Returns true if tokens match, false if they don't match or if either is missing
    */
   public async isTokenInSync(): Promise<boolean> {
     try {
       const origin = window.location.origin;
       
-      // Get token from extension storage
+      // Get token from extension storage (chrome.storage.local)
       const storedTokenInfo = this.tokenMap.get(origin);
       if (!storedTokenInfo) {
         return false; // No token in extension storage
       }
       
-      // Get token from JetBrains localStorage
+      // Get token from JetBrains localStorage (page storage)
       const localStorageTokenData = this.extractTokenFromLocalStorage();
       if (!localStorageTokenData) {
-        return false; // No token in localStorage
+        return false; // No token in page localStorage
       }
       
       // Compare tokens

@@ -20,7 +20,7 @@ export const DaysInStatusButton: React.FC = () => {
         const localStorageClient = LocalStorageAPIClient.getInstance();
         await localStorageClient.initialize();
         
-        const hasValidToken = localStorageClient.hasValidToken();
+        const hasValidToken = tokenManager.hasValidTokenForCurrentDomain();
         setHasToken(hasValidToken);
       } catch (error) {
         console.warn('Failed to check localStorage token:', error);
