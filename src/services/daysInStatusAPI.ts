@@ -36,15 +36,14 @@ export class DaysInStatusAPI {
   public async getDaysInStatus(issueId: string): Promise<DaysInStatusInfo | null> {
     // Ensure service is initialized
     await this.initialize();
-    
-    // Try to get real data from API
+
     try {
-      const directData = await this.fetchIssueDirectly(issueId);
-      if (directData) {
+      const issueData = await this.apiClient.fetchIssue(issueId);
+      if (issueData) {
         return {
           issueId,
-          created: directData.created,
-          updated: directData.updated
+          created: issueData.created,
+          updated: issueData.updated
         };
       }
     } catch (error) {
@@ -53,18 +52,6 @@ export class DaysInStatusAPI {
 
     // Return null if API fails - will show dashes
     return null;
-  }
-
-  /**
-   * Fetch issue data using localStorage API client
-   */
-  private async fetchIssueDirectly(issueId: string): Promise<IssueInfo | null> {
-    try {
-      const data = await this.apiClient.fetchIssue(issueId);
-      return data;
-    } catch (error) {
-      return null;
-    }
   }
 
 }
