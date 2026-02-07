@@ -43,7 +43,7 @@ export class TokenManager {
     await this.loadTokensFromStorage();
     
     // Extract token for current domain
-    await this.extractAndStoreTokenForCurrentDomain();
+    await this.refreshTokenForCurrentDomain();
     
     this.isInitialized = true;
   }
@@ -83,9 +83,9 @@ export class TokenManager {
   }
 
   /**
-   * Extract token and metadata from localStorage for current domain
+   * Refresh token for current domain from localStorage
    */
-  private async extractAndStoreTokenForCurrentDomain(): Promise<boolean> {
+  public async refreshTokenForCurrentDomain(): Promise<boolean> {
     try {
       const origin = window.location.origin;
       
@@ -218,13 +218,6 @@ export class TokenManager {
     return `${origin}${basePath}`;
   }
 
-  /**
-   * Refresh token for current domain from localStorage
-   */
-  public async refreshTokenForCurrentDomain(): Promise<boolean> {
-    // Try to extract from localStorage
-    return await this.extractAndStoreTokenForCurrentDomain();
-  }
 
   /**
    * Check if we have a valid token
