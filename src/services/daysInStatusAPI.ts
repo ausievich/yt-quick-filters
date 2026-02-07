@@ -1,9 +1,9 @@
 import { DaysInStatusInfo, IssueInfo } from '../types';
-import { LocalStorageAPIClient } from './localStorageAPIClient';
+import { YouTrackAPIClient } from './youTrackAPIClient';
 
 export class DaysInStatusAPI {
   private static instance: DaysInStatusAPI;
-  private apiClient: LocalStorageAPIClient;
+  private apiClient: YouTrackAPIClient;
   private isInitialized: boolean = false;
 
   public static getInstance(): DaysInStatusAPI {
@@ -14,7 +14,7 @@ export class DaysInStatusAPI {
   }
 
   private constructor() {
-    this.apiClient = LocalStorageAPIClient.getInstance();
+    this.apiClient = YouTrackAPIClient.getInstance();
   }
 
   /**

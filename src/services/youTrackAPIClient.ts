@@ -1,5 +1,5 @@
 /**
- * LocalStorage API Client for YouTrack
+ * YouTrack API Client
  * Uses tokens from localStorage with auto-retry on 401
  */
 
@@ -12,16 +12,16 @@ interface APIResponse {
   error?: string;
 }
 
-export class LocalStorageAPIClient {
-  private static instance: LocalStorageAPIClient;
+export class YouTrackAPIClient {
+  private static instance: YouTrackAPIClient;
   private tokenManager: LocalStorageTokenManager;
   private isInitialized: boolean = false;
 
-  public static getInstance(): LocalStorageAPIClient {
-    if (!LocalStorageAPIClient.instance) {
-      LocalStorageAPIClient.instance = new LocalStorageAPIClient();
+  public static getInstance(): YouTrackAPIClient {
+    if (!YouTrackAPIClient.instance) {
+      YouTrackAPIClient.instance = new YouTrackAPIClient();
     }
-    return LocalStorageAPIClient.instance;
+    return YouTrackAPIClient.instance;
   }
 
   private constructor() {

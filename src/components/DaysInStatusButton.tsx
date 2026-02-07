@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StorageService } from '../services/storage';
 import { DaysInStatusUI } from '../services/daysInStatusUI';
-import { LocalStorageAPIClient } from '../services/localStorageAPIClient';
+import { YouTrackAPIClient } from '../services/youTrackAPIClient';
 import { LocalStorageTokenManager } from '../services/localStorageTokenManager';
 import './DaysInStatusButton.css';
 
@@ -17,8 +17,8 @@ export const DaysInStatusButton: React.FC = () => {
   useEffect(() => {
     const checkToken = async () => {
       try {
-        const localStorageClient = LocalStorageAPIClient.getInstance();
-        await localStorageClient.initialize();
+        const apiClient = YouTrackAPIClient.getInstance();
+        await apiClient.initialize();
         
         // Check if token is valid (checks if token exists and is in sync)
         const hasValidToken = await tokenManager.hasValidToken();
