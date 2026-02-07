@@ -39,11 +39,11 @@ export class TokenManager {
       return; // Already initialized
     }
     
-    // Load existing tokens from storage
+    // Load existing tokens from extension storage into memory
     await this.loadTokensFromStorage();
     
-    // Extract token for current domain
-    await this.refreshTokenForCurrentDomain();
+    // Check we have a valid token for current domain
+    await this.hasValidToken();
     
     this.isInitialized = true;
   }
