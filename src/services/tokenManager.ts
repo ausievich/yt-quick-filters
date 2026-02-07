@@ -222,29 +222,8 @@ export class TokenManager {
    * Refresh token for current domain from localStorage
    */
   public async refreshTokenForCurrentDomain(): Promise<boolean> {
-    const origin = window.location.origin;
-    
-    // First try to extract from localStorage
-    const refreshed = await this.extractAndStoreTokenForCurrentDomain();
-    if (refreshed) {
-      return true;
-    }
-    
-    // If extraction failed, try to reload from storage
-    await this.loadTokensFromStorage();
-    
-    const tokenInfo = this.tokenMap.get(origin);
-    if (tokenInfo) {
-      const now = Date.now(); // UTC epoch timestamp in milliseconds
-      if (tokenInfo.expMs > now) { // Both are UTC, timezone doesn't matter
-        return true;
-      } else {
-        this.tokenMap.delete(origin);
-        await this.saveTokensToStorage();
-      }
-    }
-    
-    return false;
+    // Try to extract from localStorage
+    return await this.extractAndStoreTokenForCurrentDomain();
   }
 
   /**
