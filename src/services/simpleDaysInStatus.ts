@@ -31,10 +31,11 @@ export class SimpleDaysInStatusService {
     
     await this.apiClient.initialize();
     
-    // Check if token is expired or expiring soon (with 5 second buffer)
+    // Check if token is expired or expiring soon (with 5 minute buffer)
+    // Tokens live for 1 hour, so 5 minutes is a reasonable buffer
     // If so, refresh it before making requests
     // This happens once when the function is enabled
-    if (this.tokenManager.isTokenExpiredOrExpiringSoon(5000)) {
+    if (this.tokenManager.isTokenExpiredOrExpiringSoon(5 * 60 * 1000)) {
       await this.tokenManager.refreshTokenForCurrentDomain();
     }
     
