@@ -1,5 +1,5 @@
 /**
- * LocalStorage Token Manager
+ * Token Manager
  * Handles automatic token extraction from localStorage and domain-based storage
  */
 
@@ -18,17 +18,17 @@ interface YouTrackConfig {
   contextPath: string;
 }
 
-export class LocalStorageTokenManager {
-  private static instance: LocalStorageTokenManager;
+export class TokenManager {
+  private static instance: TokenManager;
   private tokenMap: Map<string, StoredTokenInfo> = new Map();
   private isInitialized: boolean = false;
   private static readonly STORAGE_KEY = 'youtrack_tokens';
 
-  public static getInstance(): LocalStorageTokenManager {
-    if (!LocalStorageTokenManager.instance) {
-      LocalStorageTokenManager.instance = new LocalStorageTokenManager();
+  public static getInstance(): TokenManager {
+    if (!TokenManager.instance) {
+      TokenManager.instance = new TokenManager();
     }
-    return LocalStorageTokenManager.instance;
+    return TokenManager.instance;
   }
 
   /**
@@ -53,8 +53,8 @@ export class LocalStorageTokenManager {
    */
   private async loadTokensFromStorage(): Promise<void> {
     try {
-      const result = await chrome.storage.local.get(LocalStorageTokenManager.STORAGE_KEY);
-      const storedTokens = result[LocalStorageTokenManager.STORAGE_KEY] as Record<string, StoredTokenInfo> | undefined;
+      const result = await chrome.storage.local.get(TokenManager.STORAGE_KEY);
+      const storedTokens = result[TokenManager.STORAGE_KEY] as Record<string, StoredTokenInfo> | undefined;
       
       if (storedTokens) {
         const now = Date.now(); // UTC epoch timestamp in milliseconds
@@ -76,7 +76,7 @@ export class LocalStorageTokenManager {
   private async saveTokensToStorage(): Promise<void> {
     try {
       const tokensObject = Object.fromEntries(this.tokenMap);
-      await chrome.storage.local.set({ [LocalStorageTokenManager.STORAGE_KEY]: tokensObject });
+      await chrome.storage.local.set({ [TokenManager.STORAGE_KEY]: tokensObject });
     } catch (error) {
       console.error('❌ Failed to save tokens to storage:', error);
     }

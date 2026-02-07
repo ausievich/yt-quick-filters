@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StorageService } from '../services/storage';
 import { DaysInStatusUI } from '../services/daysInStatusUI';
 import { YouTrackAPIClient } from '../services/youTrackAPIClient';
-import { LocalStorageTokenManager } from '../services/localStorageTokenManager';
+import { TokenManager } from '../services/tokenManager';
 import './DaysInStatusButton.css';
 
 export const DaysInStatusButton: React.FC = () => {
@@ -11,7 +11,7 @@ export const DaysInStatusButton: React.FC = () => {
 
   const storageService = StorageService.getInstance();
   const daysInStatusUI = DaysInStatusUI.getInstance();
-  const tokenManager = LocalStorageTokenManager.getInstance();
+  const tokenManager = TokenManager.getInstance();
 
   // Check if we have a token on mount
   useEffect(() => {

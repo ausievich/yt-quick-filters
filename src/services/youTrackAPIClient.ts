@@ -3,7 +3,7 @@
  * Uses tokens from localStorage with auto-retry on 401
  */
 
-import { LocalStorageTokenManager } from './localStorageTokenManager';
+import { TokenManager } from './tokenManager';
 import { IssueInfo } from '../types';
 
 interface APIResponse {
@@ -14,7 +14,7 @@ interface APIResponse {
 
 export class YouTrackAPIClient {
   private static instance: YouTrackAPIClient;
-  private tokenManager: LocalStorageTokenManager;
+  private tokenManager: TokenManager;
   private isInitialized: boolean = false;
 
   public static getInstance(): YouTrackAPIClient {
@@ -25,7 +25,7 @@ export class YouTrackAPIClient {
   }
 
   private constructor() {
-    this.tokenManager = LocalStorageTokenManager.getInstance();
+    this.tokenManager = TokenManager.getInstance();
   }
 
   /**

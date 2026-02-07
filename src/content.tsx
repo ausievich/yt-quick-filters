@@ -1,7 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { QuickFiltersApp } from './components/QuickFiltersApp';
-import { LocalStorageTokenManager } from './services/localStorageTokenManager';
+import { TokenManager } from './services/tokenManager';
 import './styles.css';
 
 class ContentScript {
@@ -26,7 +26,7 @@ class ContentScript {
   public async start(): Promise<void> {
     // Initialize token manager
     try {
-      const tokenManager = LocalStorageTokenManager.getInstance();
+      const tokenManager = TokenManager.getInstance();
       await tokenManager.initialize();
     } catch (error) {
       console.warn('⚠️ Failed to initialize token manager:', error);
