@@ -21,8 +21,6 @@ interface YouTrackConfig {
 export class LocalStorageTokenManager {
   private static instance: LocalStorageTokenManager;
   private tokenMap: Map<string, StoredTokenInfo> = new Map();
-  private refreshTimeouts: Map<string, NodeJS.Timeout> = new Map();
-  private liveWatcherActive: boolean = false;
   private isInitialized: boolean = false;
   private static readonly STORAGE_KEY = 'youtrack_tokens';
 
@@ -34,7 +32,7 @@ export class LocalStorageTokenManager {
   }
 
   /**
-   * Initialize token manager and start live watching
+   * Initialize token manager
    */
   public async initialize(): Promise<void> {
     if (this.isInitialized) {
@@ -46,15 +44,6 @@ export class LocalStorageTokenManager {
     
     // Extract token for current domain
     await this.extractAndStoreTokenForCurrentDomain();
-    
-    // Start live watcher
-    this.startLiveWatcher();
-    
-    // Set up refresh timers
-    this.setupRefreshTimers();
-    
-    // Set up periodic cleanup of expired tokens
-    this.setupPeriodicCleanup();
     
     this.isInitialized = true;
   }
@@ -115,7 +104,6 @@ export class LocalStorageTokenManager {
       };
 
       this.tokenMap.set(origin, tokenInfo);
-      this.setupRefreshTimer(origin, tokenInfo);
       
       // Save to chrome.storage
       await this.saveTokensToStorage();
@@ -257,145 +245,6 @@ export class LocalStorageTokenManager {
     }
     
     return false;
-  }
-
-  /**
-   * Setup refresh timers for all stored tokens
-   */
-  private setupRefreshTimers(): void {
-    this.tokenMap.forEach((tokenInfo, origin) => {
-      this.setupRefreshTimer(origin, tokenInfo);
-    });
-  }
-
-  /**
-   * Setup refresh timer for a specific token
-   */
-  private setupRefreshTimer(origin: string, tokenInfo: StoredTokenInfo): void {
-    // Clear existing timer
-    const existingTimer = this.refreshTimeouts.get(origin);
-    if (existingTimer) {
-      clearTimeout(existingTimer);
-    }
-
-    // Calculate refresh time (60 seconds before expiration)
-    const refreshTime = tokenInfo.expMs - Date.now() - 60000;
-    
-    if (refreshTime > 0) {
-      const timer = setTimeout(async () => {
-        await this.refreshTokenForOrigin(origin);
-      }, refreshTime);
-      
-      this.refreshTimeouts.set(origin, timer);
-    }
-  }
-
-  /**
-   * Setup periodic cleanup of expired tokens
-   */
-  private setupPeriodicCleanup(): void {
-    // Clean up expired tokens every 5 minutes
-    setInterval(async () => {
-      await this.cleanupExpiredTokens();
-    }, 5 * 60 * 1000);
-  }
-
-  /**
-   * Refresh token for specific origin
-   */
-  private async refreshTokenForOrigin(origin: string): Promise<boolean> {
-    try {
-      // For now, just re-extract from localStorage
-      // In a real implementation, you might want to make a refresh API call
-      const currentOrigin = window.location.origin;
-      if (origin === currentOrigin) {
-        return await this.extractAndStoreTokenForCurrentDomain();
-      }
-      return false;
-    } catch (error) {
-      console.error('❌ Failed to refresh token for', origin, ':', error);
-      return false;
-    }
-  }
-
-  /**
-   * Start live watcher for localStorage changes
-   */
-  private startLiveWatcher(): void {
-    if (this.liveWatcherActive) {
-      return;
-    }
-
-    this.liveWatcherActive = true;
-    
-    // Patch localStorage.setItem to detect token updates
-    const originalSetItem = localStorage.setItem;
-    const self = this;
-    
-    localStorage.setItem = function(key: string, value: string) {
-      // Call original method
-      originalSetItem.call(this, key, value);
-      
-      // Check if this is a token update
-      if (key.endsWith('-token')) {
-        self.handleTokenUpdate(key, value);
-      }
-    };
-  }
-
-  /**
-   * Handle token update from localStorage
-   */
-  private async handleTokenUpdate(key: string, value: string): Promise<void> {
-    try {
-      const tokenData = JSON.parse(value);
-      if (tokenData.accessToken && tokenData.expires) {
-        const origin = window.location.origin;
-        const basePath = this.extractBasePathFromLocalStorage();
-        const expMs = tokenData.expires * 1000;
-        
-        const tokenInfo: StoredTokenInfo = {
-          token: tokenData.accessToken,
-          expMs,
-          basePath
-        };
-
-        this.tokenMap.set(origin, tokenInfo);
-        this.setupRefreshTimer(origin, tokenInfo);
-        
-        // Save to chrome.storage
-        await this.saveTokensToStorage();
-      }
-    } catch (error) {
-      console.error('❌ Failed to handle token update:', error);
-    }
-  }
-
-  /**
-   * Clean up expired tokens from storage
-   */
-  private async cleanupExpiredTokens(): Promise<void> {
-    const now = Date.now();
-    const expiredOrigins: string[] = [];
-    
-    this.tokenMap.forEach((tokenInfo, origin) => {
-      if (now >= tokenInfo.expMs) {
-        expiredOrigins.push(origin);
-      }
-    });
-    
-    expiredOrigins.forEach(origin => {
-      this.tokenMap.delete(origin);
-      const timer = this.refreshTimeouts.get(origin);
-      if (timer) {
-        clearTimeout(timer);
-        this.refreshTimeouts.delete(origin);
-      }
-    });
-    
-    if (expiredOrigins.length > 0) {
-      await this.saveTokensToStorage();
-    }
   }
 
   /**
