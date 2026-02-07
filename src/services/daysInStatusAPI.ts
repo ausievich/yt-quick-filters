@@ -1,11 +1,9 @@
 import { DaysInStatusInfo, IssueInfo } from '../types';
 import { LocalStorageAPIClient } from './localStorageAPIClient';
-import { LocalStorageTokenManager } from './localStorageTokenManager';
 
 export class DaysInStatusAPI {
   private static instance: DaysInStatusAPI;
   private apiClient: LocalStorageAPIClient;
-  private tokenManager: LocalStorageTokenManager;
   private isInitialized: boolean = false;
 
   public static getInstance(): DaysInStatusAPI {
@@ -17,7 +15,6 @@ export class DaysInStatusAPI {
 
   private constructor() {
     this.apiClient = LocalStorageAPIClient.getInstance();
-    this.tokenManager = LocalStorageTokenManager.getInstance();
   }
 
   /**
@@ -34,13 +31,13 @@ export class DaysInStatusAPI {
   }
 
   /**
-   * Calculate days in status using real data from YouTrack API
+   * Get days in status data from YouTrack API
    */
-  public async getDaysInStatusFromDOM(issueId: string, cardElement: HTMLElement): Promise<DaysInStatusInfo | null> {
+  public async getDaysInStatus(issueId: string): Promise<DaysInStatusInfo | null> {
     // Ensure service is initialized
     await this.initialize();
     
-    // Try to get real data from localStorage API call
+    // Try to get real data from API
     try {
       const directData = await this.fetchIssueDirectly(issueId);
       if (directData) {
