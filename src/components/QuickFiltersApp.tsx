@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Filter } from '../types';
 import { StorageService } from '../services/storage';
 import { UtilsService } from '../services/utils';
-import { YouTrackVersionService } from '../services/youtrackVersion';
+import { YouTrackVersionService } from '../services/youTrackVersion';
 import { useQueryParams } from '../hooks/useQueryParams';
 import { FilterBar } from './FilterBar';
 import { FilterModal } from './FilterModal';
