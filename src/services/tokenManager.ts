@@ -122,7 +122,7 @@ export class TokenManager {
     try {
       const tokenCandidates: Array<{ key: string; data: TokenData }> = [];
       
-      // Find all token keys (ends with -token)
+      // Find all token keys
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         if (key && key.endsWith('-token')) {
