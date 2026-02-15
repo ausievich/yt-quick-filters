@@ -27,7 +27,6 @@ This extension brings a long-requested feature (see JetBrains request [JT-38623]
 <img src="screenshots/onboarding2.png" width="600">
 <img src="screenshots/onboarding3.png" width="600">
 <img src="screenshots/onboarding4.png" width="600">
----
 
 ## Installation
 
