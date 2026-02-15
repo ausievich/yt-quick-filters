@@ -62,6 +62,15 @@ div.yt-agile-board__top-bar #ytqf-filter-container #ytqf-bar {
   outline: none;
 }
 
+/* Remove focus after click */
+#ytqf-bar .btn:focus:not(:active) {
+  background: #fff;
+}
+
+#ytqf-bar .btn.active:focus:not(:active) {
+  background: #EBF6FF;
+}
+
 /* Ghost buttons */
 #ytqf-bar .ghost {
   opacity: 0.75;

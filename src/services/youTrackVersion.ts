@@ -78,4 +78,5 @@ export class YouTrackVersionService {
     return document.querySelector('.yt-agile-board__toolbar[data-test="yt-agile-board-toolbar"]') ||
            document.querySelector('.yt-agile-board__toolbar');
   }
+
 }

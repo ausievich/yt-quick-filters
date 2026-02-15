@@ -42,3 +42,20 @@ export interface FilterBarProps {
   onAddFilter: () => void;
   onContextMenu: (e: React.MouseEvent, item: Filter, index: number) => void;
 }
+
+export interface IssueInfo {
+  id: string;
+  created: number;
+  updated: number;
+  state?: {
+    name: string;
+    id: string;
+  };
+}
+
+
+export interface DaysInStatusInfo {
+  issueId: string;
+  created: number;
+  updated: number;
+}
