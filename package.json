@@ -1,6 +1,6 @@
 {
   "name": "yt-quick-filters",
-  "version": "2.1.2",
+  "version": "2.2.0",
   "description": "Add quick filter buttons to YouTrack Agile Boards. Create filters via a modal.",
   "scripts": {
     "build": "webpack --mode=production",
