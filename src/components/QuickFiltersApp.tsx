@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom';
 import { Filter } from '../types';
 import { StorageService } from '../services/storage';
 import { UtilsService } from '../services/utils';
-import { YouTrackVersionService } from '../services/youtrackVersion';
+import { YouTrackVersionService } from '../services/youTrackVersion';
 import { useQueryParams } from '../hooks/useQueryParams';
 import { FilterBar } from './FilterBar';
 import { FilterModal } from './FilterModal';
 import { ContextMenu } from './ContextMenu';
+import { DaysInStatusUI } from '../services/daysInStatusUI';
 
 interface ContextMenuState {
   isOpen: boolean;
@@ -42,6 +43,7 @@ export const QuickFiltersApp: React.FC = () => {
   const storageService = StorageService.getInstance();
   const utilsService = UtilsService.getInstance();
   const versionService = YouTrackVersionService.getInstance();
+  const daysInStatusUI = DaysInStatusUI.getInstance();
   
   // State to hold the DOM node for the portal
   const [portalTarget, setPortalTarget] = useState<Element | null>(null);
@@ -59,23 +61,25 @@ export const QuickFiltersApp: React.FC = () => {
     }
   }, [storageService]);
 
-  // Effect to find the target element for the portal
+
+  // Effect to find the target elements for the portals
   useEffect(() => {
-    const findTargetElement = () => {
-      return versionService.getTargetElement();
+    const findTargetElements = () => {
+      const filterTarget = versionService.getTargetElement();
+      return { filterTarget };
     };
 
     // Try immediately first
-    const targetElement = findTargetElement();
-    if (targetElement) {
-      setPortalTarget(targetElement);
+    const { filterTarget } = findTargetElements();
+    if (filterTarget) {
+      setPortalTarget(filterTarget);
     }
 
     // Keep observing DOM changes to reattach after SPA navigation
     const observer = new MutationObserver(() => {
-      const targetElement = findTargetElement();
-      if (targetElement) {
-        setPortalTarget(targetElement);
+      const { filterTarget } = findTargetElements();
+      if (filterTarget) {
+        setPortalTarget(filterTarget);
       }
     });
 
@@ -91,6 +95,19 @@ export const QuickFiltersApp: React.FC = () => {
   useEffect(() => {
     loadFilters();
   }, [pathname, loadFilters]);
+
+  // Initialize DaysInStatusUI
+  useEffect(() => {
+    const initDaysInStatus = async () => {
+      await daysInStatusUI.start();
+    };
+    
+    initDaysInStatus();
+    
+    return () => {
+      daysInStatusUI.stop();
+    };
+  }, [daysInStatusUI]);
 
   const handleFilterClick = useCallback((query: string) => {
     // If clicked on already active filter, deactivate it (toggle)
@@ -182,11 +199,13 @@ export const QuickFiltersApp: React.FC = () => {
     }
   }, [modal.isEdit, storageService, loadFilters, handleModalClose]);
 
+
   // Determine active filter based on current query
   const activeFilter = utilsService.findActiveFilter(filters, currentQuery);
 
   return (
     <>
+      {/* Render FilterBar */}
       {portalTarget ? (
         ReactDOM.createPortal(
           <FilterBar

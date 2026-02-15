@@ -45,6 +45,24 @@ export class StorageService {
     });
   }
 
+  public async getDaysInStatusEnabled(): Promise<boolean> {
+    const { storageKey } = this.getBoardInfo();
+    const daysInStatusKey = storageKey + '_daysInStatus';
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(daysInStatusKey, (data) => {
+        resolve(data[daysInStatusKey] || false);
+      });
+    });
+  }
+
+  public async setDaysInStatusEnabled(enabled: boolean): Promise<void> {
+    const { storageKey } = this.getBoardInfo();
+    const daysInStatusKey = storageKey + '_daysInStatus';
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ [daysInStatusKey]: enabled }, resolve);
+    });
+  }
+
   public async addFilter(filter: Filter): Promise<void> {
     const filters = await this.getFilters();
     filters.push(filter);

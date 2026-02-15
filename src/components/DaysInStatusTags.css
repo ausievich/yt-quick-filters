@@ -1,0 +1,57 @@
+.days-in-status {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  z-index: 0;
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+}
+
+.days-in-status__tag {
+  color: white;
+  padding: 3px 6px;
+  border-radius: 2px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  min-width: 28px;
+  text-align: center;
+  backdrop-filter: blur(2px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.days-in-status__tag--green {
+  background: #2ea043;
+  color: white;
+}
+
+.days-in-status__tag--yellow {
+  background: #ffc107;
+  color: #2c3e50;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.days-in-status__tag--red {
+  background: #dc3545;
+}
+
+.days-in-status--loading .days-in-status__tag {
+  background: rgba(102, 102, 102, 0.9);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Ensure the tags are visible on different card backgrounds */
+.yt-agile-card .days-in-status__tag {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.days-in-status__tag--gray {
+  background-color: #6c757d;
+  color: white;
+}

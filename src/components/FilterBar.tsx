@@ -1,5 +1,6 @@
 import React from 'react';
 import { FilterBarProps } from '../types';
+import { DaysInStatusButton } from './DaysInStatusButton';
 import './FilterBar.css';
 
 export const FilterBar: React.FC<FilterBarProps> = ({
@@ -11,6 +12,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 }) => {
   return (
     <div id="ytqf-bar">
+      <DaysInStatusButton />
+      
       <button className="btn ghost" onClick={onAddFilter}>
         Add filter...
       </button>
