@@ -167,4 +167,18 @@ export class StorageService {
       chrome.storage.sync.set({ ytqf_compactFormat: enabled }, resolve);
     });
   }
+
+  public async getCreatedTagColored(): Promise<boolean> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get('ytqf_createdTagColored', (data) => {
+        resolve(data.ytqf_createdTagColored || false);
+      });
+    });
+  }
+
+  public async setCreatedTagColored(enabled: boolean): Promise<void> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ ytqf_createdTagColored: enabled }, resolve);
+    });
+  }
 }

@@ -8,6 +8,7 @@ const Popup: React.FC = () => {
   const [thresholdYellow, setThresholdYellow] = useState<number>(14);
   const [thresholdRed, setThresholdRed] = useState<number>(60);
   const [compactFormat, setCompactFormat] = useState<boolean>(false);
+  const [createdTagColored, setCreatedTagColored] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const storageService = StorageService.getInstance();
@@ -20,12 +21,14 @@ const Popup: React.FC = () => {
         const thresholdYellowValue = await storageService.getDaysInStatusThresholdYellow();
         const thresholdRedValue = await storageService.getDaysInStatusThresholdRed();
         const compactFormatValue = await storageService.getDaysInStatusCompactFormat();
+        const createdTagColoredValue = await storageService.getCreatedTagColored();
         
         // Invert logic: hideCreated = false means showCreated = true
         setShowCreated(!hideCreatedValue);
         setThresholdYellow(thresholdYellowValue);
         setThresholdRed(thresholdRedValue);
         setCompactFormat(compactFormatValue);
+        setCreatedTagColored(createdTagColoredValue);
       } catch (error) {
         console.error('Failed to load settings:', error);
       } finally {
@@ -145,6 +148,25 @@ const Popup: React.FC = () => {
     }
   };
 
+  const handleCreatedTagColoredChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.checked;
+    setCreatedTagColored(value);
+    await storageService.setCreatedTagColored(value);
+    
+    // Notify content script to update
+    try {
+      const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+      if (tabs[0]?.id) {
+        chrome.tabs.sendMessage(tabs[0].id, { 
+          type: 'UPDATE_DAYS_IN_STATUS_SETTINGS',
+          createdTagColored: value
+        });
+      }
+    } catch (error) {
+      console.warn('Failed to notify content script:', error);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="popup-container">
@@ -171,6 +193,18 @@ const Popup: React.FC = () => {
               className="popup-checkbox"
             />
             <span>Show Created tag</span>
+          </label>
+        </div>
+
+        <div className="popup-setting">
+          <label className="popup-checkbox-label">
+            <input
+              type="checkbox"
+              checked={createdTagColored}
+              onChange={handleCreatedTagColoredChange}
+              className="popup-checkbox"
+            />
+            <span>Color Created tag</span>
           </label>
         </div>
 

@@ -16,6 +16,7 @@ export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataL
   const [thresholdYellow, setThresholdYellow] = useState<number>(14);
   const [thresholdRed, setThresholdRed] = useState<number>(60);
   const [compactFormat, setCompactFormat] = useState<boolean>(false);
+  const [createdTagColored, setCreatedTagColored] = useState<boolean>(false);
 
   const storageService = StorageService.getInstance();
 
@@ -26,10 +27,12 @@ export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataL
         const thresholdYellowValue = await storageService.getDaysInStatusThresholdYellow();
         const thresholdRedValue = await storageService.getDaysInStatusThresholdRed();
         const compactFormatValue = await storageService.getDaysInStatusCompactFormat();
+        const createdTagColoredValue = await storageService.getCreatedTagColored();
         setHideCreated(hideCreatedValue);
         setThresholdYellow(thresholdYellowValue);
         setThresholdRed(thresholdRedValue);
         setCompactFormat(compactFormatValue);
+        setCreatedTagColored(createdTagColoredValue);
       } catch (error) {
         console.error('Failed to load Days In Status settings:', error);
       }
@@ -74,6 +77,9 @@ export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataL
         }
         if (message.compactFormat !== undefined) {
           setCompactFormat(message.compactFormat);
+        }
+        if (message.createdTagColored !== undefined) {
+          setCreatedTagColored(message.createdTagColored);
         }
       }
     };
@@ -180,14 +186,15 @@ export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataL
   const daysSinceUpdated = Math.floor((nowStart.getTime() - updatedStart.getTime()) / (1000 * 60 * 60 * 24));
 
   // Determine color based on age for Created
-  // Temporarily disabled - always use gray for created
-  // let createdColorClass = 'days-in-status__tag--green';
-  // if (daysSinceCreated > thresholdRed) {
-  //   createdColorClass = 'days-in-status__tag--red';
-  // } else if (daysSinceCreated > thresholdYellow) {
-  //   createdColorClass = 'days-in-status__tag--yellow';
-  // }
-  const createdColorClass = 'days-in-status__tag--gray';
+  let createdColorClass = 'days-in-status__tag--gray';
+  if (createdTagColored) {
+    createdColorClass = 'days-in-status__tag--green';
+    if (daysSinceCreated > thresholdRed) {
+      createdColorClass = 'days-in-status__tag--red';
+    } else if (daysSinceCreated > thresholdYellow) {
+      createdColorClass = 'days-in-status__tag--yellow';
+    }
+  }
 
   // Determine color based on age for Updated using configurable thresholds
   let updatedColorClass = 'days-in-status__tag--green';
