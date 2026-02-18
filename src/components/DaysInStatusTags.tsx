@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DaysInStatusInfo } from '../types';
 import { DaysInStatusAPI } from '../services/daysInStatusAPI';
+import { StorageService } from '../services/storage';
 import './DaysInStatusTags.css';
 
 interface DaysInStatusProps {
@@ -11,6 +12,28 @@ interface DaysInStatusProps {
 export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataLoaded }) => {
   const [data, setData] = useState<DaysInStatusInfo | null>(null);
   const [loading, setLoading] = useState(true);
+  const [hideCreated, setHideCreated] = useState<boolean>(false);
+  const [thresholdYellow, setThresholdYellow] = useState<number>(14);
+  const [thresholdRed, setThresholdRed] = useState<number>(60);
+
+  const storageService = StorageService.getInstance();
+
+  useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        const hideCreatedValue = await storageService.getHideCreatedTag();
+        const thresholdYellowValue = await storageService.getDaysInStatusThresholdYellow();
+        const thresholdRedValue = await storageService.getDaysInStatusThresholdRed();
+        setHideCreated(hideCreatedValue);
+        setThresholdYellow(thresholdYellowValue);
+        setThresholdRed(thresholdRedValue);
+      } catch (error) {
+        console.error('Failed to load Days In Status settings:', error);
+      }
+    };
+
+    loadSettings();
+  }, [storageService]);
 
   useEffect(() => {
     const loadDaysInStatus = async () => {
@@ -32,6 +55,28 @@ export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataL
 
     loadDaysInStatus();
   }, [issueId, onDataLoaded]);
+
+  // Listen for settings updates from popup
+  useEffect(() => {
+    const handleMessage = (message: any) => {
+      if (message.type === 'UPDATE_DAYS_IN_STATUS_SETTINGS') {
+        if (message.hideCreated !== undefined) {
+          setHideCreated(message.hideCreated);
+        }
+        if (message.thresholdYellow !== undefined) {
+          setThresholdYellow(message.thresholdYellow);
+        }
+        if (message.thresholdRed !== undefined) {
+          setThresholdRed(message.thresholdRed);
+        }
+      }
+    };
+
+    chrome.runtime.onMessage.addListener(handleMessage);
+    return () => {
+      chrome.runtime.onMessage.removeListener(handleMessage);
+    };
+  }, []);
 
   if (loading) {
     return (
@@ -79,26 +124,28 @@ export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataL
   // Determine color based on age for Created
   // Temporarily disabled - always use gray for created
   // let createdColorClass = 'days-in-status__tag--green';
-  // if (daysSinceCreated > 60) {
+  // if (daysSinceCreated > thresholdRed) {
   //   createdColorClass = 'days-in-status__tag--red';
-  // } else if (daysSinceCreated > 30) {
+  // } else if (daysSinceCreated > thresholdYellow) {
   //   createdColorClass = 'days-in-status__tag--yellow';
   // }
   const createdColorClass = 'days-in-status__tag--gray';
 
-  // Determine color based on age for Updated
+  // Determine color based on age for Updated using configurable thresholds
   let updatedColorClass = 'days-in-status__tag--green';
-  if (daysSinceUpdated > 60) {
+  if (daysSinceUpdated > thresholdRed) {
     updatedColorClass = 'days-in-status__tag--red';
-  } else if (daysSinceUpdated > 14) {
+  } else if (daysSinceUpdated > thresholdYellow) {
     updatedColorClass = 'days-in-status__tag--yellow';
   }
 
   return (
     <div className="days-in-status">
-      <div className={`days-in-status__tag ${createdColorClass}`} title={`Created: ${new Date(data.created).toLocaleDateString()}`}>
-        {daysSinceCreated}
-      </div>
+      {!hideCreated && (
+        <div className={`days-in-status__tag ${createdColorClass}`} title={`Created: ${new Date(data.created).toLocaleDateString()}`}>
+          {daysSinceCreated}
+        </div>
+      )}
       <div className={`days-in-status__tag ${updatedColorClass}`} title={`Updated: ${new Date(data.updated).toLocaleDateString()}`}>
         {daysSinceUpdated}
       </div>

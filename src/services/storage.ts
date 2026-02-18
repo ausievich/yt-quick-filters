@@ -110,4 +110,47 @@ export class StorageService {
     }
     return name;
   }
+
+  // Days In Status settings (global, not board-specific)
+  public async getHideCreatedTag(): Promise<boolean> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get('ytqf_hideCreatedTag', (data) => {
+        resolve(data.ytqf_hideCreatedTag || false);
+      });
+    });
+  }
+
+  public async setHideCreatedTag(hide: boolean): Promise<void> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ ytqf_hideCreatedTag: hide }, resolve);
+    });
+  }
+
+  public async getDaysInStatusThresholdYellow(): Promise<number> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get('ytqf_thresholdYellow', (data) => {
+        resolve(data.ytqf_thresholdYellow || 14);
+      });
+    });
+  }
+
+  public async setDaysInStatusThresholdYellow(threshold: number): Promise<void> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ ytqf_thresholdYellow: threshold }, resolve);
+    });
+  }
+
+  public async getDaysInStatusThresholdRed(): Promise<number> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get('ytqf_thresholdRed', (data) => {
+        resolve(data.ytqf_thresholdRed || 60);
+      });
+    });
+  }
+
+  public async setDaysInStatusThresholdRed(threshold: number): Promise<void> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ ytqf_thresholdRed: threshold }, resolve);
+    });
+  }
 }

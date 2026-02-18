@@ -1,0 +1,142 @@
+.popup-container {
+  width: 320px;
+  min-height: 200px;
+  padding: 16px;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: rgb(31, 35, 38);
+  background: rgb(255, 255, 255);
+}
+
+.popup-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: rgb(107, 119, 128);
+}
+
+.popup-header {
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgb(223, 229, 235);
+}
+
+.popup-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: rgb(31, 35, 38);
+}
+
+.popup-section {
+  margin-bottom: 20px;
+}
+
+.popup-section-title {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(31, 35, 38);
+}
+
+.popup-setting {
+  margin-bottom: 16px;
+}
+
+.popup-checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.popup-checkbox {
+  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.popup-input-label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  color: rgb(31, 35, 38);
+}
+
+.popup-input {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid rgb(223, 229, 235);
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  color: rgb(31, 35, 38);
+  background: rgb(255, 255, 255);
+  transition: border-color 0.15s ease-out;
+  box-sizing: border-box;
+}
+
+.popup-input:focus {
+  outline: none;
+  border-color: rgb(0, 102, 204);
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+}
+
+.popup-button {
+  width: 100%;
+  padding: 8px 16px;
+  border: 1px solid rgb(223, 229, 235);
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease-out;
+  background: rgb(255, 255, 255);
+  color: rgb(31, 35, 38);
+}
+
+.popup-button-primary {
+  background: rgb(0, 102, 204);
+  color: rgb(255, 255, 255);
+  border-color: rgb(0, 102, 204);
+}
+
+.popup-button-primary:hover {
+  background: rgb(0, 92, 184);
+  border-color: rgb(0, 92, 184);
+}
+
+.popup-button-link {
+  background: transparent;
+  border: none;
+  color: rgb(0, 102, 204);
+  text-decoration: none;
+  text-align: center;
+}
+
+.popup-button-link:hover {
+  background: rgb(235, 246, 255);
+  color: rgb(0, 92, 184);
+}
+
+.popup-button:active {
+  transform: scale(0.98);
+}
+
+.popup-status {
+  padding: 8px 16px;
+  background: rgb(235, 246, 255);
+  border-radius: 4px;
+  text-align: center;
+}
+
+.popup-status-text {
+  color: rgb(0, 102, 204);
+  font-weight: 500;
+}
