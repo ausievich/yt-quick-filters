@@ -153,4 +153,18 @@ export class StorageService {
       chrome.storage.sync.set({ ytqf_thresholdRed: threshold }, resolve);
     });
   }
+
+  public async getDaysInStatusCompactFormat(): Promise<boolean> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get('ytqf_compactFormat', (data) => {
+        resolve(data.ytqf_compactFormat || false);
+      });
+    });
+  }
+
+  public async setDaysInStatusCompactFormat(enabled: boolean): Promise<void> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ ytqf_compactFormat: enabled }, resolve);
+    });
+  }
 }

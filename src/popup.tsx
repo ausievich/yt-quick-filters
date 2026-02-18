@@ -7,6 +7,7 @@ const Popup: React.FC = () => {
   const [showCreated, setShowCreated] = useState<boolean>(true);
   const [thresholdYellow, setThresholdYellow] = useState<number>(14);
   const [thresholdRed, setThresholdRed] = useState<number>(60);
+  const [compactFormat, setCompactFormat] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const storageService = StorageService.getInstance();
@@ -18,11 +19,13 @@ const Popup: React.FC = () => {
         const hideCreatedValue = await storageService.getHideCreatedTag();
         const thresholdYellowValue = await storageService.getDaysInStatusThresholdYellow();
         const thresholdRedValue = await storageService.getDaysInStatusThresholdRed();
+        const compactFormatValue = await storageService.getDaysInStatusCompactFormat();
         
         // Invert logic: hideCreated = false means showCreated = true
         setShowCreated(!hideCreatedValue);
         setThresholdYellow(thresholdYellowValue);
         setThresholdRed(thresholdRedValue);
+        setCompactFormat(compactFormatValue);
       } catch (error) {
         console.error('Failed to load settings:', error);
       } finally {
@@ -123,6 +126,25 @@ const Popup: React.FC = () => {
     }
   };
 
+  const handleCompactFormatChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.checked;
+    setCompactFormat(value);
+    await storageService.setDaysInStatusCompactFormat(value);
+    
+    // Notify content script to update
+    try {
+      const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+      if (tabs[0]?.id) {
+        chrome.tabs.sendMessage(tabs[0].id, { 
+          type: 'UPDATE_DAYS_IN_STATUS_SETTINGS',
+          compactFormat: value
+        });
+      }
+    } catch (error) {
+      console.warn('Failed to notify content script:', error);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="popup-container">
@@ -149,6 +171,18 @@ const Popup: React.FC = () => {
               className="popup-checkbox"
             />
             <span>Show Created tag</span>
+          </label>
+        </div>
+
+        <div className="popup-setting">
+          <label className="popup-checkbox-label">
+            <input
+              type="checkbox"
+              checked={compactFormat}
+              onChange={handleCompactFormatChange}
+              className="popup-checkbox"
+            />
+            <span>Use compact format (weeks/years)</span>
           </label>
         </div>
 

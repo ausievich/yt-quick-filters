@@ -15,6 +15,7 @@ export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataL
   const [hideCreated, setHideCreated] = useState<boolean>(false);
   const [thresholdYellow, setThresholdYellow] = useState<number>(14);
   const [thresholdRed, setThresholdRed] = useState<number>(60);
+  const [compactFormat, setCompactFormat] = useState<boolean>(false);
 
   const storageService = StorageService.getInstance();
 
@@ -24,9 +25,11 @@ export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataL
         const hideCreatedValue = await storageService.getHideCreatedTag();
         const thresholdYellowValue = await storageService.getDaysInStatusThresholdYellow();
         const thresholdRedValue = await storageService.getDaysInStatusThresholdRed();
+        const compactFormatValue = await storageService.getDaysInStatusCompactFormat();
         setHideCreated(hideCreatedValue);
         setThresholdYellow(thresholdYellowValue);
         setThresholdRed(thresholdRedValue);
+        setCompactFormat(compactFormatValue);
       } catch (error) {
         console.error('Failed to load Days In Status settings:', error);
       }
@@ -69,6 +72,9 @@ export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataL
         if (message.thresholdRed !== undefined) {
           setThresholdRed(message.thresholdRed);
         }
+        if (message.compactFormat !== undefined) {
+          setCompactFormat(message.compactFormat);
+        }
       }
     };
 
@@ -101,25 +107,77 @@ export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataL
   }
 
   /**
-   * Calculate difference in calendar days (not 24-hour periods)
-   * This matches YouTrack's behavior which counts days based on calendar dates in user's timezone
+   * Calculate difference in milliseconds for precise time calculation
    */
-  const getDaysDifference = (timestamp: number): number => {
+  const getTimeDifference = (timestamp: number): number => {
     const now = new Date();
     const date = new Date(timestamp);
-    
-    // Set both dates to start of day in local timezone (midnight)
-    // This ensures we count calendar days, not 24-hour periods
-    const nowStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const dateStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    
-    // Calculate difference in milliseconds and convert to days
-    const diffMs = nowStart.getTime() - dateStart.getTime();
-    return Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    return now.getTime() - date.getTime();
   };
 
-  const daysSinceCreated = getDaysDifference(data.created);
-  const daysSinceUpdated = getDaysDifference(data.updated);
+  /**
+   * Format time difference into compact format (single value: minutes/hours/days/weeks/months/years)
+   * Examples: 30 -> "30m", 5 -> "5h", 14 -> "14d", 10 -> "2w", 45 -> "2mo", 400 -> "1y"
+   */
+  const formatTime = (diffMs: number): string => {
+    if (!compactFormat) {
+      // For non-compact format, show calendar days
+      const now = new Date();
+      const date = new Date(now.getTime() - diffMs);
+      const nowStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const dateStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      const days = Math.floor((nowStart.getTime() - dateStart.getTime()) / (1000 * 60 * 60 * 24));
+      return days.toString();
+    }
+
+    const minutes = Math.floor(diffMs / (1000 * 60));
+    const hours = Math.floor(diffMs / (1000 * 60 * 60));
+    const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    // Minutes: less than 1 hour
+    if (minutes < 60) {
+      return `${minutes}m`;
+    }
+
+    // Hours: less than 1 day
+    if (hours < 24) {
+      return `${hours}h`;
+    }
+
+    // Days: less than 7 days
+    if (days < 7) {
+      return `${days}d`;
+    }
+
+    // Weeks: 7-29 days, round to nearest week
+    if (days < 30) {
+      const weeks = Math.round(days / 7);
+      return `${weeks}w`;
+    }
+
+    // Months: 30-364 days, round to nearest month (using 30 days as month)
+    if (days < 365) {
+      const months = Math.round(days / 30);
+      return `${months}mo`;
+    }
+
+    // Years: 365+ days, round to nearest year
+    const years = Math.round(days / 365);
+    return `${years}y`;
+  };
+
+  const timeDiffCreated = getTimeDifference(data.created);
+  const timeDiffUpdated = getTimeDifference(data.updated);
+  
+  // For color calculation, still use calendar days
+  const now = new Date();
+  const createdDate = new Date(data.created);
+  const updatedDate = new Date(data.updated);
+  const nowStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const createdStart = new Date(createdDate.getFullYear(), createdDate.getMonth(), createdDate.getDate());
+  const updatedStart = new Date(updatedDate.getFullYear(), updatedDate.getMonth(), updatedDate.getDate());
+  const daysSinceCreated = Math.floor((nowStart.getTime() - createdStart.getTime()) / (1000 * 60 * 60 * 24));
+  const daysSinceUpdated = Math.floor((nowStart.getTime() - updatedStart.getTime()) / (1000 * 60 * 60 * 24));
 
   // Determine color based on age for Created
   // Temporarily disabled - always use gray for created
@@ -143,11 +201,11 @@ export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataL
     <div className="days-in-status">
       {!hideCreated && (
         <div className={`days-in-status__tag ${createdColorClass}`} title={`Created: ${new Date(data.created).toLocaleDateString()}`}>
-          {daysSinceCreated}
+          {formatTime(timeDiffCreated)}
         </div>
       )}
       <div className={`days-in-status__tag ${updatedColorClass}`} title={`Updated: ${new Date(data.updated).toLocaleDateString()}`}>
-        {daysSinceUpdated}
+        {formatTime(timeDiffUpdated)}
       </div>
     </div>
   );
