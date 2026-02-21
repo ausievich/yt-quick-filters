@@ -164,7 +164,6 @@
 .popup-input:focus {
   outline: none;
   border-color: rgb(128, 198, 255);
-  box-shadow: 0 0 0 3px rgba(128, 198, 255, 0.1);
 }
 
 /* Hide number input spinners */
