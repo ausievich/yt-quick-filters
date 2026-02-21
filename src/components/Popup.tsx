@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { StorageService } from '../services/storage';
+import manifest from '../../manifest.json';
 import './Popup.css';
+
+const VERSION = manifest.version;
+const GITHUB_ISSUES_URL = 'https://github.com/ausievich/yt-quick-filters/issues';
+const CHROME_WEB_STORE_REVIEWS_URL = 'https://chromewebstore.google.com/detail/youtrack-quick-filters/iaddgmcajdiblafjfhloadmphkbplddo/reviews';
 
 const Popup: React.FC = () => {
   const [showCreated, setShowCreated] = useState<boolean>(true);
@@ -219,33 +224,39 @@ const Popup: React.FC = () => {
             <span>Use compact format (weeks/years)</span>
           </label>
         </div>
+      </div>
 
-        <div className="popup-setting">
-          <label className="popup-input-label">
-            Yellow threshold (days):
+      <div className="popup-section popup-section-thresholds">
+        <h3 className="popup-section-title">Thresholds</h3>
+        
+        <div className="popup-setting popup-setting-thresholds">
+          <div className="popup-threshold-row">
+            <span className="popup-threshold-indicator popup-threshold-indicator--yellow"></span>
+            <label className="popup-threshold-label">Warning after</label>
             <input
               type="number"
               min="1"
               value={thresholdYellow || ''}
               onChange={handleThresholdYellowChange}
               onBlur={handleThresholdYellowBlur}
-              className="popup-input"
+              placeholder="40 days"
+              className="popup-input popup-input-threshold"
             />
-          </label>
-        </div>
+          </div>
 
-        <div className="popup-setting">
-          <label className="popup-input-label">
-            Red threshold (days):
+          <div className="popup-threshold-row">
+            <span className="popup-threshold-indicator popup-threshold-indicator--red"></span>
+            <label className="popup-threshold-label">Stale after</label>
             <input
               type="number"
               min="1"
               value={thresholdRed || ''}
               onChange={handleThresholdRedChange}
               onBlur={handleThresholdRedBlur}
-              className="popup-input"
+              placeholder="60 days"
+              className="popup-input popup-input-threshold"
             />
-          </label>
+          </div>
         </div>
       </div>
     </div>

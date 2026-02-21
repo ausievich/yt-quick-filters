@@ -19,8 +19,8 @@
 }
 
 .popup-header {
-  margin-bottom: 16px;
-  padding-bottom: 12px;
+  margin: 0 -20px 16px -20px;
+  padding: 0 20px 12px 20px;
   border-bottom: 1px solid rgb(235, 236, 240);
 }
 
@@ -29,7 +29,6 @@
   font-size: 18px;
   font-weight: 600;
   color: rgb(39, 40, 46);
-  letter-spacing: -0.01em;
 }
 
 .popup-section {
@@ -40,6 +39,10 @@
   margin-bottom: 0;
 }
 
+.popup-section-thresholds {
+  margin-bottom: 20px;
+}
+
 .popup-section-title {
   margin: 0 0 10px 0;
   font-size: 12px;
@@ -47,6 +50,7 @@
   color: rgb(108, 112, 126);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  padding-left: 0;
 }
 
 .popup-setting {
@@ -89,6 +93,50 @@
   color: rgb(108, 112, 126);
 }
 
+.popup-setting-thresholds {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.popup-threshold-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.popup-threshold-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.popup-threshold-indicator--yellow {
+  background: #FED277;
+}
+
+.popup-threshold-indicator--red {
+  background: #DB3B4B;
+}
+
+.popup-threshold-label {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgb(39, 40, 46);
+  min-width: 110px;
+  flex-shrink: 0;
+  line-height: 20px;
+}
+
+.popup-input-threshold {
+  width: 75px;
+  min-width: 75px;
+  padding: 6px 10px;
+  height: 32px;
+  font-size: 14px;
+}
+
 .popup-input {
   width: 100%;
   padding: 6px 10px;
@@ -121,6 +169,11 @@
 
 .popup-input[type="number"] {
   -moz-appearance: textfield;
+}
+
+.popup-input::placeholder {
+  color: rgb(168, 173, 189);
+  opacity: 1;
 }
 
 .popup-button {
