@@ -102,7 +102,7 @@
 .popup-threshold-row {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .popup-threshold-indicator {
@@ -110,6 +110,7 @@
   height: 12px;
   border-radius: 50%;
   flex-shrink: 0;
+  margin-left: 4px;
 }
 
 .popup-threshold-indicator--yellow {
