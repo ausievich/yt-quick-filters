@@ -1,12 +1,12 @@
 .popup-container {
   width: 320px;
   min-height: 200px;
-  padding: 16px;
+  padding: 16px 20px;
   box-sizing: border-box;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, sans-serif;
   font-size: 14px;
   line-height: 20px;
-  color: rgb(31, 35, 38);
+  color: rgb(39, 40, 46);
   background: rgb(255, 255, 255);
 }
 
@@ -19,31 +19,42 @@
 }
 
 .popup-header {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   padding-bottom: 12px;
-  border-bottom: 1px solid rgb(223, 229, 235);
+  border-bottom: 1px solid rgb(235, 236, 240);
 }
 
 .popup-title {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: rgb(31, 35, 38);
+  color: rgb(39, 40, 46);
+  letter-spacing: -0.01em;
 }
 
 .popup-section {
   margin-bottom: 20px;
 }
 
+.popup-section:last-child {
+  margin-bottom: 0;
+}
+
 .popup-section-title {
-  margin: 0 0 12px 0;
-  font-size: 14px;
+  margin: 0 0 10px 0;
+  font-size: 12px;
   font-weight: 600;
-  color: rgb(31, 35, 38);
+  color: rgb(108, 112, 126);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .popup-setting {
-  margin-bottom: 16px;
+  margin-bottom: 8px;
+}
+
+.popup-setting:last-child {
+  margin-bottom: 0;
 }
 
 .popup-checkbox-label {
@@ -51,6 +62,13 @@
   align-items: center;
   cursor: pointer;
   user-select: none;
+  padding: 2px 0;
+  transition: opacity 0.15s ease-out;
+  line-height: 20px;
+}
+
+.popup-checkbox-label:hover {
+  opacity: 0.8;
 }
 
 .popup-checkbox {
@@ -58,33 +76,51 @@
   width: 16px;
   height: 16px;
   cursor: pointer;
+  accent-color: rgb(53, 116, 240);
+  flex-shrink: 0;
 }
 
 .popup-input-label {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  font-size: 14px;
-  color: rgb(31, 35, 38);
+  font-size: 12px;
+  font-weight: 500;
+  color: rgb(108, 112, 126);
 }
 
 .popup-input {
   width: 100%;
-  padding: 6px 8px;
-  border: 1px solid rgb(223, 229, 235);
+  padding: 6px 10px;
+  border: 1px solid rgb(211, 213, 219);
   border-radius: 4px;
   font-size: 14px;
   font-family: inherit;
-  color: rgb(31, 35, 38);
+  color: rgb(39, 40, 46);
   background: rgb(255, 255, 255);
-  transition: border-color 0.15s ease-out;
+  transition: all 0.15s ease-out;
   box-sizing: border-box;
+}
+
+.popup-input:hover {
+  border-color: rgb(197, 209, 219);
 }
 
 .popup-input:focus {
   outline: none;
-  border-color: rgb(0, 102, 204);
-  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+  border-color: rgb(128, 198, 255);
+  box-shadow: 0 0 0 3px rgba(128, 198, 255, 0.1);
+}
+
+/* Hide number input spinners */
+.popup-input[type="number"]::-webkit-inner-spin-button,
+.popup-input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.popup-input[type="number"] {
+  -moz-appearance: textfield;
 }
 
 .popup-button {
