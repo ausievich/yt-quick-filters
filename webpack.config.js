@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = {
   entry: {
     content: './src/content.tsx',
-    popup: './src/popup.tsx',
+    popup: './src/components/Popup.tsx',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import { StorageService } from './services/storage';
-import './popup.css';
+import { StorageService } from '../services/storage';
+import './Popup.css';
 
 const Popup: React.FC = () => {
   const [showCreated, setShowCreated] = useState<boolean>(true);
