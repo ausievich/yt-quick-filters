@@ -182,53 +182,51 @@ const Popup: React.FC = () => {
 
   return (
     <div className="popup-container">
-      <div className="popup-header">
-        <h2 className="popup-title">YouTrack Quick Filters</h2>
-        <span className="popup-header-version">v{VERSION}</span>
-      </div>
-
       <div className="popup-section">
-        <h3 className="popup-section-title">Days In Status</h3>
+        <h3 className="popup-section-title">Settings</h3>
         
         <div className="popup-setting">
-          <label className="popup-checkbox-label">
+          <label className="popup-toggle-label">
             <input
               type="checkbox"
               checked={showCreated}
               onChange={handleShowCreatedChange}
-              className="popup-checkbox"
+              className="popup-toggle-input"
             />
-            <span>Show Created tag</span>
+            <span className="popup-toggle-switch"></span>
+            <span className="popup-toggle-text">Show Created tag</span>
           </label>
         </div>
 
         <div className="popup-setting">
-          <label className="popup-checkbox-label">
+          <label className="popup-toggle-label">
             <input
               type="checkbox"
               checked={createdTagColored}
               onChange={handleCreatedTagColoredChange}
-              className="popup-checkbox"
+              className="popup-toggle-input"
             />
-            <span>Color Created tag</span>
+            <span className="popup-toggle-switch"></span>
+            <span className="popup-toggle-text">Color Created tag</span>
           </label>
         </div>
 
         <div className="popup-setting">
-          <label className="popup-checkbox-label">
+          <label className="popup-toggle-label">
             <input
               type="checkbox"
               checked={compactFormat}
               onChange={handleCompactFormatChange}
-              className="popup-checkbox"
+              className="popup-toggle-input"
             />
-            <span>Use compact format (weeks/years)</span>
+            <span className="popup-toggle-switch"></span>
+            <span className="popup-toggle-text">Use compact format</span>
           </label>
         </div>
       </div>
 
       <div className="popup-section popup-section-thresholds">
-        <h3 className="popup-section-title">Thresholds</h3>
+        <h3 className="popup-section-title">thresholds</h3>
         
         <div className="popup-setting popup-setting-thresholds">
           <div className="popup-threshold-row">
@@ -265,6 +263,8 @@ const Popup: React.FC = () => {
 
       <div className="popup-footer">
         <div className="popup-footer-links">
+          <span className="popup-footer-version">v{VERSION}</span>
+          <span className="popup-footer-separator">•</span>
           <a 
             href={CHROME_WEB_STORE_REVIEWS_URL}
             target="_blank"
@@ -273,6 +273,7 @@ const Popup: React.FC = () => {
           >
             Leave a review
           </a>
+          <span className="popup-footer-separator">•</span>
           <a 
             href={GITHUB_ISSUES_URL}
             target="_blank"
