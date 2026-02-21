@@ -184,6 +184,7 @@ const Popup: React.FC = () => {
     <div className="popup-container">
       <div className="popup-header">
         <h2 className="popup-title">YouTrack Quick Filters</h2>
+        <span className="popup-header-version">v{VERSION}</span>
       </div>
 
       <div className="popup-section">
@@ -263,6 +264,24 @@ const Popup: React.FC = () => {
       </div>
 
       <div className="popup-footer">
+        <div className="popup-footer-links">
+          <a 
+            href={CHROME_WEB_STORE_REVIEWS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="popup-footer-link"
+          >
+            Leave a review
+          </a>
+          <a 
+            href={GITHUB_ISSUES_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="popup-footer-link"
+          >
+            Report an issue
+          </a>
+        </div>
       </div>
     </div>
   );
