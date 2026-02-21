@@ -130,11 +130,17 @@
 }
 
 .popup-input-threshold {
-  width: 75px;
-  min-width: 75px;
-  padding: 6px 10px;
+  width: 50px;
+  min-width: 50px;
+  padding: 6px 8px;
   height: 32px;
   font-size: 14px;
+}
+
+.popup-threshold-unit {
+  font-size: 14px;
+  color: rgb(108, 112, 126);
+  white-space: nowrap;
 }
 
 .popup-input {
@@ -228,4 +234,10 @@
 .popup-status-text {
   color: rgb(0, 102, 204);
   font-weight: 500;
+}
+
+.popup-footer {
+  margin: 24px -20px 0 -20px;
+  padding: 12px 20px 0 20px;
+  border-top: 1px solid rgb(235, 236, 240);
 }

@@ -239,9 +239,10 @@ const Popup: React.FC = () => {
               value={thresholdYellow || ''}
               onChange={handleThresholdYellowChange}
               onBlur={handleThresholdYellowBlur}
-              placeholder="40 days"
+              placeholder="40"
               className="popup-input popup-input-threshold"
             />
+            <span className="popup-threshold-unit">days</span>
           </div>
 
           <div className="popup-threshold-row">
@@ -253,11 +254,15 @@ const Popup: React.FC = () => {
               value={thresholdRed || ''}
               onChange={handleThresholdRedChange}
               onBlur={handleThresholdRedBlur}
-              placeholder="60 days"
+              placeholder="60"
               className="popup-input popup-input-threshold"
             />
+            <span className="popup-threshold-unit">days</span>
           </div>
         </div>
+      </div>
+
+      <div className="popup-footer">
       </div>
     </div>
   );
