@@ -129,59 +129,51 @@ export class StorageService {
     });
   }
 
-  public async getDaysInStatusThresholdYellow(): Promise<number> {
+  // Generic helper for getting storage values
+  private async getStorageValue<T>(key: string, defaultValue: T): Promise<T> {
     return new Promise((resolve) => {
-      chrome.storage.sync.get('ytqf_thresholdYellow', (data) => {
-        resolve(data.ytqf_thresholdYellow || DEFAULT_THRESHOLD_YELLOW);
+      chrome.storage.sync.get(key, (data) => {
+        resolve(data[key] !== undefined ? data[key] : defaultValue);
       });
     });
+  }
+
+  // Generic helper for setting storage values
+  private async setStorageValue<T>(key: string, value: T): Promise<void> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ [key]: value }, resolve);
+    });
+  }
+
+  public async getDaysInStatusThresholdYellow(): Promise<number> {
+    return this.getStorageValue('ytqf_thresholdYellow', DEFAULT_THRESHOLD_YELLOW);
   }
 
   public async setDaysInStatusThresholdYellow(threshold: number): Promise<void> {
-    return new Promise((resolve) => {
-      chrome.storage.sync.set({ ytqf_thresholdYellow: threshold }, resolve);
-    });
+    return this.setStorageValue('ytqf_thresholdYellow', threshold);
   }
 
   public async getDaysInStatusThresholdRed(): Promise<number> {
-    return new Promise((resolve) => {
-      chrome.storage.sync.get('ytqf_thresholdRed', (data) => {
-        resolve(data.ytqf_thresholdRed || DEFAULT_THRESHOLD_RED);
-      });
-    });
+    return this.getStorageValue('ytqf_thresholdRed', DEFAULT_THRESHOLD_RED);
   }
 
   public async setDaysInStatusThresholdRed(threshold: number): Promise<void> {
-    return new Promise((resolve) => {
-      chrome.storage.sync.set({ ytqf_thresholdRed: threshold }, resolve);
-    });
+    return this.setStorageValue('ytqf_thresholdRed', threshold);
   }
 
   public async getDaysInStatusCompactFormat(): Promise<boolean> {
-    return new Promise((resolve) => {
-      chrome.storage.sync.get('ytqf_compactFormat', (data) => {
-        resolve(data.ytqf_compactFormat || false);
-      });
-    });
+    return this.getStorageValue('ytqf_compactFormat', false);
   }
 
   public async setDaysInStatusCompactFormat(enabled: boolean): Promise<void> {
-    return new Promise((resolve) => {
-      chrome.storage.sync.set({ ytqf_compactFormat: enabled }, resolve);
-    });
+    return this.setStorageValue('ytqf_compactFormat', enabled);
   }
 
   public async getCreatedTagColored(): Promise<boolean> {
-    return new Promise((resolve) => {
-      chrome.storage.sync.get('ytqf_createdTagColored', (data) => {
-        resolve(data.ytqf_createdTagColored || false);
-      });
-    });
+    return this.getStorageValue('ytqf_createdTagColored', false);
   }
 
   public async setCreatedTagColored(enabled: boolean): Promise<void> {
-    return new Promise((resolve) => {
-      chrome.storage.sync.set({ ytqf_createdTagColored: enabled }, resolve);
-    });
+    return this.setStorageValue('ytqf_createdTagColored', enabled);
   }
 }

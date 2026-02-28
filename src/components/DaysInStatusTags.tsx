@@ -181,15 +181,9 @@ export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataL
   const timeDiffCreated = getTimeDifference(data.created);
   const timeDiffUpdated = getTimeDifference(data.updated);
   
-  // For color calculation, still use calendar days
-  const now = new Date();
-  const createdDate = new Date(data.created);
-  const updatedDate = new Date(data.updated);
-  const nowStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const createdStart = new Date(createdDate.getFullYear(), createdDate.getMonth(), createdDate.getDate());
-  const updatedStart = new Date(updatedDate.getFullYear(), updatedDate.getMonth(), updatedDate.getDate());
-  const daysSinceCreated = Math.floor((nowStart.getTime() - createdStart.getTime()) / (1000 * 60 * 60 * 24));
-  const daysSinceUpdated = Math.floor((nowStart.getTime() - updatedStart.getTime()) / (1000 * 60 * 60 * 24));
+  // For color calculation, use calendar days (reuse getCalendarDays function)
+  const daysSinceCreated = getCalendarDays(timeDiffCreated);
+  const daysSinceUpdated = getCalendarDays(timeDiffUpdated);
 
   // Determine color based on age for Created
   let createdColorClass = 'days-in-status__tag--gray';

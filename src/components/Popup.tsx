@@ -24,6 +24,21 @@ const Popup: React.FC = () => {
 
   const storageService = StorageService.getInstance();
 
+  // Helper function to notify content script about settings changes
+  const notifyContentScript = async (message: any) => {
+    try {
+      const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+      if (tabs[0]?.id) {
+        chrome.tabs.sendMessage(tabs[0].id, {
+          type: 'UPDATE_DAYS_IN_STATUS_SETTINGS',
+          ...message
+        });
+      }
+    } catch (error) {
+      console.warn('Failed to notify content script:', error);
+    }
+  };
+
   useEffect(() => {
     const loadSettings = async () => {
       try {
@@ -60,185 +75,95 @@ const Popup: React.FC = () => {
     setShowCreated(value);
     // Invert: showCreated = true means hideCreated = false
     await storageService.setHideCreatedTag(!value);
-    
-    // Notify content script to update
-    try {
-      const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-      if (tabs[0]?.id) {
-        chrome.tabs.sendMessage(tabs[0].id, { 
-          type: 'UPDATE_DAYS_IN_STATUS_SETTINGS',
-          hideCreated: !value
-        });
-      }
-    } catch (error) {
-      console.warn('Failed to notify content script:', error);
-    }
+    await notifyContentScript({ hideCreated: !value });
   };
 
-  const handleThresholdYellowChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Generic handler for threshold input changes
+  const createThresholdChangeHandler = (
+    setInput: (value: string) => void
+  ) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     // Only allow digits, limit to 4 characters maximum
     const digitsOnly = inputValue.replace(/\D/g, '');
     if (digitsOnly.length <= 4) {
       // Update string input value to preserve cursor position
-      setThresholdYellowInput(digitsOnly);
+      setInput(digitsOnly);
     }
   };
 
-  const handleThresholdYellowBlur = async () => {
-    const inputValue = thresholdYellowInput.trim();
+  // Generic handler for threshold input blur
+  const createThresholdBlurHandler = (
+    inputValue: string,
+    lastUserValue: number,
+    setValue: (value: number) => void,
+    setInput: (value: string) => void,
+    setLastUserValue: (value: number) => void,
+    saveToStorage: (value: number) => Promise<void>,
+    notifyKey: 'thresholdYellow' | 'thresholdRed'
+  ) => async () => {
+    const trimmedInput = inputValue.trim();
     
-    if (inputValue === '') {
+    if (trimmedInput === '') {
       // Restore last user-selected value instead of default
-      const valueToRestore = lastUserYellowValue;
-      setThresholdYellow(valueToRestore);
-      setThresholdYellowInput(valueToRestore.toString());
-      await storageService.setDaysInStatusThresholdYellow(valueToRestore);
-      
-      // Notify content script to update
-      try {
-        const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-        if (tabs[0]?.id) {
-          chrome.tabs.sendMessage(tabs[0].id, { 
-            type: 'UPDATE_DAYS_IN_STATUS_SETTINGS',
-            thresholdYellow: valueToRestore
-          });
-        }
-      } catch (error) {
-        console.warn('Failed to notify content script:', error);
-      }
+      const valueToRestore = lastUserValue;
+      setValue(valueToRestore);
+      setInput(valueToRestore.toString());
+      await saveToStorage(valueToRestore);
+      await notifyContentScript({ [notifyKey]: valueToRestore });
     } else {
-      const value = parseInt(inputValue, 10);
+      const value = parseInt(trimmedInput, 10);
       if (!isNaN(value) && value > 0) {
         // Save and update last user-selected value only when blur with valid value
         // Max value is already limited by input length (4 chars = max 9999)
-        setThresholdYellow(value);
-        setThresholdYellowInput(value.toString());
-        setLastUserYellowValue(value);
-        await storageService.setDaysInStatusThresholdYellow(value);
-        
-        // Notify content script to update
-        try {
-          const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-          if (tabs[0]?.id) {
-            chrome.tabs.sendMessage(tabs[0].id, { 
-              type: 'UPDATE_DAYS_IN_STATUS_SETTINGS',
-              thresholdYellow: value
-            });
-          }
-        } catch (error) {
-          console.warn('Failed to notify content script:', error);
-        }
+        setValue(value);
+        setInput(value.toString());
+        setLastUserValue(value);
+        await saveToStorage(value);
+        await notifyContentScript({ [notifyKey]: value });
       } else {
         // Invalid value (not a number or <= 0), restore last valid value
-        const valueToRestore = lastUserYellowValue;
-        setThresholdYellow(valueToRestore);
-        setThresholdYellowInput(valueToRestore.toString());
-        await storageService.setDaysInStatusThresholdYellow(valueToRestore);
+        const valueToRestore = lastUserValue;
+        setValue(valueToRestore);
+        setInput(valueToRestore.toString());
+        await saveToStorage(valueToRestore);
       }
     }
   };
 
-  const handleThresholdRedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    // Only allow digits, limit to 4 characters maximum
-    const digitsOnly = inputValue.replace(/\D/g, '');
-    if (digitsOnly.length <= 4) {
-      // Update string input value to preserve cursor position
-      setThresholdRedInput(digitsOnly);
-    }
-  };
+  const handleThresholdYellowChange = createThresholdChangeHandler(setThresholdYellowInput);
+  const handleThresholdYellowBlur = createThresholdBlurHandler(
+    thresholdYellowInput,
+    lastUserYellowValue,
+    setThresholdYellow,
+    setThresholdYellowInput,
+    setLastUserYellowValue,
+    storageService.setDaysInStatusThresholdYellow.bind(storageService),
+    'thresholdYellow'
+  );
 
-  const handleThresholdRedBlur = async () => {
-    const inputValue = thresholdRedInput.trim();
-    
-    if (inputValue === '') {
-      // Restore last user-selected value instead of default
-      const valueToRestore = lastUserRedValue;
-      setThresholdRed(valueToRestore);
-      setThresholdRedInput(valueToRestore.toString());
-      await storageService.setDaysInStatusThresholdRed(valueToRestore);
-      
-      // Notify content script to update
-      try {
-        const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-        if (tabs[0]?.id) {
-          chrome.tabs.sendMessage(tabs[0].id, { 
-            type: 'UPDATE_DAYS_IN_STATUS_SETTINGS',
-            thresholdRed: valueToRestore
-          });
-        }
-      } catch (error) {
-        console.warn('Failed to notify content script:', error);
-      }
-    } else {
-      const value = parseInt(inputValue, 10);
-      if (!isNaN(value) && value > 0) {
-        // Save and update last user-selected value only when blur with valid value
-        // Max value is already limited by input length (4 chars = max 9999)
-        setThresholdRed(value);
-        setThresholdRedInput(value.toString());
-        setLastUserRedValue(value);
-        await storageService.setDaysInStatusThresholdRed(value);
-        
-        // Notify content script to update
-        try {
-          const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-          if (tabs[0]?.id) {
-            chrome.tabs.sendMessage(tabs[0].id, { 
-              type: 'UPDATE_DAYS_IN_STATUS_SETTINGS',
-              thresholdRed: value
-            });
-          }
-        } catch (error) {
-          console.warn('Failed to notify content script:', error);
-        }
-      } else {
-        // Invalid value (not a number or <= 0), restore last valid value
-        const valueToRestore = lastUserRedValue;
-        setThresholdRed(valueToRestore);
-        setThresholdRedInput(valueToRestore.toString());
-        await storageService.setDaysInStatusThresholdRed(valueToRestore);
-      }
-    }
-  };
+  const handleThresholdRedChange = createThresholdChangeHandler(setThresholdRedInput);
+  const handleThresholdRedBlur = createThresholdBlurHandler(
+    thresholdRedInput,
+    lastUserRedValue,
+    setThresholdRed,
+    setThresholdRedInput,
+    setLastUserRedValue,
+    storageService.setDaysInStatusThresholdRed.bind(storageService),
+    'thresholdRed'
+  );
 
   const handleCompactFormatChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.checked;
     setCompactFormat(value);
     await storageService.setDaysInStatusCompactFormat(value);
-    
-    // Notify content script to update
-    try {
-      const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-      if (tabs[0]?.id) {
-        chrome.tabs.sendMessage(tabs[0].id, { 
-          type: 'UPDATE_DAYS_IN_STATUS_SETTINGS',
-          compactFormat: value
-        });
-      }
-    } catch (error) {
-      console.warn('Failed to notify content script:', error);
-    }
+    await notifyContentScript({ compactFormat: value });
   };
 
   const handleCreatedTagColoredChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.checked;
     setCreatedTagColored(value);
     await storageService.setCreatedTagColored(value);
-    
-    // Notify content script to update
-    try {
-      const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-      if (tabs[0]?.id) {
-        chrome.tabs.sendMessage(tabs[0].id, { 
-          type: 'UPDATE_DAYS_IN_STATUS_SETTINGS',
-          createdTagColored: value
-        });
-      }
-    } catch (error) {
-      console.warn('Failed to notify content script:', error);
-    }
+    await notifyContentScript({ createdTagColored: value });
   };
 
   if (isLoading) {

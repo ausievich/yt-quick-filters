@@ -29,9 +29,7 @@
   margin-bottom: 0;
 }
 
-.popup-section-thresholds {
-  margin-bottom: 20px;
-}
+/* .popup-section-thresholds inherits margin-bottom from .popup-section */
 
 .popup-section-title {
   margin: 0 0 10px 0;
@@ -189,16 +187,7 @@
   border-color: rgb(128, 198, 255);
 }
 
-/* Hide number input spinners */
-.popup-input[type="number"]::-webkit-inner-spin-button,
-.popup-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.popup-input[type="number"] {
-  -moz-appearance: textfield;
-}
+/* Number input spinners are not needed as we use type="text" */
 
 .popup-input::placeholder {
   color: rgb(168, 173, 189);
@@ -260,7 +249,7 @@
 }
 
 .popup-footer {
-  margin: 24px -20px 0 -20px;
+  margin: auto -20px 0 -20px;
   padding: 8px 20px;
   border-top: 1px solid rgb(235, 236, 240);
   display: flex;
@@ -268,7 +257,6 @@
   justify-content: center;
   align-items: center;
   font-size: 11px;
-  margin-top: auto;
   white-space: nowrap;
 }
 
