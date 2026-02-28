@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import { StorageService } from '../services/storage';
+import { StorageService, DEFAULT_THRESHOLD_YELLOW, DEFAULT_THRESHOLD_RED } from '../services/storage';
 import manifest from '../../manifest.json';
 import './Popup.css';
+
+const MAX_THRESHOLD_VALUE = 9999;
 
 const VERSION = manifest.version;
 const GITHUB_ISSUES_URL = 'https://github.com/ausievich/yt-quick-filters/issues';
@@ -10,8 +12,12 @@ const CHROME_WEB_STORE_REVIEWS_URL = 'https://chromewebstore.google.com/detail/y
 
 const Popup: React.FC = () => {
   const [showCreated, setShowCreated] = useState<boolean>(true);
-  const [thresholdYellow, setThresholdYellow] = useState<number>(14);
-  const [thresholdRed, setThresholdRed] = useState<number>(60);
+  const [thresholdYellow, setThresholdYellow] = useState<number>(DEFAULT_THRESHOLD_YELLOW);
+  const [thresholdRed, setThresholdRed] = useState<number>(DEFAULT_THRESHOLD_RED);
+  const [thresholdYellowInput, setThresholdYellowInput] = useState<string>('');
+  const [thresholdRedInput, setThresholdRedInput] = useState<string>('');
+  const [lastUserYellowValue, setLastUserYellowValue] = useState<number>(DEFAULT_THRESHOLD_YELLOW);
+  const [lastUserRedValue, setLastUserRedValue] = useState<number>(DEFAULT_THRESHOLD_RED);
   const [compactFormat, setCompactFormat] = useState<boolean>(false);
   const [createdTagColored, setCreatedTagColored] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -32,6 +38,11 @@ const Popup: React.FC = () => {
         setShowCreated(!hideCreatedValue);
         setThresholdYellow(thresholdYellowValue);
         setThresholdRed(thresholdRedValue);
+        setThresholdYellowInput(thresholdYellowValue.toString());
+        setThresholdRedInput(thresholdRedValue.toString());
+        // Initialize last user values with loaded values
+        setLastUserYellowValue(thresholdYellowValue);
+        setLastUserRedValue(thresholdRedValue);
         setCompactFormat(compactFormatValue);
         setCreatedTagColored(createdTagColoredValue);
       } catch (error) {
@@ -64,18 +75,25 @@ const Popup: React.FC = () => {
     }
   };
 
-  const handleThresholdYellowChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleThresholdYellowChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
-    // Allow empty value for editing
-    if (inputValue === '') {
-      setThresholdYellow(0);
-      return;
+    // Only allow digits, limit to 4 characters maximum
+    const digitsOnly = inputValue.replace(/\D/g, '');
+    if (digitsOnly.length <= 4) {
+      // Update string input value to preserve cursor position
+      setThresholdYellowInput(digitsOnly);
     }
+  };
+
+  const handleThresholdYellowBlur = async () => {
+    const inputValue = thresholdYellowInput.trim();
     
-    const value = parseInt(inputValue, 10);
-    if (!isNaN(value) && value > 0) {
-      setThresholdYellow(value);
-      await storageService.setDaysInStatusThresholdYellow(value);
+    if (inputValue === '') {
+      // Restore last user-selected value instead of default
+      const valueToRestore = lastUserYellowValue;
+      setThresholdYellow(valueToRestore);
+      setThresholdYellowInput(valueToRestore.toString());
+      await storageService.setDaysInStatusThresholdYellow(valueToRestore);
       
       // Notify content script to update
       try {
@@ -83,34 +101,63 @@ const Popup: React.FC = () => {
         if (tabs[0]?.id) {
           chrome.tabs.sendMessage(tabs[0].id, { 
             type: 'UPDATE_DAYS_IN_STATUS_SETTINGS',
-            thresholdYellow: value
+            thresholdYellow: valueToRestore
           });
         }
       } catch (error) {
         console.warn('Failed to notify content script:', error);
       }
+    } else {
+      const value = parseInt(inputValue, 10);
+      if (!isNaN(value) && value > 0) {
+        // Save and update last user-selected value only when blur with valid value
+        // Max value is already limited by input length (4 chars = max 9999)
+        setThresholdYellow(value);
+        setThresholdYellowInput(value.toString());
+        setLastUserYellowValue(value);
+        await storageService.setDaysInStatusThresholdYellow(value);
+        
+        // Notify content script to update
+        try {
+          const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+          if (tabs[0]?.id) {
+            chrome.tabs.sendMessage(tabs[0].id, { 
+              type: 'UPDATE_DAYS_IN_STATUS_SETTINGS',
+              thresholdYellow: value
+            });
+          }
+        } catch (error) {
+          console.warn('Failed to notify content script:', error);
+        }
+      } else {
+        // Invalid value (not a number or <= 0), restore last valid value
+        const valueToRestore = lastUserYellowValue;
+        setThresholdYellow(valueToRestore);
+        setThresholdYellowInput(valueToRestore.toString());
+        await storageService.setDaysInStatusThresholdYellow(valueToRestore);
+      }
     }
   };
 
-  const handleThresholdYellowBlur = () => {
-    if (thresholdYellow === 0) {
-      setThresholdYellow(14);
-      storageService.setDaysInStatusThresholdYellow(14);
-    }
-  };
-
-  const handleThresholdRedChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleThresholdRedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
-    // Allow empty value for editing
-    if (inputValue === '') {
-      setThresholdRed(0);
-      return;
+    // Only allow digits, limit to 4 characters maximum
+    const digitsOnly = inputValue.replace(/\D/g, '');
+    if (digitsOnly.length <= 4) {
+      // Update string input value to preserve cursor position
+      setThresholdRedInput(digitsOnly);
     }
+  };
+
+  const handleThresholdRedBlur = async () => {
+    const inputValue = thresholdRedInput.trim();
     
-    const value = parseInt(inputValue, 10);
-    if (!isNaN(value) && value > 0) {
-      setThresholdRed(value);
-      await storageService.setDaysInStatusThresholdRed(value);
+    if (inputValue === '') {
+      // Restore last user-selected value instead of default
+      const valueToRestore = lastUserRedValue;
+      setThresholdRed(valueToRestore);
+      setThresholdRedInput(valueToRestore.toString());
+      await storageService.setDaysInStatusThresholdRed(valueToRestore);
       
       // Notify content script to update
       try {
@@ -118,19 +165,41 @@ const Popup: React.FC = () => {
         if (tabs[0]?.id) {
           chrome.tabs.sendMessage(tabs[0].id, { 
             type: 'UPDATE_DAYS_IN_STATUS_SETTINGS',
-            thresholdRed: value
+            thresholdRed: valueToRestore
           });
         }
       } catch (error) {
         console.warn('Failed to notify content script:', error);
       }
-    }
-  };
-
-  const handleThresholdRedBlur = () => {
-    if (thresholdRed === 0) {
-      setThresholdRed(60);
-      storageService.setDaysInStatusThresholdRed(60);
+    } else {
+      const value = parseInt(inputValue, 10);
+      if (!isNaN(value) && value > 0) {
+        // Save and update last user-selected value only when blur with valid value
+        // Max value is already limited by input length (4 chars = max 9999)
+        setThresholdRed(value);
+        setThresholdRedInput(value.toString());
+        setLastUserRedValue(value);
+        await storageService.setDaysInStatusThresholdRed(value);
+        
+        // Notify content script to update
+        try {
+          const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+          if (tabs[0]?.id) {
+            chrome.tabs.sendMessage(tabs[0].id, { 
+              type: 'UPDATE_DAYS_IN_STATUS_SETTINGS',
+              thresholdRed: value
+            });
+          }
+        } catch (error) {
+          console.warn('Failed to notify content script:', error);
+        }
+      } else {
+        // Invalid value (not a number or <= 0), restore last valid value
+        const valueToRestore = lastUserRedValue;
+        setThresholdRed(valueToRestore);
+        setThresholdRedInput(valueToRestore.toString());
+        await storageService.setDaysInStatusThresholdRed(valueToRestore);
+      }
     }
   };
 
@@ -233,12 +302,13 @@ const Popup: React.FC = () => {
             <span className="popup-threshold-indicator popup-threshold-indicator--yellow"></span>
             <label className="popup-threshold-label">Warning after</label>
             <input
-              type="number"
+              type="text"
               min="1"
-              value={thresholdYellow || ''}
+              max={MAX_THRESHOLD_VALUE}
+              value={thresholdYellowInput}
               onChange={handleThresholdYellowChange}
               onBlur={handleThresholdYellowBlur}
-              placeholder="40"
+              placeholder={lastUserYellowValue.toString()}
               className="popup-input popup-input-threshold"
             />
             <span className="popup-threshold-unit">days</span>
@@ -248,12 +318,13 @@ const Popup: React.FC = () => {
             <span className="popup-threshold-indicator popup-threshold-indicator--red"></span>
             <label className="popup-threshold-label">Stale after</label>
             <input
-              type="number"
+              type="text"
               min="1"
-              value={thresholdRed || ''}
+              max={MAX_THRESHOLD_VALUE}
+              value={thresholdRedInput}
               onChange={handleThresholdRedChange}
               onBlur={handleThresholdRedBlur}
-              placeholder="60"
+              placeholder={lastUserRedValue.toString()}
               className="popup-input popup-input-threshold"
             />
             <span className="popup-threshold-unit">days</span>

@@ -5,6 +5,9 @@ const DEFAULT_FILTERS: Filter[] = [
   { label: 'My Tasks', query: 'Assignee: me' }
 ];
 
+export const DEFAULT_THRESHOLD_YELLOW = 14;
+export const DEFAULT_THRESHOLD_RED = 60;
+
 export class StorageService {
   private static instance: StorageService;
 
@@ -129,7 +132,7 @@ export class StorageService {
   public async getDaysInStatusThresholdYellow(): Promise<number> {
     return new Promise((resolve) => {
       chrome.storage.sync.get('ytqf_thresholdYellow', (data) => {
-        resolve(data.ytqf_thresholdYellow || 14);
+        resolve(data.ytqf_thresholdYellow || DEFAULT_THRESHOLD_YELLOW);
       });
     });
   }
@@ -143,7 +146,7 @@ export class StorageService {
   public async getDaysInStatusThresholdRed(): Promise<number> {
     return new Promise((resolve) => {
       chrome.storage.sync.get('ytqf_thresholdRed', (data) => {
-        resolve(data.ytqf_thresholdRed || 60);
+        resolve(data.ytqf_thresholdRed || DEFAULT_THRESHOLD_RED);
       });
     });
   }
