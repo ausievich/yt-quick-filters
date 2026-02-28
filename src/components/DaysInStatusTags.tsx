@@ -122,53 +122,59 @@ export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataL
   };
 
   /**
-   * Format time difference into compact format (single value: minutes/hours/days/weeks/months/years)
-   * Examples: 30 -> "30m", 5 -> "5h", 14 -> "14d", 10 -> "2w", 45 -> "2mo", 400 -> "1y"
+   * Calculate calendar days difference (consistent for both formats)
+   */
+  const getCalendarDays = (diffMs: number): number => {
+    const now = new Date();
+    const date = new Date(now.getTime() - diffMs);
+    const nowStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const dateStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    return Math.floor((nowStart.getTime() - dateStart.getTime()) / (1000 * 60 * 60 * 24));
+  };
+
+  /**
+   * Format time difference into compact format (single value: minutes/hours/days/months/years)
+   * Examples: 30 -> "30m", 5 -> "5h", 14 -> "14d", 45 -> "2mo", 400 -> "1y"
+   * Note: No weeks, following JetBrains format (days -> months -> years)
    */
   const formatTime = (diffMs: number): string => {
+    // Always use calendar days for consistency
+    const calendarDays = getCalendarDays(diffMs);
+
     if (!compactFormat) {
       // For non-compact format, show calendar days
-      const now = new Date();
-      const date = new Date(now.getTime() - diffMs);
-      const nowStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      const dateStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-      const days = Math.floor((nowStart.getTime() - dateStart.getTime()) / (1000 * 60 * 60 * 24));
-      return days.toString();
+      return calendarDays.toString();
     }
 
+    // For compact format, use actual time for minutes/hours, calendar days for days+
     const minutes = Math.floor(diffMs / (1000 * 60));
     const hours = Math.floor(diffMs / (1000 * 60 * 60));
-    const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const actualDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
     // Minutes: less than 1 hour
     if (minutes < 60) {
       return `${minutes}m`;
     }
 
-    // Hours: less than 1 day
+    // Hours: less than 24 hours (use actual hours, not calendar days)
     if (hours < 24) {
       return `${hours}h`;
     }
 
-    // Days: less than 7 days
-    if (days < 7) {
-      return `${days}d`;
-    }
-
-    // Weeks: 7-29 days, round to nearest week
-    if (days < 30) {
-      const weeks = Math.round(days / 7);
-      return `${weeks}w`;
+    // Days: use calendar days for consistency with non-compact format
+    // Show days until we reach months threshold (30 days)
+    if (calendarDays < 30) {
+      return `${calendarDays}d`;
     }
 
     // Months: 30-364 days, round to nearest month (using 30 days as month)
-    if (days < 365) {
-      const months = Math.round(days / 30);
+    if (calendarDays < 365) {
+      const months = Math.round(calendarDays / 30);
       return `${months}mo`;
     }
 
     // Years: 365+ days, round to nearest year
-    const years = Math.round(days / 365);
+    const years = Math.round(calendarDays / 365);
     return `${years}y`;
   };
 
