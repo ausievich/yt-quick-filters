@@ -12,8 +12,6 @@ const CHROME_WEB_STORE_REVIEWS_URL = 'https://chromewebstore.google.com/detail/y
 
 const Popup: React.FC = () => {
   const [showCreated, setShowCreated] = useState<boolean>(true);
-  const [thresholdYellow, setThresholdYellow] = useState<number>(DEFAULT_THRESHOLD_YELLOW);
-  const [thresholdRed, setThresholdRed] = useState<number>(DEFAULT_THRESHOLD_RED);
   const [thresholdYellowInput, setThresholdYellowInput] = useState<string>('');
   const [thresholdRedInput, setThresholdRedInput] = useState<string>('');
   const [lastUserYellowValue, setLastUserYellowValue] = useState<number>(DEFAULT_THRESHOLD_YELLOW);
@@ -48,16 +46,16 @@ const Popup: React.FC = () => {
         const thresholdRedValue = await storageService.getDaysInStatusThresholdRed();
         const compactFormatValue = await storageService.getDaysInStatusCompactFormat();
         const createdTagColoredValue = await storageService.getCreatedTagColored();
+        const normalizedYellow = thresholdYellowValue > 0 ? thresholdYellowValue : DEFAULT_THRESHOLD_YELLOW;
+        const normalizedRed = thresholdRedValue > 0 ? thresholdRedValue : DEFAULT_THRESHOLD_RED;
         
         // Invert logic: hideCreated = false means showCreated = true
         setShowCreated(!hideCreatedValue);
-        setThresholdYellow(thresholdYellowValue);
-        setThresholdRed(thresholdRedValue);
-        setThresholdYellowInput(thresholdYellowValue.toString());
-        setThresholdRedInput(thresholdRedValue.toString());
+        setThresholdYellowInput(normalizedYellow.toString());
+        setThresholdRedInput(normalizedRed.toString());
         // Initialize last user values with loaded values
-        setLastUserYellowValue(thresholdYellowValue);
-        setLastUserRedValue(thresholdRedValue);
+        setLastUserYellowValue(normalizedYellow);
+        setLastUserRedValue(normalizedRed);
         setCompactFormat(compactFormatValue);
         setCreatedTagColored(createdTagColoredValue);
       } catch (error) {
@@ -80,14 +78,59 @@ const Popup: React.FC = () => {
 
   // Generic handler for threshold input changes
   const createThresholdChangeHandler = (
-    setInput: (value: string) => void
-  ) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
+    setInput: (value: string) => void,
+    saveToStorage: (value: number) => Promise<void>,
+    notifyKey: 'thresholdYellow' | 'thresholdRed'
+  ) => async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newInputValue = e.target.value;
     // Only allow digits, limit to 4 characters maximum
-    const digitsOnly = inputValue.replace(/\D/g, '');
+    const digitsOnly = newInputValue.replace(/\D/g, '');
     if (digitsOnly.length <= 4) {
       // Update string input value to preserve cursor position
       setInput(digitsOnly);
+      
+      // Save immediately so value is not lost on popup close.
+      // Do not update lastUserValue here; it represents committed value (blur/close).
+      const value = parseInt(digitsOnly, 10);
+      if (digitsOnly !== '' && !isNaN(value) && value > 0) {
+        await saveToStorage(value);
+        await notifyContentScript({ [notifyKey]: value });
+      }
+    }
+  };
+
+  // Generic handler for threshold input blur
+  const commitThresholdValue = async (
+    inputValue: string,
+    lastUserValue: number,
+    setInput: (value: string) => void,
+    setLastUserValue: (value: number) => void,
+    saveToStorage: (value: number) => Promise<void>,
+    notifyKey: 'thresholdYellow' | 'thresholdRed'
+  ): Promise<void> => {
+    const trimmedInput = inputValue.trim();
+    
+    if (trimmedInput === '') {
+      // Restore the last committed value when user leaves input empty.
+      const valueToRestore = lastUserValue;
+      setInput(valueToRestore.toString());
+      await saveToStorage(valueToRestore);
+      await notifyContentScript({ [notifyKey]: valueToRestore });
+    } else {
+      const value = parseInt(trimmedInput, 10);
+      if (!isNaN(value) && value > 0) {
+        // Save and update committed value.
+        setInput(value.toString());
+        setLastUserValue(value);
+        await saveToStorage(value);
+        await notifyContentScript({ [notifyKey]: value });
+      } else {
+        // Invalid value (not a number or <= 0), restore last committed value.
+        const valueToRestore = lastUserValue;
+        setInput(valueToRestore.toString());
+        await saveToStorage(valueToRestore);
+        await notifyContentScript({ [notifyKey]: valueToRestore });
+      }
     }
   };
 
@@ -95,62 +138,89 @@ const Popup: React.FC = () => {
   const createThresholdBlurHandler = (
     inputValue: string,
     lastUserValue: number,
-    setValue: (value: number) => void,
     setInput: (value: string) => void,
     setLastUserValue: (value: number) => void,
     saveToStorage: (value: number) => Promise<void>,
     notifyKey: 'thresholdYellow' | 'thresholdRed'
   ) => async () => {
-    const trimmedInput = inputValue.trim();
-    
-    if (trimmedInput === '') {
-      // Restore last user-selected value instead of default
-      const valueToRestore = lastUserValue;
-      setValue(valueToRestore);
-      setInput(valueToRestore.toString());
-      await saveToStorage(valueToRestore);
-      await notifyContentScript({ [notifyKey]: valueToRestore });
-    } else {
-      const value = parseInt(trimmedInput, 10);
-      if (!isNaN(value) && value > 0) {
-        // Save and update last user-selected value only when blur with valid value
-        // Max value is already limited by input length (4 chars = max 9999)
-        setValue(value);
-        setInput(value.toString());
-        setLastUserValue(value);
-        await saveToStorage(value);
-        await notifyContentScript({ [notifyKey]: value });
-      } else {
-        // Invalid value (not a number or <= 0), restore last valid value
-        const valueToRestore = lastUserValue;
-        setValue(valueToRestore);
-        setInput(valueToRestore.toString());
-        await saveToStorage(valueToRestore);
-      }
-    }
+    await commitThresholdValue(
+      inputValue,
+      lastUserValue,
+      setInput,
+      setLastUserValue,
+      saveToStorage,
+      notifyKey
+    );
   };
 
-  const handleThresholdYellowChange = createThresholdChangeHandler(setThresholdYellowInput);
+  const handleThresholdYellowChange = createThresholdChangeHandler(
+    setThresholdYellowInput,
+    storageService.setDaysInStatusThresholdYellow.bind(storageService),
+    'thresholdYellow'
+  );
   const handleThresholdYellowBlur = createThresholdBlurHandler(
     thresholdYellowInput,
     lastUserYellowValue,
-    setThresholdYellow,
     setThresholdYellowInput,
     setLastUserYellowValue,
     storageService.setDaysInStatusThresholdYellow.bind(storageService),
     'thresholdYellow'
   );
 
-  const handleThresholdRedChange = createThresholdChangeHandler(setThresholdRedInput);
+  const handleThresholdRedChange = createThresholdChangeHandler(
+    setThresholdRedInput,
+    storageService.setDaysInStatusThresholdRed.bind(storageService),
+    'thresholdRed'
+  );
   const handleThresholdRedBlur = createThresholdBlurHandler(
     thresholdRedInput,
     lastUserRedValue,
-    setThresholdRed,
     setThresholdRedInput,
     setLastUserRedValue,
     storageService.setDaysInStatusThresholdRed.bind(storageService),
     'thresholdRed'
   );
+
+  useEffect(() => {
+    const commitAllThresholds = async () => {
+      await Promise.all([
+        commitThresholdValue(
+          thresholdYellowInput,
+          lastUserYellowValue,
+          setThresholdYellowInput,
+          setLastUserYellowValue,
+          storageService.setDaysInStatusThresholdYellow.bind(storageService),
+          'thresholdYellow'
+        ),
+        commitThresholdValue(
+          thresholdRedInput,
+          lastUserRedValue,
+          setThresholdRedInput,
+          setLastUserRedValue,
+          storageService.setDaysInStatusThresholdRed.bind(storageService),
+          'thresholdRed'
+        )
+      ]);
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        void commitAllThresholds();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [
+    thresholdYellowInput,
+    lastUserYellowValue,
+    thresholdRedInput,
+    lastUserRedValue,
+    storageService
+  ]);
 
   const handleCompactFormatChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.checked;
@@ -233,7 +303,7 @@ const Popup: React.FC = () => {
               value={thresholdYellowInput}
               onChange={handleThresholdYellowChange}
               onBlur={handleThresholdYellowBlur}
-              placeholder={lastUserYellowValue.toString()}
+              placeholder={lastUserYellowValue > 0 ? lastUserYellowValue.toString() : ''}
               className="popup-input popup-input-threshold"
             />
             <span className="popup-threshold-unit">days</span>
@@ -249,7 +319,7 @@ const Popup: React.FC = () => {
               value={thresholdRedInput}
               onChange={handleThresholdRedChange}
               onBlur={handleThresholdRedBlur}
-              placeholder={lastUserRedValue.toString()}
+              placeholder={lastUserRedValue > 0 ? lastUserRedValue.toString() : ''}
               className="popup-input popup-input-threshold"
             />
             <span className="popup-threshold-unit">days</span>

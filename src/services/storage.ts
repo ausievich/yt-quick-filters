@@ -1,4 +1,4 @@
-import { Filter, StorageData, BoardInfo } from '../types';
+import { Filter, StorageData, BoardInfo, DaysInStatusSettings } from '../types';
 
 const KEY_PREFIX = 'ytQuickFilters_';
 const DEFAULT_FILTERS: Filter[] = [
@@ -175,5 +175,28 @@ export class StorageService {
 
   public async setCreatedTagColored(enabled: boolean): Promise<void> {
     return this.setStorageValue('ytqf_createdTagColored', enabled);
+  }
+
+  public async getDaysInStatusSettings(): Promise<DaysInStatusSettings> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(
+        [
+          'ytqf_hideCreatedTag',
+          'ytqf_thresholdYellow',
+          'ytqf_thresholdRed',
+          'ytqf_compactFormat',
+          'ytqf_createdTagColored'
+        ],
+        (data) => {
+          resolve({
+            hideCreated: data.ytqf_hideCreatedTag ?? false,
+            thresholdYellow: data.ytqf_thresholdYellow ?? DEFAULT_THRESHOLD_YELLOW,
+            thresholdRed: data.ytqf_thresholdRed ?? DEFAULT_THRESHOLD_RED,
+            compactFormat: data.ytqf_compactFormat ?? false,
+            createdTagColored: data.ytqf_createdTagColored ?? false
+          });
+        }
+      );
+    });
   }
 }

@@ -2,7 +2,33 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { QuickFiltersApp } from './components/QuickFiltersApp';
 import { TokenManager } from './services/tokenManager';
+import { DaysInStatusSettingsService } from './services/daysInStatusSettings';
 import './styles.css';
+
+let isSettingsMessageBridgeInitialized = false;
+
+const initializeSettingsMessageBridge = (): void => {
+  if (isSettingsMessageBridgeInitialized) {
+    return;
+  }
+
+  chrome.runtime.onMessage.addListener((message: any) => {
+    if (message?.type !== 'UPDATE_DAYS_IN_STATUS_SETTINGS') {
+      return;
+    }
+
+    const settingsService = DaysInStatusSettingsService.getInstance();
+    settingsService.update({
+      hideCreated: message.hideCreated,
+      thresholdYellow: message.thresholdYellow,
+      thresholdRed: message.thresholdRed,
+      compactFormat: message.compactFormat,
+      createdTagColored: message.createdTagColored
+    });
+  });
+
+  isSettingsMessageBridgeInitialized = true;
+};
 
 class ContentScript {
   private observer: MutationObserver | null = null;
@@ -24,6 +50,15 @@ class ContentScript {
   }
 
   public async start(): Promise<void> {
+    initializeSettingsMessageBridge();
+
+    // Prime settings cache once per content script context.
+    try {
+      await DaysInStatusSettingsService.getInstance().init();
+    } catch (error) {
+      console.warn('Failed to initialize Days In Status settings cache:', error);
+    }
+
     // Initialize token manager
     try {
       const tokenManager = TokenManager.getInstance();

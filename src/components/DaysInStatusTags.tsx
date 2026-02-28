@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { DaysInStatusInfo } from '../types';
+import { DaysInStatusInfo, DaysInStatusSettings } from '../types';
 import { DaysInStatusAPI } from '../services/daysInStatusAPI';
-import { StorageService } from '../services/storage';
+import { DaysInStatusSettingsService } from '../services/daysInStatusSettings';
 import './DaysInStatusTags.css';
 
 interface DaysInStatusProps {
@@ -18,28 +18,45 @@ export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataL
   const [compactFormat, setCompactFormat] = useState<boolean>(false);
   const [createdTagColored, setCreatedTagColored] = useState<boolean>(false);
 
-  const storageService = StorageService.getInstance();
+  const applySettings = (settings: DaysInStatusSettings) => {
+    setHideCreated(settings.hideCreated);
+    setThresholdYellow(settings.thresholdYellow);
+    setThresholdRed(settings.thresholdRed);
+    setCompactFormat(settings.compactFormat);
+    setCreatedTagColored(settings.createdTagColored);
+  };
 
   useEffect(() => {
-    const loadSettings = async () => {
+    let isActive = true;
+    let unsubscribe = () => {};
+
+    const initializeSettings = async () => {
       try {
-        const hideCreatedValue = await storageService.getHideCreatedTag();
-        const thresholdYellowValue = await storageService.getDaysInStatusThresholdYellow();
-        const thresholdRedValue = await storageService.getDaysInStatusThresholdRed();
-        const compactFormatValue = await storageService.getDaysInStatusCompactFormat();
-        const createdTagColoredValue = await storageService.getCreatedTagColored();
-        setHideCreated(hideCreatedValue);
-        setThresholdYellow(thresholdYellowValue);
-        setThresholdRed(thresholdRedValue);
-        setCompactFormat(compactFormatValue);
-        setCreatedTagColored(createdTagColoredValue);
+        const settingsService = DaysInStatusSettingsService.getInstance();
+        const loadedSettings = await settingsService.init();
+        if (!isActive) {
+          return;
+        }
+
+        applySettings(loadedSettings);
+        unsubscribe = settingsService.subscribe((settings) => {
+          if (!isActive) {
+            return;
+          }
+          applySettings(settings);
+        });
       } catch (error) {
         console.error('Failed to load Days In Status settings:', error);
       }
     };
 
-    loadSettings();
-  }, [storageService]);
+    initializeSettings();
+
+    return () => {
+      isActive = false;
+      unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     const loadDaysInStatus = async () => {
@@ -62,34 +79,6 @@ export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataL
     loadDaysInStatus();
   }, [issueId, onDataLoaded]);
 
-  // Listen for settings updates from popup
-  useEffect(() => {
-    const handleMessage = (message: any) => {
-      if (message.type === 'UPDATE_DAYS_IN_STATUS_SETTINGS') {
-        if (message.hideCreated !== undefined) {
-          setHideCreated(message.hideCreated);
-        }
-        if (message.thresholdYellow !== undefined) {
-          setThresholdYellow(message.thresholdYellow);
-        }
-        if (message.thresholdRed !== undefined) {
-          setThresholdRed(message.thresholdRed);
-        }
-        if (message.compactFormat !== undefined) {
-          setCompactFormat(message.compactFormat);
-        }
-        if (message.createdTagColored !== undefined) {
-          setCreatedTagColored(message.createdTagColored);
-        }
-      }
-    };
-
-    chrome.runtime.onMessage.addListener(handleMessage);
-    return () => {
-      chrome.runtime.onMessage.removeListener(handleMessage);
-    };
-  }, []);
-
   if (loading) {
     return (
       <div className="days-in-status days-in-status--loading">
@@ -102,9 +91,11 @@ export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataL
     // Show dashes when API data is not available
     return (
       <div className="days-in-status">
-        <div className="days-in-status__tag days-in-status__tag--gray" title="No data available">
-          —
-        </div>
+        {!hideCreated && (
+          <div className="days-in-status__tag days-in-status__tag--gray" title="No data available">
+            —
+          </div>
+        )}
         <div className="days-in-status__tag days-in-status__tag--gray" title="No data available">
           —
         </div>
