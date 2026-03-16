@@ -1,9 +1,12 @@
-import { Filter, StorageData, BoardInfo } from '../types';
+import { Filter, StorageData, BoardInfo, DaysInStatusSettings } from '../types';
 
 const KEY_PREFIX = 'ytQuickFilters_';
 const DEFAULT_FILTERS: Filter[] = [
   { label: 'My Tasks', query: 'Assignee: me' }
 ];
+
+export const DEFAULT_THRESHOLD_YELLOW = 14;
+export const DEFAULT_THRESHOLD_RED = 60;
 
 export class StorageService {
   private static instance: StorageService;
@@ -109,5 +112,91 @@ export class StorageService {
       n++;
     }
     return name;
+  }
+
+  // Days In Status settings (global, not board-specific)
+  public async getHideCreatedTag(): Promise<boolean> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get('ytqf_hideCreatedTag', (data) => {
+        resolve(data.ytqf_hideCreatedTag || false);
+      });
+    });
+  }
+
+  public async setHideCreatedTag(hide: boolean): Promise<void> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ ytqf_hideCreatedTag: hide }, resolve);
+    });
+  }
+
+  // Generic helper for getting storage values
+  private async getStorageValue<T>(key: string, defaultValue: T): Promise<T> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(key, (data) => {
+        resolve(data[key] !== undefined ? data[key] : defaultValue);
+      });
+    });
+  }
+
+  // Generic helper for setting storage values
+  private async setStorageValue<T>(key: string, value: T): Promise<void> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ [key]: value }, resolve);
+    });
+  }
+
+  public async getDaysInStatusThresholdYellow(): Promise<number> {
+    return this.getStorageValue('ytqf_thresholdYellow', DEFAULT_THRESHOLD_YELLOW);
+  }
+
+  public async setDaysInStatusThresholdYellow(threshold: number): Promise<void> {
+    return this.setStorageValue('ytqf_thresholdYellow', threshold);
+  }
+
+  public async getDaysInStatusThresholdRed(): Promise<number> {
+    return this.getStorageValue('ytqf_thresholdRed', DEFAULT_THRESHOLD_RED);
+  }
+
+  public async setDaysInStatusThresholdRed(threshold: number): Promise<void> {
+    return this.setStorageValue('ytqf_thresholdRed', threshold);
+  }
+
+  public async getDaysInStatusCompactFormat(): Promise<boolean> {
+    return this.getStorageValue('ytqf_compactFormat', false);
+  }
+
+  public async setDaysInStatusCompactFormat(enabled: boolean): Promise<void> {
+    return this.setStorageValue('ytqf_compactFormat', enabled);
+  }
+
+  public async getCreatedTagColored(): Promise<boolean> {
+    return this.getStorageValue('ytqf_createdTagColored', false);
+  }
+
+  public async setCreatedTagColored(enabled: boolean): Promise<void> {
+    return this.setStorageValue('ytqf_createdTagColored', enabled);
+  }
+
+  public async getDaysInStatusSettings(): Promise<DaysInStatusSettings> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(
+        [
+          'ytqf_hideCreatedTag',
+          'ytqf_thresholdYellow',
+          'ytqf_thresholdRed',
+          'ytqf_compactFormat',
+          'ytqf_createdTagColored'
+        ],
+        (data) => {
+          resolve({
+            hideCreated: data.ytqf_hideCreatedTag ?? false,
+            thresholdYellow: data.ytqf_thresholdYellow ?? DEFAULT_THRESHOLD_YELLOW,
+            thresholdRed: data.ytqf_thresholdRed ?? DEFAULT_THRESHOLD_RED,
+            compactFormat: data.ytqf_compactFormat ?? false,
+            createdTagColored: data.ytqf_createdTagColored ?? false
+          });
+        }
+      );
+    });
   }
 }

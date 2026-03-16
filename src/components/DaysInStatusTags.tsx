@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { DaysInStatusInfo } from '../types';
+import { DaysInStatusInfo, DaysInStatusSettings } from '../types';
 import { DaysInStatusAPI } from '../services/daysInStatusAPI';
+import { DaysInStatusSettingsService } from '../services/daysInStatusSettings';
 import './DaysInStatusTags.css';
 
 interface DaysInStatusProps {
@@ -11,6 +12,51 @@ interface DaysInStatusProps {
 export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataLoaded }) => {
   const [data, setData] = useState<DaysInStatusInfo | null>(null);
   const [loading, setLoading] = useState(true);
+  const [hideCreated, setHideCreated] = useState<boolean>(false);
+  const [thresholdYellow, setThresholdYellow] = useState<number>(14);
+  const [thresholdRed, setThresholdRed] = useState<number>(60);
+  const [compactFormat, setCompactFormat] = useState<boolean>(false);
+  const [createdTagColored, setCreatedTagColored] = useState<boolean>(false);
+
+  const applySettings = (settings: DaysInStatusSettings) => {
+    setHideCreated(settings.hideCreated);
+    setThresholdYellow(settings.thresholdYellow);
+    setThresholdRed(settings.thresholdRed);
+    setCompactFormat(settings.compactFormat);
+    setCreatedTagColored(settings.createdTagColored);
+  };
+
+  useEffect(() => {
+    let isActive = true;
+    let unsubscribe = () => {};
+
+    const initializeSettings = async () => {
+      try {
+        const settingsService = DaysInStatusSettingsService.getInstance();
+        const loadedSettings = await settingsService.init();
+        if (!isActive) {
+          return;
+        }
+
+        applySettings(loadedSettings);
+        unsubscribe = settingsService.subscribe((settings) => {
+          if (!isActive) {
+            return;
+          }
+          applySettings(settings);
+        });
+      } catch (error) {
+        console.error('Failed to load Days In Status settings:', error);
+      }
+    };
+
+    initializeSettings();
+
+    return () => {
+      isActive = false;
+      unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     const loadDaysInStatus = async () => {
@@ -45,9 +91,11 @@ export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataL
     // Show dashes when API data is not available
     return (
       <div className="days-in-status">
-        <div className="days-in-status__tag days-in-status__tag--gray" title="No data available">
-          —
-        </div>
+        {!hideCreated && (
+          <div className="days-in-status__tag days-in-status__tag--gray" title="No data available">
+            —
+          </div>
+        )}
         <div className="days-in-status__tag days-in-status__tag--gray" title="No data available">
           —
         </div>
@@ -56,51 +104,106 @@ export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataL
   }
 
   /**
-   * Calculate difference in calendar days (not 24-hour periods)
-   * This matches YouTrack's behavior which counts days based on calendar dates in user's timezone
+   * Calculate difference in milliseconds for precise time calculation
    */
-  const getDaysDifference = (timestamp: number): number => {
+  const getTimeDifference = (timestamp: number): number => {
     const now = new Date();
     const date = new Date(timestamp);
-    
-    // Set both dates to start of day in local timezone (midnight)
-    // This ensures we count calendar days, not 24-hour periods
-    const nowStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const dateStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    
-    // Calculate difference in milliseconds and convert to days
-    const diffMs = nowStart.getTime() - dateStart.getTime();
-    return Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    return now.getTime() - date.getTime();
   };
 
-  const daysSinceCreated = getDaysDifference(data.created);
-  const daysSinceUpdated = getDaysDifference(data.updated);
+  /**
+   * Calculate calendar days difference (consistent for both formats)
+   */
+  const getCalendarDays = (diffMs: number): number => {
+    const now = new Date();
+    const date = new Date(now.getTime() - diffMs);
+    const nowStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const dateStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    return Math.floor((nowStart.getTime() - dateStart.getTime()) / (1000 * 60 * 60 * 24));
+  };
+
+  /**
+   * Format time difference into compact format (single value: minutes/hours/days/months/years)
+   * Examples: 30 -> "30m", 5 -> "5h", 14 -> "14d", 45 -> "2mo", 400 -> "1y"
+   * Note: No weeks, following JetBrains format (days -> months -> years)
+   */
+  const formatTime = (diffMs: number): string => {
+    // Always use calendar days for consistency
+    const calendarDays = getCalendarDays(diffMs);
+
+    if (!compactFormat) {
+      // For non-compact format, show calendar days
+      return calendarDays.toString();
+    }
+
+    // For compact format, use actual time for minutes/hours, calendar days for days+
+    const minutes = Math.floor(diffMs / (1000 * 60));
+    const hours = Math.floor(diffMs / (1000 * 60 * 60));
+    const actualDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    // Minutes: less than 1 hour
+    if (minutes < 60) {
+      return `${minutes}m`;
+    }
+
+    // Hours: less than 24 hours (use actual hours, not calendar days)
+    if (hours < 24) {
+      return `${hours}h`;
+    }
+
+    // Days: use calendar days for consistency with non-compact format
+    // Show days until we reach months threshold (30 days)
+    if (calendarDays < 30) {
+      return `${calendarDays}d`;
+    }
+
+    // Months: 30-364 days, round to nearest month (using 30 days as month)
+    if (calendarDays < 365) {
+      const months = Math.round(calendarDays / 30);
+      return `${months}mo`;
+    }
+
+    // Years: 365+ days, round to nearest year
+    const years = Math.round(calendarDays / 365);
+    return `${years}y`;
+  };
+
+  const timeDiffCreated = getTimeDifference(data.created);
+  const timeDiffUpdated = getTimeDifference(data.updated);
+  
+  // For color calculation, use calendar days (reuse getCalendarDays function)
+  const daysSinceCreated = getCalendarDays(timeDiffCreated);
+  const daysSinceUpdated = getCalendarDays(timeDiffUpdated);
 
   // Determine color based on age for Created
-  // Temporarily disabled - always use gray for created
-  // let createdColorClass = 'days-in-status__tag--green';
-  // if (daysSinceCreated > 60) {
-  //   createdColorClass = 'days-in-status__tag--red';
-  // } else if (daysSinceCreated > 30) {
-  //   createdColorClass = 'days-in-status__tag--yellow';
-  // }
-  const createdColorClass = 'days-in-status__tag--gray';
+  let createdColorClass = 'days-in-status__tag--gray';
+  if (createdTagColored) {
+    createdColorClass = 'days-in-status__tag--green';
+    if (daysSinceCreated > thresholdRed) {
+      createdColorClass = 'days-in-status__tag--red';
+    } else if (daysSinceCreated > thresholdYellow) {
+      createdColorClass = 'days-in-status__tag--yellow';
+    }
+  }
 
-  // Determine color based on age for Updated
+  // Determine color based on age for Updated using configurable thresholds
   let updatedColorClass = 'days-in-status__tag--green';
-  if (daysSinceUpdated > 60) {
+  if (daysSinceUpdated > thresholdRed) {
     updatedColorClass = 'days-in-status__tag--red';
-  } else if (daysSinceUpdated > 14) {
+  } else if (daysSinceUpdated > thresholdYellow) {
     updatedColorClass = 'days-in-status__tag--yellow';
   }
 
   return (
     <div className="days-in-status">
-      <div className={`days-in-status__tag ${createdColorClass}`} title={`Created: ${new Date(data.created).toLocaleDateString()}`}>
-        {daysSinceCreated}
-      </div>
+      {!hideCreated && (
+        <div className={`days-in-status__tag ${createdColorClass}`} title={`Created: ${new Date(data.created).toLocaleDateString()}`}>
+          {formatTime(timeDiffCreated)}
+        </div>
+      )}
       <div className={`days-in-status__tag ${updatedColorClass}`} title={`Updated: ${new Date(data.updated).toLocaleDateString()}`}>
-        {daysSinceUpdated}
+        {formatTime(timeDiffUpdated)}
       </div>
     </div>
   );

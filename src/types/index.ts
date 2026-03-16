@@ -59,3 +59,11 @@ export interface DaysInStatusInfo {
   created: number;
   updated: number;
 }
+
+export interface DaysInStatusSettings {
+  hideCreated: boolean;
+  thresholdYellow: number;
+  thresholdRed: number;
+  compactFormat: boolean;
+  createdTagColored: boolean;
+}
