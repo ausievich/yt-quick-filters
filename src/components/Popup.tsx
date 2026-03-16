@@ -25,14 +25,16 @@ const Popup: React.FC = () => {
   // Helper function to notify content script about settings changes
   const notifyContentScript = async (message: any) => {
     try {
-      const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-      if (tabs[0]?.id) {
-        chrome.tabs.sendMessage(tabs[0].id, {
-          type: 'UPDATE_DAYS_IN_STATUS_SETTINGS',
-          ...message
-        });
-      }
-    } catch (error) {
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      if (!tab?.id) return;
+
+      await chrome.tabs.sendMessage(tab.id, {
+        type: 'UPDATE_DAYS_IN_STATUS_SETTINGS',
+        ...message
+      });
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : String(error);
+      if (msg.includes('Receiving end does not exist')) return;
       console.warn('Failed to notify content script:', error);
     }
   };
