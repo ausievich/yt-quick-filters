@@ -4,8 +4,6 @@ import { StorageService, DEFAULT_THRESHOLD_YELLOW, DEFAULT_THRESHOLD_RED } from 
 import manifest from '../../manifest.json';
 import './Popup.css';
 
-const MAX_THRESHOLD_VALUE = 9999;
-
 const VERSION = manifest.version;
 const GITHUB_ISSUES_URL = 'https://github.com/ausievich/yt-quick-filters/issues';
 const CHROME_WEB_STORE_REVIEWS_URL = 'https://chromewebstore.google.com/detail/youtrack-quick-filters/iaddgmcajdiblafjfhloadmphkbplddo/reviews';
@@ -300,8 +298,6 @@ const Popup: React.FC = () => {
             <label className="popup-threshold-label">Warning after</label>
             <input
               type="text"
-              min="1"
-              max={MAX_THRESHOLD_VALUE}
               value={thresholdYellowInput}
               onChange={handleThresholdYellowChange}
               onBlur={handleThresholdYellowBlur}
@@ -316,8 +312,6 @@ const Popup: React.FC = () => {
             <label className="popup-threshold-label">Stale after</label>
             <input
               type="text"
-              min="1"
-              max={MAX_THRESHOLD_VALUE}
               value={thresholdRedInput}
               onChange={handleThresholdRedChange}
               onBlur={handleThresholdRedBlur}
