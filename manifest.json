@@ -4,7 +4,7 @@
   "version": "2.2.1",
   "description": "Add quick filter buttons to YouTrack Agile Boards. Create filters via a modal.",
   "icons": { "128": "icons/logo_128.png" },
-  "permissions": ["storage", "tabs"],
+  "permissions": ["storage"],
   "action": {
     "default_popup": "public/popup.html",
     "default_icon": {
