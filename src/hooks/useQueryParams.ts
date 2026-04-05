@@ -13,7 +13,7 @@ export function useQueryParams() {
     const observer = new MutationObserver(() => {
       const currentSearch = window.location.search;
       const currentPathname = window.location.pathname;
-      
+
       if (currentSearch !== search || currentPathname !== pathname) {
         setSearch(currentSearch);
         setPathname(currentPathname);
@@ -25,19 +25,38 @@ export function useQueryParams() {
       subtree: true
     });
 
-    // Also listen to standard navigation events
-    const handleLocationChange = () => {
+    return () => {
+      observer.disconnect();
+    };
+  }, [search, pathname]);
+
+  useEffect(() => {
+    const syncFromWindow = () => {
       setSearch(window.location.search);
       setPathname(window.location.pathname);
     };
 
-    window.addEventListener('popstate', handleLocationChange);
+    window.addEventListener('popstate', syncFromWindow);
+
+    const originalPushState = history.pushState.bind(history);
+    const originalReplaceState = history.replaceState.bind(history);
+
+    history.pushState = (...args: Parameters<History['pushState']>) => {
+      originalPushState(...args);
+      queueMicrotask(syncFromWindow);
+    };
+
+    history.replaceState = (...args: Parameters<History['replaceState']>) => {
+      originalReplaceState(...args);
+      queueMicrotask(syncFromWindow);
+    };
 
     return () => {
-      observer.disconnect();
-      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('popstate', syncFromWindow);
+      history.pushState = originalPushState;
+      history.replaceState = originalReplaceState;
     };
-  }, [search, pathname]);
+  }, []);
 
   const params = useMemo(() => new URLSearchParams(search), [search]);
 

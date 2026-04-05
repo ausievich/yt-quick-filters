@@ -1,3 +1,5 @@
+import { tryApplyBoardQueryViaNativeSearch } from './boardQueryApplicator';
+
 export class UtilsService {
   private static instance: UtilsService;
 
@@ -9,6 +11,23 @@ export class UtilsService {
   }
 
   public setQuery(query: string): void {
+    if (typeof localStorage !== 'undefined' && localStorage.getItem('ytqf-force-location-assign') === 'true') {
+      this.assignQueryToLocation(query);
+      return;
+    }
+
+    if (this.isAgileBoardWithNativeSearch() && tryApplyBoardQueryViaNativeSearch(query)) {
+      return;
+    }
+
+    this.assignQueryToLocation(query);
+  }
+
+  private isAgileBoardWithNativeSearch(): boolean {
+    return /\/agiles\/[^/]+\//.test(location.pathname) && !!document.querySelector('search-query-panel');
+  }
+
+  private assignQueryToLocation(query: string): void {
     const url = new URL(location.href);
     if (query && query.trim()) {
       url.searchParams.set('query', query.trim());
