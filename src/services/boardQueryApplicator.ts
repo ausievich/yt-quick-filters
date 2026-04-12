@@ -7,18 +7,6 @@
 
 const QUERY_ASSIST_INPUT = 'search-query-panel [data-test="ring-query-assist-input"]';
 
-function setNativeInputValue(input: HTMLInputElement, value: string): void {
-  const proto = Object.getPrototypeOf(input) as object;
-  const desc = Object.getOwnPropertyDescriptor(proto, 'value') as
-    | PropertyDescriptor
-    | undefined;
-  if (desc?.set) {
-    desc.set.call(input, value);
-  } else {
-    input.value = value;
-  }
-}
-
 function dispatchEnterSubmit(el: HTMLElement): void {
   const init: KeyboardEventInit = {
     key: 'Enter',
@@ -46,11 +34,8 @@ export function tryNativeBoardQuery(query: string): boolean {
 
   field.focus();
 
-  if (field instanceof HTMLInputElement) {
-    setNativeInputValue(field, trimmed);
-  } else {
-    field.textContent = trimmed;
-  }
+  // Ring query assist: contenteditable role="textbox", not <input>
+  field.textContent = trimmed;
 
   field.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
   field.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }));
