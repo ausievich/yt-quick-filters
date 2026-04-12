@@ -1,49 +1,11 @@
 /**
  * Applies the agile board issues query by driving YouTrack's search UI,
  * so the SPA refetches data without a full document navigation.
+ *
+ * Target: Ring query assist textbox on agile boards (YouTrack 2024+).
  */
 
-function* walkComposedSubtree(root: Element | ShadowRoot): Generator<Element> {
-  const children =
-    root instanceof ShadowRoot ? Array.from(root.children) : Array.from(root.children);
-  for (const el of children) {
-    yield el;
-    yield* walkComposedSubtree(el);
-    if (el.shadowRoot) {
-      yield* walkComposedSubtree(el.shadowRoot);
-    }
-  }
-}
-
-function findSearchField(panel: Element): HTMLElement | null {
-  let inputCandidate: HTMLInputElement | null = null;
-
-  for (const el of walkComposedSubtree(panel)) {
-    if (el instanceof HTMLInputElement) {
-      const type = (el.type || 'text').toLowerCase();
-      if (type === 'hidden' || type === 'checkbox' || type === 'radio' || type === 'file') {
-        continue;
-      }
-      if (el.getAttribute('role') === 'searchbox') {
-        return el;
-      }
-      if (
-        el.getAttribute('data-test')?.toLowerCase().includes('search') ||
-        el.getAttribute('aria-label')?.toLowerCase().includes('search')
-      ) {
-        return el;
-      }
-      if (!inputCandidate) {
-        inputCandidate = el;
-      }
-    }
-    if (el instanceof HTMLElement && el.isContentEditable) {
-      return el;
-    }
-  }
-
-  return inputCandidate;
-}
+const QUERY_ASSIST_INPUT = 'search-query-panel [data-test="ring-query-assist-input"]';
 
 function setNativeInputValue(input: HTMLInputElement, value: string): void {
   const proto = Object.getPrototypeOf(input) as object;
@@ -72,15 +34,10 @@ function dispatchEnterSubmit(el: HTMLElement): void {
 }
 
 /**
- * @returns true if the native search panel was found and a submit was dispatched
+ * @returns true if the query assist field was found and a submit was dispatched
  */
 export function tryApplyBoardQueryViaNativeSearch(query: string): boolean {
-  const panel = document.querySelector('search-query-panel');
-  if (!panel) {
-    return false;
-  }
-
-  const field = findSearchField(panel);
+  const field = document.querySelector<HTMLElement>(QUERY_ASSIST_INPUT);
   if (!field) {
     return false;
   }
