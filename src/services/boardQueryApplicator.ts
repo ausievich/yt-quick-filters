@@ -6,6 +6,8 @@
  */
 
 const QUERY_ASSIST_INPUT = 'search-query-panel [data-test="ring-query-assist-input"]';
+const NEUTRAL_FOCUS_TARGET =
+  '#ytqf-filter-container, .yt-agile-board__top-bar, .yt-agile-board__toolbar[data-test="yt-agile-board-toolbar"], .yt-agile-board__toolbar';
 
 function dispatchEnterSubmit(el: HTMLElement): void {
   const init: KeyboardEventInit = {
@@ -22,18 +24,26 @@ function dispatchEnterSubmit(el: HTMLElement): void {
 }
 
 function dismissQueryAssist(el: HTMLElement): void {
-  const escapeInit: KeyboardEventInit = {
-    key: 'Escape',
-    code: 'Escape',
-    keyCode: 27,
-    which: 27,
-    bubbles: true,
-    cancelable: true
-  };
+  const neutralTarget = document.querySelector<HTMLElement>(NEUTRAL_FOCUS_TARGET);
 
-  el.dispatchEvent(new KeyboardEvent('keydown', escapeInit));
-  el.dispatchEvent(new KeyboardEvent('keyup', escapeInit));
-  el.blur();
+  // Blur on the next frame so YouTrack can finish handling Enter first,
+  // then move focus to a neutral toolbar container instead of leaving it
+  // on the query assist textbox.
+  requestAnimationFrame(() => {
+    el.blur();
+    window.getSelection()?.removeAllRanges();
+
+    if (neutralTarget) {
+      const hadTabIndex = neutralTarget.hasAttribute('tabindex');
+      if (!hadTabIndex) {
+        neutralTarget.setAttribute('tabindex', '-1');
+      }
+      neutralTarget.focus({ preventScroll: true });
+      if (!hadTabIndex) {
+        neutralTarget.removeAttribute('tabindex');
+      }
+    }
+  });
 }
 
 /**
