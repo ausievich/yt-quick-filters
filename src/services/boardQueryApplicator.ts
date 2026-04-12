@@ -21,6 +21,21 @@ function dispatchEnterSubmit(el: HTMLElement): void {
   el.dispatchEvent(new KeyboardEvent('keyup', init));
 }
 
+function dismissQueryAssist(el: HTMLElement): void {
+  const escapeInit: KeyboardEventInit = {
+    key: 'Escape',
+    code: 'Escape',
+    keyCode: 27,
+    which: 27,
+    bubbles: true,
+    cancelable: true
+  };
+
+  el.dispatchEvent(new KeyboardEvent('keydown', escapeInit));
+  el.dispatchEvent(new KeyboardEvent('keyup', escapeInit));
+  el.blur();
+}
+
 /**
  * @returns true if the query assist field was found and a submit was dispatched
  */
@@ -43,7 +58,7 @@ export function tryNativeBoardQuery(query: string): boolean {
   dispatchEnterSubmit(field);
 
   queueMicrotask(() => {
-    field.blur();
+    dismissQueryAssist(field);
   });
 
   return true;

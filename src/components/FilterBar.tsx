@@ -23,7 +23,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           key={index}
           className={`btn ${activeFilter === filter ? 'active' : ''}`}
           title={filter.query}
-          onClick={() => onFilterClick(filter.query)}
+          onClick={() => onFilterClick(filter)}
           onContextMenu={(e) => onContextMenu(e, filter, index)}
         >
           <span className="lbl">{filter.label}</span>
