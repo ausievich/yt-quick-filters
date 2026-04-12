@@ -38,7 +38,7 @@ export interface ModalProps {
 export interface FilterBarProps {
   filters: Filter[];
   activeFilter: Filter | null;
-  onFilterClick: (filter: Filter) => void;
+  onFilterClick: (query: string) => void;
   onAddFilter: () => void;
   onContextMenu: (e: React.MouseEvent, item: Filter, index: number) => void;
 }

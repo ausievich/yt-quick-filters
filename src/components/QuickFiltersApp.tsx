@@ -28,7 +28,7 @@ interface ModalState {
 
 export const QuickFiltersApp: React.FC = () => {
   const [filters, setFilters] = useState<Filter[]>([]);
-  const [optimisticActiveFilter, setOptimisticActiveFilter] = useState<Filter | null | undefined>(undefined);
+  const [optimisticQuery, setOptimisticQuery] = useState<string | null>(null);
   const [contextMenu, setContextMenu] = useState<ContextMenuState>({
     isOpen: false,
     x: 0,
@@ -98,7 +98,7 @@ export const QuickFiltersApp: React.FC = () => {
   }, [pathname, loadFilters]);
 
   useEffect(() => {
-    setOptimisticActiveFilter(undefined);
+    setOptimisticQuery(null);
   }, [currentQuery]);
 
   // Initialize DaysInStatusUI
@@ -114,14 +114,14 @@ export const QuickFiltersApp: React.FC = () => {
     };
   }, [daysInStatusUI]);
 
-  const handleFilterClick = useCallback((filter: Filter) => {
+  const handleFilterClick = useCallback((query: string) => {
     // If clicked on already active filter, deactivate it (toggle)
-    if (utilsService.normalizeQuery(currentQuery) === utilsService.normalizeQuery(filter.query)) {
-      setOptimisticActiveFilter(null);
+    if (utilsService.normalizeQuery(currentQuery) === utilsService.normalizeQuery(query)) {
+      setOptimisticQuery('');
       utilsService.setQuery('');
     } else {
-      setOptimisticActiveFilter(filter);
-      utilsService.setQuery(filter.query);
+      setOptimisticQuery(query);
+      utilsService.setQuery(query);
     }
   }, [utilsService, currentQuery]);
 
@@ -208,9 +208,8 @@ export const QuickFiltersApp: React.FC = () => {
 
 
   // Determine active filter based on current query
-  const activeFilter = optimisticActiveFilter === undefined
-    ? utilsService.findActiveFilter(filters, currentQuery)
-    : optimisticActiveFilter;
+  const effectiveQuery = optimisticQuery ?? currentQuery;
+  const activeFilter = utilsService.findActiveFilter(filters, effectiveQuery);
 
   return (
     <>
