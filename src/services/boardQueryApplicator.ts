@@ -36,7 +36,7 @@ function dispatchEnterSubmit(el: HTMLElement): void {
 /**
  * @returns true if the query assist field was found and a submit was dispatched
  */
-export function tryApplyBoardQueryViaNativeSearch(query: string): boolean {
+export function tryNativeBoardQuery(query: string): boolean {
   const field = document.querySelector<HTMLElement>(QUERY_ASSIST_INPUT);
   if (!field) {
     return false;

@@ -1,4 +1,4 @@
-import { tryApplyBoardQueryViaNativeSearch } from './boardQueryApplicator';
+import { tryNativeBoardQuery } from './boardQueryApplicator';
 
 export class UtilsService {
   private static instance: UtilsService;
@@ -11,7 +11,7 @@ export class UtilsService {
   }
 
   public setQuery(query: string): void {
-    if (location.pathname.includes('/agiles/') && tryApplyBoardQueryViaNativeSearch(query)) {
+    if (location.pathname.includes('/agiles/') && tryNativeBoardQuery(query)) {
       return;
     }
 
