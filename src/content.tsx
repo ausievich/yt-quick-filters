@@ -5,6 +5,21 @@ import { TokenManager } from './services/tokenManager';
 import { DaysInStatusSettingsService } from './services/daysInStatusSettings';
 import './styles.css';
 
+/** Content script is registered for all https:// URLs; only run on YouTrack-like pages (custom domains, issue view, boards). */
+function isYouTrackLikePage(): boolean {
+  try {
+    const { hostname, pathname } = window.location;
+    return (
+      pathname.includes('/youtrack/') ||
+      pathname.includes('/agiles/') ||
+      /\.youtrack\.cloud$/i.test(hostname) ||
+      /youtrack/i.test(hostname)
+    );
+  } catch {
+    return false;
+  }
+}
+
 let isSettingsMessageBridgeInitialized = false;
 
 const initializeSettingsMessageBridge = (): void => {
@@ -84,14 +99,15 @@ class ContentScript {
 
 // Initialize content script with delay to ensure service worker is ready
 const initializeContentScript = async () => {
-  // Check if extension is ready
-  if (chrome.runtime?.id) {
-    const contentScript = new ContentScript();
-    await contentScript.start();
-  } else {
-    // Retry after a short delay
+  if (!chrome.runtime?.id) {
     setTimeout(initializeContentScript, 100);
+    return;
   }
+  if (!isYouTrackLikePage()) {
+    return;
+  }
+  const contentScript = new ContentScript();
+  await contentScript.start();
 };
 
 // Start initialization

@@ -8,11 +8,23 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   activeFilter,
   onFilterClick,
   onAddFilter,
-  onContextMenu
+  onContextMenu,
+  onOpenAssistant
 }) => {
   return (
     <div id="ytqf-bar">
       <DaysInStatusButton />
+
+      {onOpenAssistant && (
+        <button
+          type="button"
+          className="btn ghost"
+          onClick={onOpenAssistant}
+          title="Сохранить контекст задачи для AI. Панель: клик по иконке расширения в тулбаре"
+        >
+          AI
+        </button>
+      )}
       
       <button className="btn ghost" onClick={onAddFilter}>
         Add filter...

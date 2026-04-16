@@ -1,0 +1,218 @@
+/* Нативная боковая панель Chrome: только разметка панели, без оверлея над страницей */
+
+.ytqf-sp-root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  background: #fafbfc;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.ytqf-sp-chrome {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 12px;
+  background: #fff;
+  border-bottom: 1px solid #e8eaed;
+}
+
+.ytqf-sp-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2328;
+  flex: 1;
+  min-width: 0;
+}
+
+.ytqf-sp-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.ytqf-sp-clear-history {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 6px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #57606a;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.ytqf-sp-clear-history:hover {
+  color: #0066cc;
+}
+
+.ytqf-sp-segment {
+  display: flex;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.ytqf-sp-segment-btn {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 10px;
+  border: none;
+  background: #fff;
+  color: #57606a;
+  cursor: pointer;
+}
+
+.ytqf-sp-segment-btn:hover {
+  background: #f6f8fa;
+  color: #1f2328;
+}
+
+.ytqf-sp-segment-btn--active {
+  background: #eef5ff;
+  color: #0066cc;
+}
+
+.ytqf-sp-settings-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #fff;
+}
+
+.ytqf-sp-settings-wrap .ytqf-sp-settings-form.popup-container {
+  width: 100%;
+  max-width: none;
+  min-height: min-content;
+  padding: 12px 14px 20px;
+  box-sizing: border-box;
+}
+
+.ytqf-sp-hint {
+  margin: 0;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: #6b7280;
+  background: #fff8e6;
+  border-bottom: 1px solid #fde68a;
+}
+
+.ytqf-sp-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+}
+
+.ytqf-sp-msg {
+  display: flex;
+  flex-direction: column;
+  max-width: 96%;
+}
+
+.ytqf-sp-msg--user {
+  align-self: flex-end;
+}
+
+.ytqf-sp-msg--assistant,
+.ytqf-sp-msg--system {
+  align-self: flex-start;
+}
+
+.ytqf-sp-msg-content {
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.ytqf-sp-msg--user .ytqf-sp-msg-content {
+  background: #0066cc;
+  color: #fff;
+}
+
+.ytqf-sp-msg--assistant .ytqf-sp-msg-content {
+  background: #fff;
+  color: #1f2328;
+  border: 1px solid #e8eaed;
+}
+
+.ytqf-sp-msg--system .ytqf-sp-msg-content {
+  background: #ecfdf5;
+  color: #065f46;
+  font-size: 12px;
+}
+
+.ytqf-sp-msg--error .ytqf-sp-msg-content {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.ytqf-sp-msg-time {
+  font-size: 10px;
+  color: #9ca3af;
+  margin-top: 4px;
+  padding: 0 2px;
+}
+
+.ytqf-sp-msg--user .ytqf-sp-msg-time {
+  text-align: right;
+}
+
+.ytqf-sp-input-wrap {
+  flex-shrink: 0;
+  padding: 10px 12px 14px;
+  border-top: 1px solid #e8eaed;
+  background: #fff;
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.ytqf-sp-input {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: inherit;
+  resize: none;
+  outline: none;
+}
+
+.ytqf-sp-input:focus {
+  border-color: #0066cc;
+}
+
+.ytqf-sp-send {
+  padding: 8px 14px;
+  background: #0066cc;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ytqf-sp-send:disabled {
+  background: #d0d7de;
+  cursor: not-allowed;
+}

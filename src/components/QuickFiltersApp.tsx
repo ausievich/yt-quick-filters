@@ -9,6 +9,7 @@ import { FilterBar } from './FilterBar';
 import { FilterModal } from './FilterModal';
 import { ContextMenu } from './ContextMenu';
 import { DaysInStatusUI } from '../services/daysInStatusUI';
+import { YouTrackAPIClient } from '../services/youTrackAPIClient';
 
 interface ContextMenuState {
   isOpen: boolean;
@@ -45,7 +46,10 @@ export const QuickFiltersApp: React.FC = () => {
   const utilsService = UtilsService.getInstance();
   const versionService = YouTrackVersionService.getInstance();
   const daysInStatusUI = DaysInStatusUI.getInstance();
-  
+  const apiClient = YouTrackAPIClient.getInstance();
+
+  const [currentIssueId, setCurrentIssueId] = useState<string | null>(null);
+
   // State to hold the DOM node for the portal
   const [portalTarget, setPortalTarget] = useState<Element | null>(null);
 
@@ -113,6 +117,29 @@ export const QuickFiltersApp: React.FC = () => {
       daysInStatusUI.stop();
     };
   }, [daysInStatusUI]);
+
+  useEffect(() => {
+    void apiClient.initialize();
+  }, [apiClient]);
+
+  useEffect(() => {
+    const detectIssueId = () => {
+      const path = window.location.pathname;
+      const match = path.match(/\/issue\/([A-Z]+-\d+)/i);
+      setCurrentIssueId(match ? match[1] : null);
+    };
+
+    detectIssueId();
+
+    const observer = new MutationObserver(detectIssueId);
+    observer.observe(document.body, { childList: true, subtree: true });
+    window.addEventListener('popstate', detectIssueId);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('popstate', detectIssueId);
+    };
+  }, []);
 
   const handleFilterClick = useCallback((query: string) => {
     // If clicked on already active filter, deactivate it (toggle)
@@ -211,6 +238,19 @@ export const QuickFiltersApp: React.FC = () => {
   const effectiveQuery = optimisticQuery ?? currentQuery;
   const activeFilter = utilsService.findActiveFilter(filters, effectiveQuery);
 
+  const handleOpenAssistant = useCallback(async () => {
+    try {
+      await chrome.runtime.sendMessage({
+        type: 'YTQF_SYNC_AI_CONTEXT',
+        ytqf_youtrack_origin: window.location.origin,
+        ytqf_sidepanel_issue: currentIssueId,
+        ytqf_sidepanel_page_url: window.location.href
+      });
+    } catch (e) {
+      console.error('Failed to sync AI context:', e);
+    }
+  }, [currentIssueId]);
+
   return (
     <>
       {/* Render FilterBar */}
@@ -222,6 +262,7 @@ export const QuickFiltersApp: React.FC = () => {
             onFilterClick={handleFilterClick}
             onAddFilter={handleAddFilter}
             onContextMenu={handleContextMenu}
+            onOpenAssistant={handleOpenAssistant}
           />,
           portalTarget
         )
@@ -232,6 +273,7 @@ export const QuickFiltersApp: React.FC = () => {
           onFilterClick={handleFilterClick}
           onAddFilter={handleAddFilter}
           onContextMenu={handleContextMenu}
+          onOpenAssistant={handleOpenAssistant}
         />
       )}
       
@@ -266,6 +308,7 @@ export const QuickFiltersApp: React.FC = () => {
           document.body
         )
       }
+
     </>
   );
 };

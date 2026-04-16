@@ -41,6 +41,7 @@ export interface FilterBarProps {
   onFilterClick: (query: string) => void;
   onAddFilter: () => void;
   onContextMenu: (e: React.MouseEvent, item: Filter, index: number) => void;
+  onOpenAssistant?: () => void;
 }
 
 export interface IssueInfo {
