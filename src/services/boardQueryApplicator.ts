@@ -42,23 +42,11 @@ export function tryNativeBoardQuery(query: string): boolean {
 
   dispatchEnterSubmit(field);
 
-  // Defer blur until after YouTrack handles Enter and any async suggestion
-  // popover (shown for free-text queries) has had a chance to render.
-  // Escape closes the Ring query assist suggestions popover; blur removes
-  // the caret from the contenteditable field.
-  requestAnimationFrame(() => {
-    field.dispatchEvent(
-      new KeyboardEvent('keydown', {
-        key: 'Escape',
-        code: 'Escape',
-        keyCode: 27,
-        which: 27,
-        bubbles: true,
-        cancelable: true
-      })
-    );
-    field.blur();
-  });
+  // The suggestions popover stays open as long as the field has focus, so we
+  // blur after Enter is handled. A follow-up blur covers async re-focus from
+  // Ring's suggestion API, which can re-open the popover for free-text queries.
+  requestAnimationFrame(() => field.blur());
+  setTimeout(() => field.blur(), 250);
 
   return true;
 }
