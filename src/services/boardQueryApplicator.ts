@@ -6,8 +6,6 @@
  */
 
 const QUERY_ASSIST_INPUT = 'search-query-panel [data-test="ring-query-assist-input"]';
-const NEUTRAL_FOCUS_TARGET =
-  '#ytqf-filter-container, .yt-agile-board__top-bar, .yt-agile-board__toolbar[data-test="yt-agile-board-toolbar"], .yt-agile-board__toolbar';
 
 function dispatchEnterSubmit(el: HTMLElement): void {
   const init: KeyboardEventInit = {
@@ -21,29 +19,6 @@ function dispatchEnterSubmit(el: HTMLElement): void {
   el.dispatchEvent(new KeyboardEvent('keydown', init));
   el.dispatchEvent(new KeyboardEvent('keypress', init));
   el.dispatchEvent(new KeyboardEvent('keyup', init));
-}
-
-function dismissQueryAssist(el: HTMLElement): void {
-  const neutralTarget = document.querySelector<HTMLElement>(NEUTRAL_FOCUS_TARGET);
-
-  // Blur on the next frame so YouTrack can finish handling Enter first,
-  // then move focus to a neutral toolbar container instead of leaving it
-  // on the query assist textbox.
-  requestAnimationFrame(() => {
-    el.blur();
-    window.getSelection()?.removeAllRanges();
-
-    if (neutralTarget) {
-      const hadTabIndex = neutralTarget.hasAttribute('tabindex');
-      if (!hadTabIndex) {
-        neutralTarget.setAttribute('tabindex', '-1');
-      }
-      neutralTarget.focus({ preventScroll: true });
-      if (!hadTabIndex) {
-        neutralTarget.removeAttribute('tabindex');
-      }
-    }
-  });
 }
 
 /**
@@ -67,8 +42,22 @@ export function tryNativeBoardQuery(query: string): boolean {
 
   dispatchEnterSubmit(field);
 
-  queueMicrotask(() => {
-    dismissQueryAssist(field);
+  // Defer blur until after YouTrack handles Enter and any async suggestion
+  // popover (shown for free-text queries) has had a chance to render.
+  // Escape closes the Ring query assist suggestions popover; blur removes
+  // the caret from the contenteditable field.
+  requestAnimationFrame(() => {
+    field.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'Escape',
+        code: 'Escape',
+        keyCode: 27,
+        which: 27,
+        bubbles: true,
+        cancelable: true
+      })
+    );
+    field.blur();
   });
 
   return true;
