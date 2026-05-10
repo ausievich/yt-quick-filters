@@ -118,10 +118,10 @@ export const QuickFiltersApp: React.FC = () => {
     // If clicked on already active filter, deactivate it (toggle)
     if (utilsService.normalizeQuery(currentQuery) === utilsService.normalizeQuery(query)) {
       setOptimisticQuery('');
-      utilsService.setQuery('');
+      void utilsService.setQuery('');
     } else {
       setOptimisticQuery(query);
-      utilsService.setQuery(query);
+      void utilsService.setQuery(query);
     }
   }, [utilsService, currentQuery]);
 

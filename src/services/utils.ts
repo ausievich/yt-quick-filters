@@ -10,8 +10,8 @@ export class UtilsService {
     return UtilsService.instance;
   }
 
-  public setQuery(query: string): void {
-    if (location.pathname.includes('/agiles/') && tryNativeBoardQuery(query)) {
+  public async setQuery(query: string): Promise<void> {
+    if (location.pathname.includes('/agiles/') && await tryNativeBoardQuery(query)) {
       return;
     }
 

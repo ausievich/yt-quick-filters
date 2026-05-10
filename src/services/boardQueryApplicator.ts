@@ -7,6 +7,39 @@
 
 const QUERY_ASSIST_INPUT = 'search-query-panel [data-test="ring-query-assist-input"]';
 
+/**
+ * Replace the contenteditable's text directly. Ring's controller is expected
+ * to pick the new text up via the InputEvent dispatched right after, where
+ * `inputType: 'insertText'` and `data` route the listener into the
+ * "user typed something" branch rather than the unknown-change branch.
+ */
+function replaceContentEditableText(el: HTMLElement, text: string): void {
+  el.focus();
+  el.textContent = text;
+}
+
+/**
+ * Dispatch the input events Ring actually listens to. A bare Event('input')
+ * has no inputType/data, so most contenteditable controllers ignore it or
+ * trigger a full DOM re-read that overrides our text.
+ */
+function dispatchInputEvents(el: HTMLElement, text: string): void {
+  el.dispatchEvent(new InputEvent('beforeinput', {
+    bubbles: true,
+    cancelable: true,
+    data: text,
+    inputType: 'insertText'
+  }));
+
+  el.dispatchEvent(new InputEvent('input', {
+    bubbles: true,
+    data: text,
+    inputType: 'insertText'
+  }));
+
+  el.dispatchEvent(new Event('change', { bubbles: true }));
+}
+
 function dispatchEnterSubmit(el: HTMLElement): void {
   const init: KeyboardEventInit = {
     key: 'Enter',
@@ -21,10 +54,14 @@ function dispatchEnterSubmit(el: HTMLElement): void {
   el.dispatchEvent(new KeyboardEvent('keyup', init));
 }
 
+function waitForUiTick(): Promise<void> {
+  return new Promise((resolve) => requestAnimationFrame(() => resolve()));
+}
+
 /**
  * @returns true if the query assist field was found and a submit was dispatched
  */
-export function tryNativeBoardQuery(query: string): boolean {
+export async function tryNativeBoardQuery(query: string): Promise<boolean> {
   const field = document.querySelector<HTMLElement>(QUERY_ASSIST_INPUT);
   if (!field) {
     return false;
@@ -32,14 +69,11 @@ export function tryNativeBoardQuery(query: string): boolean {
 
   const trimmed = query.trim();
 
-  field.focus();
+  replaceContentEditableText(field, trimmed);
+  dispatchInputEvents(field, trimmed);
 
-  // Ring query assist: contenteditable role="textbox", not <input>
-  field.textContent = trimmed;
-
-  field.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
-  field.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }));
-
+  // Yield one frame so Ring can settle its internal state before we submit.
+  await waitForUiTick();
   dispatchEnterSubmit(field);
 
   // The suggestions popover stays open as long as the field has focus, so we
