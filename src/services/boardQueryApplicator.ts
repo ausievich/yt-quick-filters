@@ -1,17 +1,11 @@
 /**
- * Applies the agile board issues query by driving YouTrack's search UI,
- * so the SPA refetches data without a full document navigation.
- *
- * Target: Ring query assist textbox on agile boards (YouTrack 2024+).
+ * Applies a query by driving YouTrack's Ring search UI without a full page reload.
  */
 
 const QUERY_ASSIST_INPUT = 'search-query-panel [data-test="ring-query-assist-input"]';
 
 /**
- * Replace the contenteditable's text directly. Ring's controller is expected
- * to pick the new text up via the InputEvent dispatched right after, where
- * `inputType: 'insertText'` and `data` route the listener into the
- * "user typed something" branch rather than the unknown-change branch.
+ * Sets the contenteditable text. Ring picks it up via the InputEvent dispatched after.
  */
 function replaceContentEditableText(el: HTMLElement, text: string): void {
   el.focus();
@@ -19,9 +13,8 @@ function replaceContentEditableText(el: HTMLElement, text: string): void {
 }
 
 /**
- * Dispatch the input events Ring actually listens to. A bare Event('input')
- * has no inputType/data, so most contenteditable controllers ignore it or
- * trigger a full DOM re-read that overrides our text.
+ * Dispatches input events with `inputType: 'insertText'` — required for Ring
+ * to treat the change as user input rather than an external DOM mutation.
  */
 function dispatchInputEvents(el: HTMLElement, text: string): void {
   el.dispatchEvent(new InputEvent('beforeinput', {
@@ -72,13 +65,11 @@ export async function tryNativeBoardQuery(query: string): Promise<boolean> {
   replaceContentEditableText(field, trimmed);
   dispatchInputEvents(field, trimmed);
 
-  // Yield one frame so Ring can settle its internal state before we submit.
+  // Let Ring settle before submitting.
   await waitForUiTick();
   dispatchEnterSubmit(field);
 
-  // The suggestions popover stays open as long as the field has focus, so we
-  // blur after Enter is handled. A follow-up blur covers async re-focus from
-  // Ring's suggestion API, which can re-open the popover for free-text queries.
+  // Double-blur: Ring can async re-focus after Enter, which re-opens the popover.
   requestAnimationFrame(() => field.blur());
   setTimeout(() => field.blur(), 250);
 
