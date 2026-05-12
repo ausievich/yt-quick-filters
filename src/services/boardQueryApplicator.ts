@@ -52,6 +52,38 @@ function waitForUiTick(): Promise<void> {
 }
 
 /**
+ * Simulates an outside click — the standard Ring mechanism for closing popups.
+ */
+function dismissRingPopup(): void {
+  const evt = { bubbles: true, cancelable: true };
+  document.body.dispatchEvent(new MouseEvent('mousedown', evt));
+  document.body.dispatchEvent(new MouseEvent('mouseup', evt));
+  document.body.dispatchEvent(new MouseEvent('click', evt));
+}
+
+const POPUP_SELECTOR = '[data-test~="ring-query-assist-popup"][data-test-shown="true"]';
+
+/**
+ * Watches for up to `timeoutMs` and dismisses the popup if it (re-)appears,
+ * e.g. after Ring's async suggestion response arrives post-submit.
+ */
+function watchAndDismissPopup(timeoutMs = 600): void {
+  const deadline = Date.now() + timeoutMs;
+
+  const observer = new MutationObserver(() => {
+    if (document.querySelector(POPUP_SELECTOR)) {
+      dismissRingPopup();
+    }
+    if (Date.now() >= deadline) {
+      observer.disconnect();
+    }
+  });
+
+  observer.observe(document.body, { subtree: true, attributes: true, attributeFilter: ['data-test-shown'] });
+  setTimeout(() => observer.disconnect(), timeoutMs);
+}
+
+/**
  * @returns true if the query assist field was found and a submit was dispatched
  */
 export async function tryNativeBoardQuery(query: string): Promise<boolean> {
@@ -69,9 +101,11 @@ export async function tryNativeBoardQuery(query: string): Promise<boolean> {
   await waitForUiTick();
   dispatchEnterSubmit(field);
 
-  // Double-blur: Ring can async re-focus after Enter, which re-opens the popover.
-  requestAnimationFrame(() => field.blur());
-  setTimeout(() => field.blur(), 250);
+  field.blur();
+  dismissRingPopup();
+
+  // Ring's suggestion API is async — the popup can reappear after the response.
+  watchAndDismissPopup();
 
   return true;
 }
