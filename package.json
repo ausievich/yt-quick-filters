@@ -3,8 +3,8 @@
   "version": "2.2.2",
   "description": "Add quick filter buttons to YouTrack Agile Boards. Create filters via a modal.",
   "scripts": {
-    "build": "webpack --mode=production",
-    "dev": "webpack --mode=development --watch",
+    "build": "webpack",
+    "watch": "webpack --watch",
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {

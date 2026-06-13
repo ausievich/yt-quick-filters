@@ -50,8 +50,7 @@ export const QuickFiltersApp: React.FC = () => {
   const [portalTarget, setPortalTarget] = useState<Element | null>(null);
 
   // Use custom hook for working with query parameters
-  const { getParam, pathname } = useQueryParams();
-  const currentQuery = getParam('query') || '';
+  const { query: currentQuery, pathname } = useQueryParams();
 
   const loadFilters = useCallback(async () => {
     try {

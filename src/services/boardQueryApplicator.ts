@@ -2,39 +2,83 @@
  * Applies a query by driving YouTrack's Ring search UI without a full page reload.
  */
 
-const QUERY_ASSIST_INPUT = 'search-query-panel [data-test="ring-query-assist-input"]';
+const QUERY_ASSIST_SELECTORS = [
+  '[data-test="ring-query-assist-input"][contenteditable="true"]',
+  'search-query-panel [contenteditable="true"][role="textbox"]',
+  'rg-query-assist [contenteditable="true"][role="textbox"]'
+];
 
-/**
- * Sets the contenteditable text. Ring picks it up via the InputEvent dispatched after.
- */
-function replaceContentEditableText(el: HTMLElement, text: string): void {
-  el.focus();
-  el.textContent = text;
+export function getQueryAssistInputElement(): HTMLElement | null {
+  for (const selector of QUERY_ASSIST_SELECTORS) {
+    const input = document.querySelector<HTMLElement>(selector);
+    if (input) {
+      return input;
+    }
+  }
+
+  return null;
 }
 
-/**
- * Dispatches input events with `inputType: 'insertText'` — required for Ring
- * to treat the change as user input rather than an external DOM mutation.
- */
-function dispatchInputEvents(el: HTMLElement, text: string): void {
-  el.dispatchEvent(new InputEvent('beforeinput', {
+function normalizeUiQueryText(text: string): string {
+  return text.replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+export function getCurrentQuery(): string {
+  const input = getQueryAssistInputElement();
+
+  if (input) {
+    return normalizeUiQueryText(input.innerText || input.textContent || '');
+  }
+
+  return new URLSearchParams(location.search).get('query')?.trim() || '';
+}
+
+function replaceContentEditableText(element: HTMLElement, text: string): void {
+  const selection = window.getSelection();
+  const range = document.createRange();
+
+  element.focus();
+
+  if (typeof document.execCommand === 'function') {
+    try {
+      document.execCommand('selectAll', false);
+      document.execCommand('insertText', false, text);
+    } catch {
+      element.textContent = text;
+    }
+  } else {
+    element.textContent = text;
+  }
+
+  if (!selection) {
+    return;
+  }
+
+  range.selectNodeContents(element);
+  range.collapse(false);
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+
+function dispatchQueryInputEvents(element: HTMLElement, text: string): void {
+  element.dispatchEvent(new InputEvent('beforeinput', {
     bubbles: true,
     cancelable: true,
     data: text,
     inputType: 'insertText'
   }));
 
-  el.dispatchEvent(new InputEvent('input', {
+  element.dispatchEvent(new InputEvent('input', {
     bubbles: true,
     data: text,
     inputType: 'insertText'
   }));
 
-  el.dispatchEvent(new Event('change', { bubbles: true }));
+  element.dispatchEvent(new Event('change', { bubbles: true }));
 }
 
-function dispatchEnterSubmit(el: HTMLElement): void {
-  const init: KeyboardEventInit = {
+function dispatchEnterKey(element: HTMLElement): void {
+  const keyboardEventInit: KeyboardEventInit = {
     key: 'Enter',
     code: 'Enter',
     keyCode: 13,
@@ -42,9 +86,10 @@ function dispatchEnterSubmit(el: HTMLElement): void {
     bubbles: true,
     cancelable: true
   };
-  el.dispatchEvent(new KeyboardEvent('keydown', init));
-  el.dispatchEvent(new KeyboardEvent('keypress', init));
-  el.dispatchEvent(new KeyboardEvent('keyup', init));
+
+  element.dispatchEvent(new KeyboardEvent('keydown', keyboardEventInit));
+  element.dispatchEvent(new KeyboardEvent('keypress', keyboardEventInit));
+  element.dispatchEvent(new KeyboardEvent('keyup', keyboardEventInit));
 }
 
 function waitForUiTick(): Promise<void> {
@@ -52,60 +97,23 @@ function waitForUiTick(): Promise<void> {
 }
 
 /**
- * Simulates an outside click — the standard Ring mechanism for closing popups.
- */
-function dismissRingPopup(): void {
-  const evt = { bubbles: true, cancelable: true };
-  document.body.dispatchEvent(new MouseEvent('mousedown', evt));
-  document.body.dispatchEvent(new MouseEvent('mouseup', evt));
-  document.body.dispatchEvent(new MouseEvent('click', evt));
-}
-
-const POPUP_SELECTOR = '[data-test~="ring-query-assist-popup"][data-test-shown="true"]';
-
-/**
- * Watches for up to `timeoutMs` and dismisses the popup if it (re-)appears,
- * e.g. after Ring's async suggestion response arrives post-submit.
- */
-function watchAndDismissPopup(timeoutMs = 600): void {
-  const deadline = Date.now() + timeoutMs;
-
-  const observer = new MutationObserver(() => {
-    if (document.querySelector(POPUP_SELECTOR)) {
-      dismissRingPopup();
-    }
-    if (Date.now() >= deadline) {
-      observer.disconnect();
-    }
-  });
-
-  observer.observe(document.body, { subtree: true, attributes: true, attributeFilter: ['data-test-shown'] });
-  setTimeout(() => observer.disconnect(), timeoutMs);
-}
-
-/**
  * @returns true if the query assist field was found and a submit was dispatched
  */
 export async function tryNativeBoardQuery(query: string): Promise<boolean> {
-  const field = document.querySelector<HTMLElement>(QUERY_ASSIST_INPUT);
-  if (!field) {
+  const input = getQueryAssistInputElement();
+
+  if (!input) {
     return false;
   }
 
-  const trimmed = query.trim();
+  const normalizedQuery = query.trim();
 
-  replaceContentEditableText(field, trimmed);
-  dispatchInputEvents(field, trimmed);
+  input.focus();
+  replaceContentEditableText(input, normalizedQuery);
+  dispatchQueryInputEvents(input, normalizedQuery);
 
-  // Let Ring settle before submitting.
   await waitForUiTick();
-  dispatchEnterSubmit(field);
-
-  field.blur();
-  dismissRingPopup();
-
-  // Ring's suggestion API is async — the popup can reappear after the response.
-  watchAndDismissPopup();
+  dispatchEnterKey(input);
 
   return true;
 }

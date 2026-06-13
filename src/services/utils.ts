@@ -15,10 +15,6 @@ export class UtilsService {
       return;
     }
 
-    this.assignQueryToLocation(query);
-  }
-
-  private assignQueryToLocation(query: string): void {
     const url = new URL(location.href);
     if (query && query.trim()) {
       url.searchParams.set('query', query.trim());
