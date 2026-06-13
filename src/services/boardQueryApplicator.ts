@@ -114,6 +114,7 @@ export async function tryNativeBoardQuery(query: string): Promise<boolean> {
 
   await waitForUiTick();
   dispatchEnterKey(input);
+  input.blur();
 
   return true;
 }
