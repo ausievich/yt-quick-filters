@@ -1,3 +1,5 @@
+import { tryNativeBoardQuery } from './boardQueryApplicator';
+
 export class UtilsService {
   private static instance: UtilsService;
 
@@ -8,7 +10,11 @@ export class UtilsService {
     return UtilsService.instance;
   }
 
-  public setQuery(query: string): void {
+  public async setQuery(query: string): Promise<void> {
+    if (location.pathname.includes('/agiles/') && await tryNativeBoardQuery(query)) {
+      return;
+    }
+
     const url = new URL(location.href);
     if (query && query.trim()) {
       url.searchParams.set('query', query.trim());

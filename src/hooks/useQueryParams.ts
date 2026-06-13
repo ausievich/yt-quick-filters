@@ -1,52 +1,35 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
+import { getCurrentQuery } from '../services/boardQueryApplicator';
 
 /**
- * Custom hook for working with URL query parameters
- * Tracks URL changes and allows reading/updating query parameters
+ * Tracks the current board path and the visible query assist text.
  */
 export function useQueryParams() {
-  const [search, setSearch] = useState(() => window.location.search);
+  const [query, setQuery] = useState(() => getCurrentQuery());
   const [pathname, setPathname] = useState(() => window.location.pathname);
 
   useEffect(() => {
-    // Track URL changes through DOM mutations (YouTrack's method)
-    const observer = new MutationObserver(() => {
-      const currentSearch = window.location.search;
+    const updateState = () => {
+      const currentQuery = getCurrentQuery();
       const currentPathname = window.location.pathname;
-      
-      if (currentSearch !== search || currentPathname !== pathname) {
-        setSearch(currentSearch);
-        setPathname(currentPathname);
-      }
-    });
 
-    observer.observe(document.documentElement, {
-      childList: true,
-      subtree: true
-    });
-
-    // Also listen to standard navigation events
-    const handleLocationChange = () => {
-      setSearch(window.location.search);
-      setPathname(window.location.pathname);
+      setQuery((previousQuery) => previousQuery === currentQuery ? previousQuery : currentQuery);
+      setPathname((previousPathname) => previousPathname === currentPathname ? previousPathname : currentPathname);
     };
 
-    window.addEventListener('popstate', handleLocationChange);
+    const intervalId = window.setInterval(updateState, 300);
+
+    window.addEventListener('popstate', updateState);
+    updateState();
 
     return () => {
-      observer.disconnect();
-      window.removeEventListener('popstate', handleLocationChange);
+      window.clearInterval(intervalId);
+      window.removeEventListener('popstate', updateState);
     };
-  }, [search, pathname]);
+  }, []);
 
-  const params = useMemo(() => new URLSearchParams(search), [search]);
-
-  const getParam = (key: string) => params.get(key);
-
-  return { 
-    getParam, 
-    params,
-    search,
+  return {
+    query,
     pathname
   };
 }

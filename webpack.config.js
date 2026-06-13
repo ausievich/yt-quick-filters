@@ -33,7 +33,8 @@ module.exports = {
     }),
   ],
   optimization: {
-    splitChunks: false, // Disable code splitting for content scripts
+    splitChunks: false,
   },
   mode: 'production',
+  devtool: false,
 };
