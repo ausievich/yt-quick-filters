@@ -17,20 +17,14 @@ export function useQueryParams() {
       setPathname((previousPathname) => previousPathname === currentPathname ? previousPathname : currentPathname);
     };
 
-    const handleLocationChange = () => {
-      updateState();
-    };
+    const intervalId = window.setInterval(updateState, 300);
 
-    const intervalId = window.setInterval(() => {
-      updateState();
-    }, 300);
-
-    window.addEventListener('popstate', handleLocationChange);
+    window.addEventListener('popstate', updateState);
     updateState();
 
     return () => {
       window.clearInterval(intervalId);
-      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('popstate', updateState);
     };
   }, []);
 

@@ -7,6 +7,7 @@ const DEFAULT_FILTERS: Filter[] = [
 
 export const DEFAULT_THRESHOLD_YELLOW = 14;
 export const DEFAULT_THRESHOLD_RED = 60;
+export const DEFAULT_COMPACT_FORMAT = true;
 
 export class StorageService {
   private static instance: StorageService;
@@ -162,7 +163,7 @@ export class StorageService {
   }
 
   public async getDaysInStatusCompactFormat(): Promise<boolean> {
-    return this.getStorageValue('ytqf_compactFormat', false);
+    return this.getStorageValue('ytqf_compactFormat', DEFAULT_COMPACT_FORMAT);
   }
 
   public async setDaysInStatusCompactFormat(enabled: boolean): Promise<void> {
@@ -192,7 +193,7 @@ export class StorageService {
             hideCreated: data.ytqf_hideCreatedTag ?? false,
             thresholdYellow: data.ytqf_thresholdYellow ?? DEFAULT_THRESHOLD_YELLOW,
             thresholdRed: data.ytqf_thresholdRed ?? DEFAULT_THRESHOLD_RED,
-            compactFormat: data.ytqf_compactFormat ?? false,
+            compactFormat: data.ytqf_compactFormat ?? DEFAULT_COMPACT_FORMAT,
             createdTagColored: data.ytqf_createdTagColored ?? false
           });
         }
