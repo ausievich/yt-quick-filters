@@ -78,11 +78,19 @@ function dispatchQueryInputEvents(element: HTMLElement, text: string): void {
 }
 
 function dispatchEnterKey(element: HTMLElement): void {
+  dispatchKey(element, 'Enter', 'Enter', 13);
+}
+
+function dispatchEscapeKey(element: HTMLElement): void {
+  dispatchKey(element, 'Escape', 'Escape', 27);
+}
+
+function dispatchKey(element: HTMLElement, key: string, code: string, keyCode: number): void {
   const keyboardEventInit: KeyboardEventInit = {
-    key: 'Enter',
-    code: 'Enter',
-    keyCode: 13,
-    which: 13,
+    key,
+    code,
+    keyCode,
+    which: keyCode,
     bubbles: true,
     cancelable: true
   };
@@ -90,6 +98,53 @@ function dispatchEnterKey(element: HTMLElement): void {
   element.dispatchEvent(new KeyboardEvent('keydown', keyboardEventInit));
   element.dispatchEvent(new KeyboardEvent('keypress', keyboardEventInit));
   element.dispatchEvent(new KeyboardEvent('keyup', keyboardEventInit));
+}
+
+const QUERY_ASSIST_POPUP_SELECTORS = [
+  '[data-test="ring-popup ring-query-assist-popup"]',
+  '[data-test~="ring-query-assist-popup"]',
+  '.yt-search-panel__popup'
+];
+
+function getQueryAssistPopupElement(): HTMLElement | null {
+  for (const selector of QUERY_ASSIST_POPUP_SELECTORS) {
+    const popup = document.querySelector<HTMLElement>(selector);
+    if (popup) {
+      return popup;
+    }
+  }
+
+  return null;
+}
+
+function isQueryAssistPopupVisible(): boolean {
+  const popup = getQueryAssistPopupElement();
+  if (!popup) {
+    return false;
+  }
+
+  const shownAttr = popup.getAttribute('data-test-shown');
+  if (shownAttr === 'false') {
+    return false;
+  }
+
+  if (shownAttr === 'true') {
+    return popup.getBoundingClientRect().width > 0;
+  }
+
+  if (popup.className.includes('hidden')) {
+    return false;
+  }
+
+  return getComputedStyle(popup).display !== 'none' && popup.getBoundingClientRect().width > 0;
+}
+
+function dismissQueryAssistSuggestor(input: HTMLElement): void {
+  dispatchEscapeKey(input);
+
+  if (isQueryAssistPopupVisible()) {
+    dispatchEscapeKey(input);
+  }
 }
 
 function waitForUiTick(): Promise<void> {
@@ -115,6 +170,9 @@ export async function tryNativeBoardQuery(query: string): Promise<boolean> {
   await waitForUiTick();
   dispatchEnterKey(input);
   input.blur();
+
+  await waitForUiTick();
+  dismissQueryAssistSuggestor(input);
 
   return true;
 }

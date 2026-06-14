@@ -1,0 +1,107 @@
+---
+name: test-yt-quick-filters
+description: >-
+  Build and E2E-test the YouTrack Quick Filters Chrome extension in Playwright MCP
+  by injecting dist/content.js on a live YouTrack agile board. Use when the user
+  asks to test the extension, verify a bug fix, validate quick filter apply flow,
+  or check query-assist suggestor behavior after changes to boardQueryApplicator.
+---
+
+# Test YT Quick Filters Extension
+
+## What this skill does
+
+Runs end-to-end checks **without** the user's Chrome or `chrome://extensions`.
+
+Use **Playwright MCP** (`user-playwright`) to:
+1. Build the extension
+2. Open a public YouTrack agile board
+3. Inject `dist/content.js` + CSS with a `chrome.storage` mock
+4. Exercise quick filters and report pass/fail
+
+## Hard limits
+
+- Cannot use `chrome://extensions` in the user's desktop Chrome.
+- Cannot load MV3 via `--load-extension` in MCP (sandbox blocks `require` / dynamic `import`).
+- Injected test ≈ content script behavior, not full extension install.
+
+## Default test board
+
+```
+https://youtrack.jetbrains.com/agiles/153-6143/current
+```
+
+## Workflow
+
+```
+E2E Progress:
+- [ ] npm run build
+- [ ] browser_close (reset polluted MCP context)
+- [ ] Navigate to agile board, wait for load
+- [ ] Inject chrome mock + content assets (NO addInitScript)
+- [ ] Verify #ytqf-bar mounted
+- [ ] Run query/suggestor scenarios
+- [ ] Report results
+```
+
+### Inject rules
+
+- Mock `window.chrome` with **`page.evaluate()` once** — never `addInitScript`
+- Load assets with `page.addStyleTag({ path })` and `page.addScriptTag({ path })`
+- Wait ~3s after injection
+
+Template: [reference.md](reference.md)
+
+### Default regression — suggestor closes after quick filter apply
+
+1. Add temp filters via modal if needed (`state: {In progress}`, `#Unresolved`, etc.)
+2. Click each quick filter button in `#ytqf-bar`
+3. After each click, assert suggestor is closed:
+
+```js
+() => {
+  const popup = document.querySelector('[data-test="ring-popup ring-query-assist-popup"]');
+  if (!popup) return { popupFound: false, popupOpen: false };
+  return {
+    popupFound: true,
+    popupOpen: popup.getAttribute('data-test-shown') === 'true',
+    dataTestShown: popup.getAttribute('data-test-shown'),
+  };
+}
+```
+
+**Must-pass query types:**
+- `Assignee: me`
+- `state: {In progress}` (braces — original bug)
+- `Assignee: me State: Open`
+- `#Unresolved`
+
+Also verify toggle off (second click clears query) and rapid switching between filters.
+
+### Other scenarios
+
+- Quick filter modal create/edit
+- Context menu duplicate/delete
+- Query applied without full page reload (`?query=` in URL or input text matches)
+
+## Key DOM selectors (YouTrack)
+
+| Element | Selector |
+|---------|----------|
+| Query input | `[data-test="ring-query-assist-input"]` |
+| Query assist root | `[data-test="queryAssist"]` |
+| **Suggestor popup** | `[data-test="ring-popup ring-query-assist-popup"]` (primary) |
+| Popup fallbacks | `[data-test~="ring-query-assist-popup"]`, `.yt-search-panel__popup` |
+| Popup visible flag | `data-test-shown="true"` |
+| Extension bar | `#ytqf-bar`, `#ytqf-modal` |
+
+YouTrack uses `data-test`, not `data-testid`.
+
+## Troubleshooting
+
+| Symptom | Fix |
+|---------|-----|
+| Redirect to `/issues` | `browser_close`, re-navigate; never stale `addInitScript` |
+| Suggestor still open | Check `boardQueryApplicator.dismissQueryAssistSuggestor` |
+| Search input timeout | Wait longer after board navigation |
+| `require is not defined` | Use inject method, not `--load-extension` |
