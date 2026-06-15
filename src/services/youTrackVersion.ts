@@ -79,4 +79,50 @@ export class YouTrackVersionService {
            document.querySelector('.yt-agile-board__toolbar');
   }
 
+  /**
+   * Mount point for "Save filter" inside the board search input.
+   */
+  public getSearchSaveButtonTarget(): Element | null {
+    const anchor = this.findQueryAssistAnchor();
+    if (!anchor) {
+      return null;
+    }
+
+    return this.ensureSearchSaveContainer(anchor);
+  }
+
+  private findQueryAssistAnchor(): Element | null {
+    const queryAssist = document.querySelector('[data-test="queryAssist"]');
+    if (queryAssist) {
+      return queryAssist.querySelector('[data-test="ring-query-assist"]') ?? queryAssist;
+    }
+
+    const toolbar = this.findToolbar();
+    if (!toolbar) {
+      return null;
+    }
+
+    const toolbarQueryAssist = toolbar.querySelector('[data-test="queryAssist"], rg-query-assist');
+    if (toolbarQueryAssist) {
+      return toolbarQueryAssist.querySelector('[data-test="ring-query-assist"]') ?? toolbarQueryAssist;
+    }
+
+    return null;
+  }
+
+  private ensureSearchSaveContainer(anchor: Element): Element {
+    let container = document.getElementById('ytqf-search-save-container');
+
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'ytqf-search-save-container';
+    }
+
+    if (container.parentElement !== anchor) {
+      anchor.appendChild(container);
+    }
+
+    return container;
+  }
+
 }

@@ -1,0 +1,43 @@
+#ytqf-search-save-container {
+  position: absolute;
+  top: 0;
+  right: 1px;
+  bottom: 0;
+  display: flex;
+  align-items: stretch;
+  z-index: 2;
+  pointer-events: none;
+}
+
+#ytqf-search-save-container .ytqf-save-from-search {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  height: 100%;
+  margin: 0;
+  padding: 0 12px;
+  border: none;
+  border-left: 1px solid #d0d6e0;
+  border-radius: 0 3px 3px 0;
+  cursor: pointer;
+  background: #f0f4f8;
+  font: 500 12px system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  color: #1F2326;
+  line-height: 22px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+#ytqf-search-save-container .ytqf-save-from-search:hover {
+  border-left-color: rgb(128, 198, 255);
+  background: #EBF6FF;
+}
+
+#ytqf-search-save-container .ytqf-save-from-search:focus {
+  outline: none;
+  border-left-color: rgb(128, 198, 255);
+  background: #EBF6FF;
+}

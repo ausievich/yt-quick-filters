@@ -139,12 +139,26 @@ function isQueryAssistPopupVisible(): boolean {
   return getComputedStyle(popup).display !== 'none' && popup.getBoundingClientRect().width > 0;
 }
 
-function dismissQueryAssistSuggestor(input: HTMLElement): void {
-  dispatchEscapeKey(input);
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => window.setTimeout(resolve, ms));
+}
+
+async function dismissQueryAssistSuggestor(input: HTMLElement): Promise<void> {
+  const deadline = Date.now() + 700;
+
+  while (Date.now() < deadline) {
+    if (isQueryAssistPopupVisible()) {
+      dispatchEscapeKey(input);
+    }
+
+    await sleep(50);
+  }
 
   if (isQueryAssistPopupVisible()) {
     dispatchEscapeKey(input);
   }
+
+  input.blur();
 }
 
 function waitForUiTick(): Promise<void> {
@@ -169,10 +183,8 @@ export async function tryNativeBoardQuery(query: string): Promise<boolean> {
 
   await waitForUiTick();
   dispatchEnterKey(input);
-  input.blur();
 
-  await waitForUiTick();
-  dismissQueryAssistSuggestor(input);
+  await dismissQueryAssistSuggestor(input);
 
   return true;
 }
