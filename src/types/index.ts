@@ -35,6 +35,11 @@ export interface ModalProps {
   onSave: (name: string, query: string, index?: number) => void;
 }
 
+export interface SaveFilterButtonProps {
+  visible: boolean;
+  onSave: () => void;
+}
+
 export interface FilterBarProps {
   filters: Filter[];
   activeFilter: Filter | null;
