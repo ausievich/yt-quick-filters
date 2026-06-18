@@ -21,6 +21,8 @@ build/
 .cursor/*
 !.cursor/skills/
 !.cursor/skills/**
+!.cursor/agents/
+!.cursor/agents/**
 *.swp
 *.swo
 *~
