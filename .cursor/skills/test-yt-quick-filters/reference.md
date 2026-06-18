@@ -1,10 +1,10 @@
-# Playwright MCP templates
+# Playwright MCP reference
 
-Replace `EXT_ROOT` with repo root using forward slashes.
+## Extension inject
 
-## Inject + suggestor regression
+Read the block below, replace `EXT_ROOT` with the repo root (absolute path, forward slashes), pass as `code` to `browser_run_code_unsafe`. Do not use `addInitScript`.
 
-Use with `browser_run_code_unsafe` on MCP server `user-playwright`.
+Requires `npm run build` first.
 
 ```javascript
 async (page) => {
@@ -33,41 +33,24 @@ async (page) => {
   await page.addScriptTag({ path: `${extRoot}/dist/content.js` });
   await page.waitForTimeout(3500);
 
-  const popupState = () => page.evaluate(() => {
-    const popup = document.querySelector('[data-test="ring-popup ring-query-assist-popup"]');
-    if (!popup) return { found: false, open: false };
-    return {
-      found: true,
-      open: popup.getAttribute('data-test-shown') === 'true',
-      shown: popup.getAttribute('data-test-shown'),
-    };
-  });
-
-  const addFilter = async (label, query) => {
-    await page.locator('#ytqf-bar button.btn', { hasText: 'Add filter...' }).click();
-    await page.waitForTimeout(300);
-    await page.locator('#ytqf-name').fill(label);
-    await page.locator('#ytqf-query').fill(query);
-    await page.locator('#ytqf-save').click();
-    await page.waitForTimeout(700);
-  };
-
-  await addFilter('QA braces', 'state: {In progress}');
-
-  await page.locator('#ytqf-bar button.btn', { hasText: 'My Tasks' }).click();
-  await page.waitForTimeout(1000);
-  await page.locator('#ytqf-bar button.btn', { hasText: 'QA braces' }).click();
-  await page.waitForTimeout(1300);
-
-  return {
-    hasFilterBar: await page.locator('#ytqf-bar').count() > 0,
-    url: page.url(),
-    popup: await popupState(),
-  };
+  const hasFilterBar = (await page.locator('#ytqf-bar').count()) > 0;
+  return { injected: true, hasFilterBar, url: page.url() };
 }
 ```
 
-## Suggestor probe
+## Default regression (suggestor closes)
+
+Run **after** inject. Use `browser_run_code_unsafe` with `filename` (absolute path, forward slashes):
+
+```
+<workspace>/.cursor/skills/test-yt-quick-filters/scripts/regression-suggestor.js
+```
+
+Expect `passed: true`.
+
+## Probes (`browser_evaluate`)
+
+**Suggestor state:**
 
 ```javascript
 () => {
@@ -81,7 +64,7 @@ async (page) => {
 }
 ```
 
-## Board readiness probe
+**Board readiness:**
 
 ```javascript
 () => ({

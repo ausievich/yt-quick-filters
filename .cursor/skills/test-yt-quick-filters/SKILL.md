@@ -37,21 +37,23 @@ E2E Progress:
 - [ ] npm run build
 - [ ] browser_close (reset polluted MCP context)
 - [ ] Navigate to agile board, wait for load
-- [ ] Inject chrome mock + content assets (NO addInitScript)
-- [ ] Verify #ytqf-bar mounted
-- [ ] Run query/suggestor scenarios
+- [ ] Inject extension (see reference.md — replace EXT_ROOT, pass as `code`)
+- [ ] Confirm `hasFilterBar: true`
+- [ ] `browser_run_code_unsafe` → `scripts/regression-suggestor.js` (absolute `filename`)
+- [ ] Confirm `passed: true`
 - [ ] Report results
 ```
 
 ### Inject rules
 
-- Mock `window.chrome` with **`page.evaluate()` once** — never `addInitScript`
-- Load assets with `page.addStyleTag({ path })` and `page.addScriptTag({ path })`
-- Wait ~3s after injection
-
-Template: [reference.md](reference.md)
+- Read inject block from [reference.md](reference.md), substitute `EXT_ROOT` with repo root (absolute, forward slashes).
+- Pass result to `browser_run_code_unsafe` as **`code`** — never `addInitScript`, never relative `dist/` paths.
 
 ### Default regression — suggestor closes after quick filter apply
+
+Quick run: `browser_run_code_unsafe` with absolute `filename` → `scripts/regression-suggestor.js`. Expect `passed: true`.
+
+Manual / extended checks:
 
 1. Add temp filters via modal if needed (`state: {In progress}`, `#Unresolved`, etc.)
 2. Click each quick filter button in `#ytqf-bar`
@@ -104,3 +106,4 @@ YouTrack uses `data-test`, not `data-testid`.
 | Suggestor still open | Check `boardQueryApplicator.dismissQueryAssistSuggestor` |
 | Search input timeout | Wait longer after board navigation |
 | `require is not defined` | Use inject method, not `--load-extension` |
+| `ENOENT` on `dist/` | `EXT_ROOT` must be absolute repo path, not relative |
