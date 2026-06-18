@@ -5,6 +5,18 @@
  * (absolute path, forward slashes)
  */
 async (page) => {
+  const clearActiveFilter = async () => {
+    const hadActive = await page.evaluate(() => {
+      const active = document.querySelector('#ytqf-bar button.btn.active');
+      if (active) {
+        active.click();
+        return true;
+      }
+      return false;
+    });
+    if (hadActive) await page.waitForTimeout(1200);
+  };
+
   const popupState = () =>
     page.evaluate(() => {
       const popup = document.querySelector('[data-test="ring-popup ring-query-assist-popup"]');
@@ -25,6 +37,7 @@ async (page) => {
     await page.waitForTimeout(700);
   };
 
+  await clearActiveFilter();
   await addFilter('QA braces', 'state: {In progress}');
 
   await page.locator('#ytqf-bar button.btn', { hasText: 'My Tasks' }).click();

@@ -39,8 +39,12 @@ E2E Progress:
 - [ ] Navigate to agile board, wait for load
 - [ ] Inject extension (see reference.md — replace EXT_ROOT, pass as `code`)
 - [ ] Confirm `hasFilterBar: true`
-- [ ] `browser_run_code_unsafe` → `scripts/regression-suggestor.js` (absolute `filename`)
-- [ ] Confirm `passed: true`
+- [ ] `browser_run_code_unsafe` → critical scenarios (absolute `filename`, all `passed: true`):
+  - `scripts/regression-suggestor.js`
+  - `scripts/regression-toggle-off.js`
+  - `scripts/regression-query-types.js`
+  - `scripts/regression-days-in-status.js`
+  - `scripts/regression-delete-filter.js`
 - [ ] Report results
 ```
 
@@ -49,9 +53,21 @@ E2E Progress:
 - Read inject block from [reference.md](reference.md), substitute `EXT_ROOT` with repo root (absolute, forward slashes).
 - Pass result to `browser_run_code_unsafe` as **`code`** — never `addInitScript`, never relative `dist/` paths.
 
+### Regression scenarios
+
+Run **after** inject via `browser_run_code_unsafe` with absolute `filename`. Each script returns `passed: true` on success.
+
+| Script | What it checks |
+|--------|----------------|
+| `regression-suggestor.js` | Suggestor closes after applying `state: {In progress}` |
+| `regression-toggle-off.js` | Second click on active filter clears query |
+| `regression-query-types.js` | Must-pass queries apply with suggestor closed |
+| `regression-days-in-status.js` | Days In Status toggles on, tags appear on cards |
+| `regression-delete-filter.js` | Delete filter via context menu |
+
 ### Default regression — suggestor closes after quick filter apply
 
-Quick run: `browser_run_code_unsafe` with absolute `filename` → `scripts/regression-suggestor.js`. Expect `passed: true`.
+Quick run: `regression-suggestor.js`. Expect `passed: true`.
 
 Manual / extended checks:
 
@@ -84,6 +100,7 @@ Also verify toggle off (second click clears query) and rapid switching between f
 - Quick filter modal create/edit
 - Context menu duplicate/delete
 - Query applied without full page reload (`?query=` in URL or input text matches)
+- Days In Status tags on cards (see `regression-days-in-status.js`)
 
 ## Key DOM selectors (YouTrack)
 
