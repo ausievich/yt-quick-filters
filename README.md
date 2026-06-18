@@ -62,6 +62,25 @@ npm run build
 2. Enable **Developer mode**
 3. Click **Load unpacked** and select this repo folder
 
+### Cursor AI (optional)
+
+This repo includes Cursor agent tooling for contributors:
+
+| Component | Path | Purpose |
+|-----------|------|---------|
+| **yt-qa-engineer** subagent | `.cursor/agents/yt-qa-engineer.md` | Dedicated QA agent that runs E2E checks in an isolated context |
+| **test-yt-quick-filters** skill | `.cursor/skills/test-yt-quick-filters/` | Build, inject, and regression-test the extension via Playwright MCP |
+
+After code changes, ask the main agent to delegate verification:
+
+```
+Use the yt-qa-engineer subagent to verify the recent changes
+```
+
+The subagent follows the `test-yt-quick-filters` skill (full regression suite: suggestor, toggle-off, query types, days-in-status, delete filter). Requires [Playwright MCP](https://cursor.com/docs/context/mcp) configured in Cursor.
+
+QA runs on demand — not automatically after every edit.
+
 ---
 
 ## Motivation
