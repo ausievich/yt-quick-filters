@@ -7,7 +7,7 @@ Display Created and Updated tags on cards.
 
 [Install from Chrome Web Store](https://chromewebstore.google.com/detail/iaddgmcajdiblafjfhloadmphkbplddo)
 
-Try it out on one of the [public boards](https://youtrack.jetbrains.com/agiles/153-6143/current).
+Try it out on one of the [public boards](https://youtrack.jetbrains.com/agiles/153-6143/current)
 
 ---
 
