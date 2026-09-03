@@ -1,11 +1,13 @@
 # YouTrack Quick Filters
 
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/iaddgmcajdiblafjfhloadmphkbplddo.svg)](https://chromewebstore.google.com/detail/iaddgmcajdiblafjfhloadmphkbplddo)
+[![Firefox Add-on](https://img.shields.io/amo/v/youtrack-quick-filters.svg)](https://addons.mozilla.org/firefox/addon/youtrack-quick-filters/)
 
 Add quick filter buttons to YouTrack Agile Boards. Create filters via a modal.  
 Display Created and Updated tags on cards.
 
-[Install from Chrome Web Store](https://chromewebstore.google.com/detail/iaddgmcajdiblafjfhloadmphkbplddo)
+[Install from Chrome Web Store](https://chromewebstore.google.com/detail/iaddgmcajdiblafjfhloadmphkbplddo)  
+[Install from Firefox Add-ons](https://addons.mozilla.org/firefox/addon/youtrack-quick-filters/)
 
 Try it out on one of the [public boards](https://youtrack.jetbrains.com/agiles/153-6143/current)
 
