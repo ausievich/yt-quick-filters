@@ -13,7 +13,11 @@
       }
     }
   },
-  "permissions": ["storage"],
+  "permissions": [
+    "storage",
+    "webNavigation",
+    "scripting"
+  ],
   "action": {
     "default_popup": "public/popup.html",
     "default_icon": {
@@ -31,5 +35,15 @@
       "js": ["dist/content.js"],
       "run_at": "document_idle"
     }
-  ]
+  ],
+  "host_permissions": [
+    "https://*/*"
+  ],
+  "background": {
+    "service_worker": "dist/background.js",
+    "scripts": [
+      "dist/background.js"
+    ]
+  },
+  "minimum_chrome_version": "121"
 }

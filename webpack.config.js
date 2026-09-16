@@ -3,6 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   entry: {
+    background: './src/background.ts',
     content: './src/content.tsx',
     popup: './src/components/Popup.tsx',
   },
