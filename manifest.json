@@ -37,7 +37,9 @@
     }
   ],
   "host_permissions": [
-    "https://*/*"
+    "https://*/youtrack/*",
+    "https://*/agiles/*",
+    "https://*.youtrack.cloud/*"
   ],
   "background": {
     "service_worker": "dist/background.js",
