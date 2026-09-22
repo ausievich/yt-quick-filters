@@ -140,7 +140,6 @@ export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataL
     // For compact format, use actual time for minutes/hours, calendar days for days+
     const minutes = Math.floor(diffMs / (1000 * 60));
     const hours = Math.floor(diffMs / (1000 * 60 * 60));
-    const actualDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
     // Minutes: less than 1 hour
     if (minutes < 60) {

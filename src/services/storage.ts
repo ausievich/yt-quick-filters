@@ -18,7 +18,7 @@ export class StorageService {
   }
 
   private getBoardId(): string {
-    const match = location.pathname.match(/\/agiles\/([^\/]+)/);
+    const match = location.pathname.match(/\/agiles\/([^/]+)/);
     return match ? match[1] : 'default';
   }
 

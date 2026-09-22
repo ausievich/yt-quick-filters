@@ -1,4 +1,4 @@
-import { DaysInStatusInfo, IssueInfo } from '../types';
+import { DaysInStatusInfo } from '../types';
 import { YouTrackAPIClient } from './youTrackAPIClient';
 
 export class DaysInStatusAPI {
