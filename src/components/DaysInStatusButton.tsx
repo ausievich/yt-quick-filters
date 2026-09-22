@@ -7,7 +7,6 @@ import './DaysInStatusButton.css';
 
 export const DaysInStatusButton: React.FC = () => {
   const [showDaysInStatus, setShowDaysInStatus] = useState<boolean>(false);
-  const [hasToken, setHasToken] = useState(false);
 
   const storageService = StorageService.getInstance();
   const daysInStatusUI = DaysInStatusUI.getInstance();
@@ -21,11 +20,9 @@ export const DaysInStatusButton: React.FC = () => {
         await apiClient.initialize();
 
         // Check if token is valid (checks if token exists and is in sync)
-        const hasValidToken = await tokenManager.hasValidToken();
-        setHasToken(hasValidToken);
+        await tokenManager.hasValidToken();
       } catch (error) {
         console.warn('Failed to check localStorage token:', error);
-        setHasToken(false);
       }
     };
 
@@ -53,11 +50,9 @@ export const DaysInStatusButton: React.FC = () => {
     if (newState) {
       try {
         // hasValidToken() will automatically refresh token if it's expiring soon
-        const hasValidToken = await tokenManager.hasValidToken();
-        setHasToken(hasValidToken);
+        await tokenManager.hasValidToken();
       } catch (error) {
         console.warn('⚠️ Error checking token:', error);
-        setHasToken(false);
         // Continue anyway - the API client will handle retries
       }
     }
