@@ -5,7 +5,11 @@
   "scripts": {
     "build": "webpack",
     "watch": "webpack --watch",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" webpack.config.js",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
