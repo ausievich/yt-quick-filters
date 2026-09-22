@@ -9,7 +9,7 @@ export const FilterModal: React.FC<ModalProps> = ({
   initialQuery = '',
   index,
   onClose,
-  onSave
+  onSave,
 }) => {
   const [name, setName] = useState(initialName);
   const [query, setQuery] = useState(initialQuery);
@@ -67,10 +67,8 @@ export const FilterModal: React.FC<ModalProps> = ({
       <div id="ytqf-modal-backdrop" onClick={onClose} />
       <div id="ytqf-modal">
         <div className="card">
-          <div className="hdr">
-            {isEdit ? 'Edit quick filter' : 'Create quick filter'}
-          </div>
-          
+          <div className="hdr">{isEdit ? 'Edit quick filter' : 'Create quick filter'}</div>
+
           <div className="body">
             <label>Name</label>
             <input
@@ -83,7 +81,7 @@ export const FilterModal: React.FC<ModalProps> = ({
               onKeyDown={handleInputKeyDown}
               className={name.trim() === '' ? 'error' : ''}
             />
-            
+
             <label>Query</label>
             <input
               id="ytqf-query"
@@ -95,17 +93,12 @@ export const FilterModal: React.FC<ModalProps> = ({
               className={query.trim() === '' ? 'error' : ''}
             />
           </div>
-          
+
           <div className="f">
             <button id="ytqf-cancel" onClick={onClose}>
               Cancel
             </button>
-            <button 
-              className="primary" 
-              id="ytqf-save" 
-              onClick={handleSave}
-              disabled={!isValid}
-            >
+            <button className="primary" id="ytqf-save" onClick={handleSave} disabled={!isValid}>
               {isEdit ? 'Save' : 'Create'}
             </button>
           </div>

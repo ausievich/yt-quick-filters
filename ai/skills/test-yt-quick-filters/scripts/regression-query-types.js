@@ -64,12 +64,13 @@ async (page) => {
     const url = page.url();
     const inputText = await page.evaluate(() => {
       const input = document.querySelector('[data-test="ring-query-assist-input"]');
-      return input ? (input.innerText || input.textContent || '').replace(/\u00a0/g, ' ').trim() : '';
+      return input
+        ? (input.innerText || input.textContent || '').replace(/\u00a0/g, ' ').trim()
+        : '';
     });
 
     const queryApplied =
-      url.includes('query=') ||
-      inputText.toLowerCase().includes(query.toLowerCase().split(' ')[0]);
+      url.includes('query=') || inputText.toLowerCase().includes(query.toLowerCase().split(' ')[0]);
 
     results.push({
       label,

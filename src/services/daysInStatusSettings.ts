@@ -1,12 +1,17 @@
 import { DaysInStatusSettings } from '../types';
-import { StorageService, DEFAULT_THRESHOLD_RED, DEFAULT_THRESHOLD_YELLOW, DEFAULT_COMPACT_FORMAT } from './storage';
+import {
+  StorageService,
+  DEFAULT_THRESHOLD_RED,
+  DEFAULT_THRESHOLD_YELLOW,
+  DEFAULT_COMPACT_FORMAT,
+} from './storage';
 
 const DEFAULT_DAYS_IN_STATUS_SETTINGS: DaysInStatusSettings = {
   hideCreated: false,
   thresholdYellow: DEFAULT_THRESHOLD_YELLOW,
   thresholdRed: DEFAULT_THRESHOLD_RED,
   compactFormat: DEFAULT_COMPACT_FORMAT,
-  createdTagColored: false
+  createdTagColored: false,
 };
 
 type SettingsListener = (settings: DaysInStatusSettings) => void;
@@ -64,12 +69,12 @@ export class DaysInStatusSettingsService {
 
   public update(partial: Partial<DaysInStatusSettings>): void {
     const safePartial = Object.fromEntries(
-      Object.entries(partial).filter(([, value]) => value !== undefined)
+      Object.entries(partial).filter(([, value]) => value !== undefined),
     ) as Partial<DaysInStatusSettings>;
 
     this.settings = {
       ...this.settings,
-      ...safePartial
+      ...safePartial,
     };
     this.initialized = true;
     this.emit();

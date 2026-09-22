@@ -1,9 +1,7 @@
 import { Filter, StorageData, BoardInfo, DaysInStatusSettings } from '../types';
 
 const KEY_PREFIX = 'ytQuickFilters_';
-const DEFAULT_FILTERS: Filter[] = [
-  { label: 'My Tasks', query: 'Assignee: me' }
-];
+const DEFAULT_FILTERS: Filter[] = [{ label: 'My Tasks', query: 'Assignee: me' }];
 
 export const DEFAULT_THRESHOLD_YELLOW = 14;
 export const DEFAULT_THRESHOLD_RED = 60;
@@ -20,7 +18,7 @@ export class StorageService {
   }
 
   private getBoardId(): string {
-    const match = location.pathname.match(/\/agiles\/([^\/]+)/);
+    const match = location.pathname.match(/\/agiles\/([^/]+)/);
     return match ? match[1] : 'default';
   }
 
@@ -28,7 +26,7 @@ export class StorageService {
     const id = this.getBoardId();
     return {
       id,
-      storageKey: KEY_PREFIX + id
+      storageKey: KEY_PREFIX + id,
     };
   }
 
@@ -40,7 +38,6 @@ export class StorageService {
       });
     });
   }
-
 
   public async saveFilters(filters: Filter[]): Promise<void> {
     const { storageKey } = this.getBoardInfo();
@@ -96,7 +93,7 @@ export class StorageService {
       const uniqueLabel = this.generateUniqueLabel(originalFilter.label, filters);
       const newFilter: Filter = {
         label: uniqueLabel,
-        query: originalFilter.query
+        query: originalFilter.query,
       };
       filters.splice(index + 1, 0, newFilter);
       await this.saveFilters(filters);
@@ -106,8 +103,8 @@ export class StorageService {
   private generateUniqueLabel(base: string, filters: Filter[]): string {
     let name = base + ' (copy)';
     let n = 2;
-    const labels = new Set(filters.map(f => f.label));
-    
+    const labels = new Set(filters.map((f) => f.label));
+
     while (labels.has(name)) {
       name = base + ' (copy ' + n + ')';
       n++;
@@ -186,7 +183,7 @@ export class StorageService {
           'ytqf_thresholdYellow',
           'ytqf_thresholdRed',
           'ytqf_compactFormat',
-          'ytqf_createdTagColored'
+          'ytqf_createdTagColored',
         ],
         (data) => {
           resolve({
@@ -194,9 +191,9 @@ export class StorageService {
             thresholdYellow: data.ytqf_thresholdYellow ?? DEFAULT_THRESHOLD_YELLOW,
             thresholdRed: data.ytqf_thresholdRed ?? DEFAULT_THRESHOLD_RED,
             compactFormat: data.ytqf_compactFormat ?? DEFAULT_COMPACT_FORMAT,
-            createdTagColored: data.ytqf_createdTagColored ?? false
+            createdTagColored: data.ytqf_createdTagColored ?? false,
           });
-        }
+        },
       );
     });
   }

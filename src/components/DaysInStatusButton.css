@@ -11,8 +11,13 @@
   border: 1px solid #d0d6e0;
   cursor: pointer;
   background: #fff;
-  font: 500 12px system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  color: #1F2326;
+  font:
+    500 12px system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    sans-serif;
+  color: #1f2326;
   line-height: 22px;
   overflow: hidden;
   white-space: nowrap;
@@ -25,18 +30,18 @@
 }
 
 #ytqf-bar .ytqf-days-button.active {
-  background: #EBF6FF;
-  border-color: #0080E5;
-  color: #1F2326;
+  background: #ebf6ff;
+  border-color: #0080e5;
+  color: #1f2326;
 }
 
 #ytqf-bar .ytqf-days-button.active:hover {
-  background: #D6EEFF;
-  border-color: #0080E5;
+  background: #d6eeff;
+  border-color: #0080e5;
 }
 
 #ytqf-bar .ytqf-days-button:focus {
-  background: #EBF6FF;
+  background: #ebf6ff;
   outline: none;
 }
 
@@ -45,7 +50,7 @@
 }
 
 #ytqf-bar .ytqf-days-button.active:focus:not(:active) {
-  background: #EBF6FF;
+  background: #ebf6ff;
 }
 
 #ytqf-bar .ytqf-days-button.ghost {

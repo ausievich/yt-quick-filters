@@ -20,10 +20,10 @@ export class DaysInStatusUI {
     // Initialize the service
     const service = DaysInStatusAPI.getInstance();
     await service.initialize();
-    
+
     // Initial scan
     this.scanAndAddDaysInStatus();
-    
+
     // Watch for DOM changes
     this.observer = new MutationObserver(() => {
       this.scanAndAddDaysInStatus();
@@ -31,7 +31,7 @@ export class DaysInStatusUI {
 
     this.observer.observe(document.body, {
       childList: true,
-      subtree: true
+      subtree: true,
     });
   }
 
@@ -40,7 +40,7 @@ export class DaysInStatusUI {
       this.observer.disconnect();
       this.observer = null;
     }
-    
+
     // Clean up mounted components
     this.mountedComponents.forEach(({ root }) => {
       root.unmount();
@@ -50,7 +50,7 @@ export class DaysInStatusUI {
 
   public setEnabled(enabled: boolean): void {
     this.isEnabled = enabled;
-    
+
     if (enabled) {
       // Re-scan and add components
       this.scanAndAddDaysInStatus();
@@ -71,10 +71,10 @@ export class DaysInStatusUI {
     if (!this.isEnabled) {
       return;
     }
-    
+
     const cards = this.findIssueCards();
-    
-    cards.forEach(card => {
+
+    cards.forEach((card) => {
       const issueId = this.extractIssueIdFromElement(card);
       if (issueId && !this.mountedComponents.has(issueId)) {
         this.addDaysInStatusToCard(card, issueId);
@@ -96,19 +96,19 @@ export class DaysInStatusUI {
       '.agile-card',
       '[data-issue-id]',
       '.yt-issue-card',
-      '.issue-card'
+      '.issue-card',
     ];
-    
+
     const cards: HTMLElement[] = [];
-    selectors.forEach(selector => {
+    selectors.forEach((selector) => {
       const elements = document.querySelectorAll(selector);
-      elements.forEach(element => {
+      elements.forEach((element) => {
         if (element instanceof HTMLElement && !cards.includes(element)) {
           cards.push(element);
         }
       });
     });
-    
+
     return cards;
   }
 
@@ -125,7 +125,7 @@ export class DaysInStatusUI {
       '.agile-card__id',
       '.yt-issue-id',
       '.issue-id',
-      '[data-test="issue-id"]'
+      '[data-test="issue-id"]',
     ];
 
     for (const selector of issueIdSelectors) {
@@ -169,8 +169,8 @@ export class DaysInStatusUI {
     const root = createRoot(container);
     root.render(
       React.createElement(DaysInStatusTags, {
-        issueId: issueId
-      })
+        issueId: issueId,
+      }),
     );
 
     // Store reference for cleanup

@@ -30,8 +30,13 @@ div.yt-agile-board__top-bar #ytqf-filter-container #ytqf-bar {
   border: 1px solid #d0d6e0;
   cursor: pointer;
   background: #fff;
-  font: 500 12px system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  color: #1F2326;
+  font:
+    500 12px system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    sans-serif;
+  color: #1f2326;
   line-height: 22px;
   overflow: hidden;
   white-space: nowrap; /* Prevent text wrapping */
@@ -46,19 +51,19 @@ div.yt-agile-board__top-bar #ytqf-filter-container #ytqf-bar {
 
 /* Active state */
 #ytqf-bar .btn.active {
-  background: #EBF6FF;
-  border-color: #0080E5;
-  color: #1F2326;
+  background: #ebf6ff;
+  border-color: #0080e5;
+  color: #1f2326;
 }
 
 #ytqf-bar .btn.active:hover {
-  background: #D6EEFF;
-  border-color: #0080E5;
+  background: #d6eeff;
+  border-color: #0080e5;
 }
 
 /* Focus state */
 #ytqf-bar .btn:focus {
-  background: #EBF6FF;
+  background: #ebf6ff;
   outline: none;
 }
 
@@ -68,7 +73,7 @@ div.yt-agile-board__top-bar #ytqf-filter-container #ytqf-bar {
 }
 
 #ytqf-bar .btn.active:focus:not(:active) {
-  background: #EBF6FF;
+  background: #ebf6ff;
 }
 
 /* Ghost buttons */

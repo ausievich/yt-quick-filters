@@ -18,12 +18,20 @@ async (page) => {
         sync: {
           get: (keys, cb) => {
             const result = {};
-            const list = Array.isArray(keys) ? keys : typeof keys === 'string' ? [keys] : Object.keys(keys || {});
+            const list = Array.isArray(keys)
+              ? keys
+              : typeof keys === 'string'
+                ? [keys]
+                : Object.keys(keys || {});
             for (const key of list) result[key] = store[key];
             if (cb) cb(result);
             return Promise.resolve(result);
           },
-          set: (items, cb) => { Object.assign(store, items); if (cb) cb(); return Promise.resolve(); },
+          set: (items, cb) => {
+            Object.assign(store, items);
+            if (cb) cb();
+            return Promise.resolve();
+          },
         },
       },
     };
@@ -35,20 +43,20 @@ async (page) => {
 
   const hasFilterBar = (await page.locator('#ytqf-bar').count()) > 0;
   return { injected: true, hasFilterBar, url: page.url() };
-}
+};
 ```
 
 ## Regression scenarios
 
 Run **after** inject. Use `browser_run_code_unsafe` with `filename` (absolute path, forward slashes). All scripts return `passed: true` on success.
 
-| Script | Checks |
-|--------|--------|
-| `scripts/regression-suggestor.js` | Suggestor closes after `state: {In progress}` |
-| `scripts/regression-toggle-off.js` | Toggle off clears query |
-| `scripts/regression-query-types.js` | Must-pass query types + suggestor closed |
-| `scripts/regression-days-in-status.js` | Days In Status on, tags on cards |
-| `scripts/regression-delete-filter.js` | Delete filter via context menu |
+| Script                                 | Checks                                        |
+| -------------------------------------- | --------------------------------------------- |
+| `scripts/regression-suggestor.js`      | Suggestor closes after `state: {In progress}` |
+| `scripts/regression-toggle-off.js`     | Toggle off clears query                       |
+| `scripts/regression-query-types.js`    | Must-pass query types + suggestor closed      |
+| `scripts/regression-days-in-status.js` | Days In Status on, tags on cards              |
+| `scripts/regression-delete-filter.js`  | Delete filter via context menu                |
 
 ## Default regression (suggestor closes)
 
@@ -67,7 +75,7 @@ Legacy alias for `regression-suggestor.js`. Expect `passed: true`.
     dataTest: popup.getAttribute('data-test'),
     dataTestShown: popup.getAttribute('data-test-shown'),
   };
-}
+};
 ```
 
 **Board readiness:**
@@ -77,5 +85,5 @@ Legacy alias for `regression-suggestor.js`. Expect `passed: true`.
   url: location.href,
   hasTopBar: !!document.querySelector('div.yt-agile-board__top-bar'),
   hasQueryInput: !!document.querySelector('[data-test="ring-query-assist-input"]'),
-})
+});
 ```

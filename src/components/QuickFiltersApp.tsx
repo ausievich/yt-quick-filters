@@ -34,18 +34,18 @@ export const QuickFiltersApp: React.FC = () => {
     x: 0,
     y: 0,
     item: null,
-    index: -1
+    index: -1,
   });
   const [modal, setModal] = useState<ModalState>({
     isOpen: false,
-    isEdit: false
+    isEdit: false,
   });
 
   const storageService = StorageService.getInstance();
   const utilsService = UtilsService.getInstance();
   const versionService = YouTrackVersionService.getInstance();
   const daysInStatusUI = DaysInStatusUI.getInstance();
-  
+
   // State to hold the DOM node for the portal
   const [portalTarget, setPortalTarget] = useState<Element | null>(null);
 
@@ -60,7 +60,6 @@ export const QuickFiltersApp: React.FC = () => {
       console.error('Failed to load filters:', error);
     }
   }, [storageService]);
-
 
   // Effect to find the target elements for the portals
   useEffect(() => {
@@ -85,7 +84,7 @@ export const QuickFiltersApp: React.FC = () => {
 
     observer.observe(document.body, {
       childList: true,
-      subtree: true
+      subtree: true,
     });
 
     return () => observer.disconnect();
@@ -105,29 +104,32 @@ export const QuickFiltersApp: React.FC = () => {
     const initDaysInStatus = async () => {
       await daysInStatusUI.start();
     };
-    
+
     initDaysInStatus();
-    
+
     return () => {
       daysInStatusUI.stop();
     };
   }, [daysInStatusUI]);
 
-  const handleFilterClick = useCallback((query: string) => {
-    // If clicked on already active filter, deactivate it (toggle)
-    if (utilsService.normalizeQuery(currentQuery) === utilsService.normalizeQuery(query)) {
-      setOptimisticQuery('');
-      void utilsService.setQuery('');
-    } else {
-      setOptimisticQuery(query);
-      void utilsService.setQuery(query);
-    }
-  }, [utilsService, currentQuery]);
+  const handleFilterClick = useCallback(
+    (query: string) => {
+      // If clicked on already active filter, deactivate it (toggle)
+      if (utilsService.normalizeQuery(currentQuery) === utilsService.normalizeQuery(query)) {
+        setOptimisticQuery('');
+        void utilsService.setQuery('');
+      } else {
+        setOptimisticQuery(query);
+        void utilsService.setQuery(query);
+      }
+    },
+    [utilsService, currentQuery],
+  );
 
   const handleAddFilter = useCallback(() => {
     setModal({
       isOpen: true,
-      isEdit: false
+      isEdit: false,
     });
   }, []);
 
@@ -139,7 +141,7 @@ export const QuickFiltersApp: React.FC = () => {
       x: e.clientX,
       y: e.clientY,
       item,
-      index
+      index,
     });
   }, []);
 
@@ -149,62 +151,73 @@ export const QuickFiltersApp: React.FC = () => {
       x: 0,
       y: 0,
       item: null,
-      index: -1
+      index: -1,
     });
   }, []);
 
-  const handleEditFilter = useCallback((item: Filter, index: number) => {
-    closeContextMenu();
-    setModal({
-      isOpen: true,
-      isEdit: true,
-      initialName: item.label,
-      initialQuery: item.query,
-      index
-    });
-  }, [closeContextMenu]);
+  const handleEditFilter = useCallback(
+    (item: Filter, index: number) => {
+      closeContextMenu();
+      setModal({
+        isOpen: true,
+        isEdit: true,
+        initialName: item.label,
+        initialQuery: item.query,
+        index,
+      });
+    },
+    [closeContextMenu],
+  );
 
-  const handleDuplicateFilter = useCallback(async (item: Filter, index: number) => {
-    closeContextMenu();
-    try {
-      await storageService.duplicateFilter(index);
-      await loadFilters();
-    } catch (error) {
-      console.error('Failed to duplicate filter:', error);
-    }
-  }, [closeContextMenu, storageService, loadFilters]);
+  const handleDuplicateFilter = useCallback(
+    async (item: Filter, index: number) => {
+      closeContextMenu();
+      try {
+        await storageService.duplicateFilter(index);
+        await loadFilters();
+      } catch (error) {
+        console.error('Failed to duplicate filter:', error);
+      }
+    },
+    [closeContextMenu, storageService, loadFilters],
+  );
 
-  const handleDeleteFilter = useCallback(async (index: number) => {
-    closeContextMenu();
-    try {
-      await storageService.deleteFilter(index);
-      await loadFilters();
-    } catch (error) {
-      console.error('Failed to delete filter:', error);
-    }
-  }, [closeContextMenu, storageService, loadFilters]);
+  const handleDeleteFilter = useCallback(
+    async (index: number) => {
+      closeContextMenu();
+      try {
+        await storageService.deleteFilter(index);
+        await loadFilters();
+      } catch (error) {
+        console.error('Failed to delete filter:', error);
+      }
+    },
+    [closeContextMenu, storageService, loadFilters],
+  );
 
   const handleModalClose = useCallback(() => {
     setModal({
       isOpen: false,
-      isEdit: false
+      isEdit: false,
     });
   }, []);
 
-  const handleModalSave = useCallback(async (name: string, query: string, index?: number) => {
-    try {
-      if (modal.isEdit && typeof index === 'number') {
-        await storageService.updateFilter(index, { label: name, query });
-      } else {
-        await storageService.addFilter({ label: name, query });
+  const handleModalSave = useCallback(
+    async (name: string, query: string, index?: number) => {
+      try {
+        if (modal.isEdit && typeof index === 'number') {
+          await storageService.updateFilter(index, { label: name, query });
+        } else {
+          await storageService.addFilter({ label: name, query });
+        }
+        await loadFilters();
+        handleModalClose();
+      } catch (error) {
+        console.error('Failed to save filter:', error);
       }
-      await loadFilters();
-      handleModalClose();
-    } catch (error) {
-      console.error('Failed to save filter:', error);
-    }
-  }, [modal.isEdit, storageService, loadFilters, handleModalClose]);
-
+    },
+    [modal.isEdit, storageService, loadFilters, handleModalClose],
+  );
 
   // Determine active filter based on current query
   const effectiveQuery = optimisticQuery ?? currentQuery;
@@ -222,7 +235,7 @@ export const QuickFiltersApp: React.FC = () => {
             onAddFilter={handleAddFilter}
             onContextMenu={handleContextMenu}
           />,
-          portalTarget
+          portalTarget,
         )
       ) : (
         <FilterBar
@@ -233,9 +246,10 @@ export const QuickFiltersApp: React.FC = () => {
           onContextMenu={handleContextMenu}
         />
       )}
-      
+
       {/* Render context menu and modal in document.body for proper layering */}
-      {contextMenu.isOpen && contextMenu.item && 
+      {contextMenu.isOpen &&
+        contextMenu.item &&
         ReactDOM.createPortal(
           <ContextMenu
             x={contextMenu.x}
@@ -247,11 +261,10 @@ export const QuickFiltersApp: React.FC = () => {
             onDelete={handleDeleteFilter}
             onClose={closeContextMenu}
           />,
-          document.body
-        )
-      }
-      
-      {modal.isOpen && 
+          document.body,
+        )}
+
+      {modal.isOpen &&
         ReactDOM.createPortal(
           <FilterModal
             isOpen={modal.isOpen}
@@ -262,9 +275,8 @@ export const QuickFiltersApp: React.FC = () => {
             onClose={handleModalClose}
             onSave={handleModalSave}
           />,
-          document.body
-        )
-      }
+          document.body,
+        )}
     </>
   );
 };

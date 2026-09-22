@@ -10,7 +10,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
   onEdit,
   onDuplicate,
   onDelete,
-  onClose
+  onClose,
 }) => {
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -62,7 +62,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
       const h = menu.offsetHeight;
       const vw = window.innerWidth;
       const vh = window.innerHeight;
-      
+
       menu.style.left = Math.min(x, vw - w - 8) + 'px';
       menu.style.top = Math.min(y, vh - h - 8) + 'px';
     }
@@ -70,8 +70,8 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
 
   return (
     <div ref={menuRef} id="ytqf-menu">
-      <div 
-        className="mi" 
+      <div
+        className="mi"
         onClick={(e) => {
           e.stopPropagation();
           onEdit(item, index);
@@ -79,9 +79,9 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
       >
         Edit
       </div>
-      
-      <div 
-        className="mi" 
+
+      <div
+        className="mi"
         onClick={(e) => {
           e.stopPropagation();
           onDuplicate(item, index);
@@ -89,11 +89,11 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
       >
         Duplicate
       </div>
-      
+
       <div className="sep"></div>
-      
-      <div 
-        className="mi danger" 
+
+      <div
+        className="mi danger"
         onClick={(e) => {
           e.stopPropagation();
           onDelete(index);

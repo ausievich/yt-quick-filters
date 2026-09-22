@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "YouTrack Quick Filters",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "Add quick filter buttons to YouTrack Agile Boards. Create filters via a modal.",
   "icons": { "128": "icons/logo_128.png" },
   "browser_specific_settings": {
@@ -13,11 +13,7 @@
       }
     }
   },
-  "permissions": [
-    "storage",
-    "webNavigation",
-    "scripting"
-  ],
+  "permissions": ["storage", "webNavigation", "scripting"],
   "action": {
     "default_popup": "public/popup.html",
     "default_icon": {
@@ -26,26 +22,16 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "https://*/youtrack/*",
-        "https://*/agiles/*",
-        "https://*.youtrack.cloud/*"
-      ],
+      "matches": ["https://*/youtrack/*", "https://*/agiles/*", "https://*.youtrack.cloud/*"],
       "css": ["dist/content.css"],
       "js": ["dist/content.js"],
       "run_at": "document_idle"
     }
   ],
-  "host_permissions": [
-    "https://*/youtrack/*",
-    "https://*/agiles/*",
-    "https://*.youtrack.cloud/*"
-  ],
+  "host_permissions": ["https://*/youtrack/*", "https://*/agiles/*", "https://*.youtrack.cloud/*"],
   "background": {
     "service_worker": "dist/background.js",
-    "scripts": [
-      "dist/background.js"
-    ]
+    "scripts": ["dist/background.js"]
   },
   "minimum_chrome_version": "121"
 }

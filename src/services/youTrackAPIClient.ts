@@ -35,7 +35,7 @@ export class YouTrackAPIClient {
     if (this.isInitialized) {
       return; // Already initialized
     }
-    
+
     await this.tokenManager.initialize();
     this.isInitialized = true;
   }
@@ -46,7 +46,7 @@ export class YouTrackAPIClient {
   private async makeRequestWithRetry(url: string): Promise<APIResponse> {
     // Get token (should be valid from initialization)
     let token = this.tokenManager.getTokenForCurrentDomain();
-    
+
     // If no token, try to refresh it
     if (!token) {
       const refreshed = await this.tokenManager.refreshTokenForCurrentDomain();
@@ -54,32 +54,32 @@ export class YouTrackAPIClient {
         token = this.tokenManager.getTokenForCurrentDomain();
       }
     }
-    
+
     if (!token) {
       return { success: false, error: 'No token found' };
     }
 
     const response = await this.makeRequest(url, token);
-    
+
     // If successful, return
     if (response.success) {
       return response;
     }
-    
+
     // If 401, refresh token and retry once
     if (response.error?.includes('401')) {
       const refreshed = await this.tokenManager.refreshTokenForCurrentDomain();
-      
+
       if (refreshed) {
         const newToken = this.tokenManager.getTokenForCurrentDomain();
         if (newToken) {
           return await this.makeRequest(url, newToken);
         }
       }
-      
+
       return { success: false, error: 'No token found after refresh' };
     }
-    
+
     return response;
   }
 
@@ -89,29 +89,29 @@ export class YouTrackAPIClient {
   private async makeRequest(url: string, token: string): Promise<APIResponse> {
     try {
       const headers: Record<string, string> = {
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
       };
-            
+
       const response = await fetch(url, {
         method: 'GET',
         headers,
-        credentials: 'include'
+        credentials: 'include',
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         return { success: true, data };
       } else {
-        return { 
-          success: false, 
-          error: `API request failed: ${response.status} ${response.statusText}` 
+        return {
+          success: false,
+          error: `API request failed: ${response.status} ${response.statusText}`,
         };
       }
     } catch (error) {
-      return { 
-        success: false, 
-        error: `Network error: ${error instanceof Error ? error.message : 'Unknown error'}` 
+      return {
+        success: false,
+        error: `Network error: ${error instanceof Error ? error.message : 'Unknown error'}`,
       };
     }
   }
@@ -124,16 +124,16 @@ export class YouTrackAPIClient {
       const baseUrl = this.tokenManager.getApiBaseUrlForCurrentDomain();
       // Only request fields we actually use: id, created, updated
       const url = `${baseUrl}/api/issues/${issueId}?fields=id,created,updated`;
-      
+
       const response = await this.makeRequestWithRetry(url);
-      
+
       if (response.success && response.data) {
         const data = response.data;
-        
+
         return {
           id: data.id,
           created: data.created || Date.now(),
-          updated: data.updated || Date.now()
+          updated: data.updated || Date.now(),
         };
       } else {
         console.warn('⚠️ Failed to fetch issue data:', response.error);
@@ -144,5 +144,4 @@ export class YouTrackAPIClient {
       return null;
     }
   }
-
 }

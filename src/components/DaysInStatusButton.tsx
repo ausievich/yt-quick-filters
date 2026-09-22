@@ -7,7 +7,6 @@ import './DaysInStatusButton.css';
 
 export const DaysInStatusButton: React.FC = () => {
   const [showDaysInStatus, setShowDaysInStatus] = useState<boolean>(false);
-  const [hasToken, setHasToken] = useState(false);
 
   const storageService = StorageService.getInstance();
   const daysInStatusUI = DaysInStatusUI.getInstance();
@@ -19,16 +18,14 @@ export const DaysInStatusButton: React.FC = () => {
       try {
         const apiClient = YouTrackAPIClient.getInstance();
         await apiClient.initialize();
-        
+
         // Check if token is valid (checks if token exists and is in sync)
-        const hasValidToken = await tokenManager.hasValidToken();
-        setHasToken(hasValidToken);
+        await tokenManager.hasValidToken();
       } catch (error) {
         console.warn('Failed to check localStorage token:', error);
-        setHasToken(false);
       }
     };
-    
+
     checkToken();
   }, []);
 
@@ -48,23 +45,21 @@ export const DaysInStatusButton: React.FC = () => {
 
   const handleToggleDaysInStatus = async () => {
     const newState = !showDaysInStatus;
-    
+
     // If enabling days in status, check and refresh token if needed
     if (newState) {
       try {
         // hasValidToken() will automatically refresh token if it's expiring soon
-        const hasValidToken = await tokenManager.hasValidToken();
-        setHasToken(hasValidToken);
+        await tokenManager.hasValidToken();
       } catch (error) {
         console.warn('⚠️ Error checking token:', error);
-        setHasToken(false);
         // Continue anyway - the API client will handle retries
       }
     }
-    
+
     setShowDaysInStatus(newState);
     daysInStatusUI.setEnabled(newState);
-    
+
     try {
       await storageService.setDaysInStatusEnabled(newState);
     } catch (error) {
@@ -74,13 +69,23 @@ export const DaysInStatusButton: React.FC = () => {
 
   return (
     <>
-      <button 
-        className={`ytqf-days-button ${showDaysInStatus ? 'active' : 'ghost'}`} 
+      <button
+        className={`ytqf-days-button ${showDaysInStatus ? 'active' : 'ghost'}`}
         onClick={handleToggleDaysInStatus}
         title={'Days in status'}
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-          <path fillRule="evenodd" d="M13.75 8a5.75 5.75 0 1 1-11.5 0 5.75 5.75 0 0 1 11.5 0ZM15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM8.225 5a.625.625 0 1 0-1.25 0v3c0 .22.115.423.303.536l2.5 1.5a.625.625 0 0 0 .644-1.072L8.225 7.646V5Z" clipRule="evenodd"></path>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          fill="currentColor"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fillRule="evenodd"
+            d="M13.75 8a5.75 5.75 0 1 1-11.5 0 5.75 5.75 0 0 1 11.5 0ZM15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM8.225 5a.625.625 0 1 0-1.25 0v3c0 .22.115.423.303.536l2.5 1.5a.625.625 0 0 0 .644-1.072L8.225 7.646V5Z"
+            clipRule="evenodd"
+          ></path>
         </svg>
       </button>
     </>

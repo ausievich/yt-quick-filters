@@ -19,7 +19,9 @@ async (page) => {
   const getQueryState = () =>
     page.evaluate(() => {
       const input = document.querySelector('[data-test="ring-query-assist-input"]');
-      const inputText = input ? (input.innerText || input.textContent || '').replace(/\u00a0/g, ' ').trim() : '';
+      const inputText = input
+        ? (input.innerText || input.textContent || '').replace(/\u00a0/g, ' ').trim()
+        : '';
       const urlQuery = new URLSearchParams(location.search).get('query')?.trim() || '';
       return { inputText, urlQuery, hasQueryParam: location.search.includes('query=') };
     });
@@ -31,7 +33,10 @@ async (page) => {
   await page.waitForTimeout(1500);
 
   const afterOn = await getQueryState();
-  const onApplied = afterOn.hasQueryParam || /assignee:\s*me/i.test(afterOn.inputText) || /assignee:\s*me/i.test(afterOn.urlQuery);
+  const onApplied =
+    afterOn.hasQueryParam ||
+    /assignee:\s*me/i.test(afterOn.inputText) ||
+    /assignee:\s*me/i.test(afterOn.urlQuery);
 
   await myTasks.click();
   await page.waitForTimeout(1500);

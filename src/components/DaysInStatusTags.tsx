@@ -140,7 +140,6 @@ export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataL
     // For compact format, use actual time for minutes/hours, calendar days for days+
     const minutes = Math.floor(diffMs / (1000 * 60));
     const hours = Math.floor(diffMs / (1000 * 60 * 60));
-    const actualDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
     // Minutes: less than 1 hour
     if (minutes < 60) {
@@ -171,7 +170,7 @@ export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataL
 
   const timeDiffCreated = getTimeDifference(data.created);
   const timeDiffUpdated = getTimeDifference(data.updated);
-  
+
   // For color calculation, use calendar days (reuse getCalendarDays function)
   const daysSinceCreated = getCalendarDays(timeDiffCreated);
   const daysSinceUpdated = getCalendarDays(timeDiffUpdated);
@@ -198,11 +197,17 @@ export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataL
   return (
     <div className="days-in-status">
       {!hideCreated && (
-        <div className={`days-in-status__tag ${createdColorClass}`} title={`Created: ${new Date(data.created).toLocaleDateString()}`}>
+        <div
+          className={`days-in-status__tag ${createdColorClass}`}
+          title={`Created: ${new Date(data.created).toLocaleDateString()}`}
+        >
           {formatTime(timeDiffCreated)}
         </div>
       )}
-      <div className={`days-in-status__tag ${updatedColorClass}`} title={`Updated: ${new Date(data.updated).toLocaleDateString()}`}>
+      <div
+        className={`days-in-status__tag ${updatedColorClass}`}
+        title={`Updated: ${new Date(data.updated).toLocaleDateString()}`}
+      >
         {formatTime(timeDiffUpdated)}
       </div>
     </div>
