@@ -13,7 +13,7 @@
       }
     }
   },
-  "permissions": ["storage", "webNavigation", "scripting"],
+  "permissions": ["storage"],
   "action": {
     "default_popup": "public/popup.html",
     "default_icon": {
@@ -22,16 +22,10 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://*/youtrack/*", "https://*/agiles/*", "https://*.youtrack.cloud/*"],
+      "matches": ["https://*/*"],
       "css": ["dist/content.css"],
       "js": ["dist/content.js"],
       "run_at": "document_idle"
     }
-  ],
-  "host_permissions": ["https://*/youtrack/*", "https://*/agiles/*", "https://*.youtrack.cloud/*"],
-  "background": {
-    "service_worker": "dist/background.js",
-    "scripts": ["dist/background.js"]
-  },
-  "minimum_chrome_version": "121"
+  ]
 }

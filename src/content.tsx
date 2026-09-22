@@ -82,23 +82,10 @@ class ContentScript {
   }
 }
 
-// The flag lives in the extension's isolated world and survives bundle reinjection.
-declare global {
-  interface Window {
-    __ytqfStarted?: boolean;
-  }
-}
-
-// Initialize at most once per document, including while async startup is pending.
+// Initialize content script with delay to ensure service worker is ready
 const initializeContentScript = async () => {
-  if (window.__ytqfStarted) return;
-
-  // Recheck at execution time: frame-targeted navigation may have moved on.
-  // The background listener will start us later if this is not an Agile view.
-  if (location.protocol !== 'https:' || !/\/agiles(?:\/|$)/.test(location.pathname)) return;
-
+  // Check if extension is ready
   if (chrome.runtime?.id) {
-    window.__ytqfStarted = true;
     const contentScript = new ContentScript();
     await contentScript.start();
   } else {
