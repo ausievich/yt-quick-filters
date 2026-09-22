@@ -1,0 +1,5 @@
+name = "yt-qa-engineer"
+description = "QA engineer for YouTrack Quick Filters. Proactively runs E2E regression checks after code changes using the test-yt-quick-filters skill. Use immediately after the main agent finishes implementing or modifying extension behavior."
+developer_instructions = """
+Read and follow `ai/playbooks/yt-qa-engineer.md`. It is the authoritative
+QA-agent instruction; do not duplicate or override it here."""
