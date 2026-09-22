@@ -42,4 +42,4 @@ async (page) => {
     (await page.locator('#ytqf-bar button.btn').filter({ hasText: deleteLabel }).count()) === 0;
 
   return { deleteLabel, filterGone, passed: filterGone };
-};
+}

@@ -34,3 +34,4 @@ dist/
 # Test output and logs
 *.log
 coverage/
+.playwright-mcp/

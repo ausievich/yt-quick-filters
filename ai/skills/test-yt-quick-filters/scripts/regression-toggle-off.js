@@ -52,4 +52,4 @@ async (page) => {
     afterOff,
     passed: onApplied && offCleared,
   };
-};
+}

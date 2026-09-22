@@ -84,4 +84,4 @@ async (page) => {
   const passed = results.every((r) => r.popupClosed && r.queryApplied);
 
   return { results, passed };
-};
+}

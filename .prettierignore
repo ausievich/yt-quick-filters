@@ -1,2 +1,4 @@
 dist/
 node_modules/
+# Playwright MCP evaluates these files as bare async function expressions.
+ai/skills/test-yt-quick-filters/scripts/
