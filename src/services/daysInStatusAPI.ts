@@ -24,9 +24,9 @@ export class DaysInStatusAPI {
     if (this.isInitialized) {
       return;
     }
-    
+
     await this.apiClient.initialize();
-    
+
     this.isInitialized = true;
   }
 
@@ -43,7 +43,7 @@ export class DaysInStatusAPI {
         return {
           issueId,
           created: issueData.created,
-          updated: issueData.updated
+          updated: issueData.updated,
         };
       }
     } catch (error) {
@@ -53,5 +53,4 @@ export class DaysInStatusAPI {
     // Return null if API fails - will show dashes
     return null;
   }
-
 }

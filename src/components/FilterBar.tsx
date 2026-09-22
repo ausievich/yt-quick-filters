@@ -8,12 +8,12 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   activeFilter,
   onFilterClick,
   onAddFilter,
-  onContextMenu
+  onContextMenu,
 }) => {
   return (
     <div id="ytqf-bar">
       <DaysInStatusButton />
-      
+
       <button className="btn ghost" onClick={onAddFilter}>
         Add filter...
       </button>

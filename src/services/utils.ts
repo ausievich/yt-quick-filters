@@ -11,7 +11,7 @@ export class UtilsService {
   }
 
   public async setQuery(query: string): Promise<void> {
-    if (location.pathname.includes('/agiles/') && await tryNativeBoardQuery(query)) {
+    if (location.pathname.includes('/agiles/') && (await tryNativeBoardQuery(query))) {
       return;
     }
 
@@ -34,15 +34,18 @@ export class UtilsService {
   /**
    * Finds active filter by current query
    */
-  public findActiveFilter<T extends { query: string }>(filters: T[], currentQuery: string): T | null {
+  public findActiveFilter<T extends { query: string }>(
+    filters: T[],
+    currentQuery: string,
+  ): T | null {
     const normalizedCurrentQuery = this.normalizeQuery(currentQuery);
-    
+
     for (const filter of filters) {
       if (this.normalizeQuery(filter.query) === normalizedCurrentQuery) {
         return filter;
       }
     }
-    
+
     return null;
   }
 }

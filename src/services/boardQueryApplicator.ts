@@ -5,7 +5,7 @@
 const QUERY_ASSIST_SELECTORS = [
   '[data-test="ring-query-assist-input"][contenteditable="true"]',
   'search-query-panel [contenteditable="true"][role="textbox"]',
-  'rg-query-assist [contenteditable="true"][role="textbox"]'
+  'rg-query-assist [contenteditable="true"][role="textbox"]',
 ];
 
 export function getQueryAssistInputElement(): HTMLElement | null {
@@ -20,7 +20,10 @@ export function getQueryAssistInputElement(): HTMLElement | null {
 }
 
 function normalizeUiQueryText(text: string): string {
-  return text.replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+  return text
+    .replace(/\u00a0/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 export function getCurrentQuery(): string {
@@ -61,18 +64,22 @@ function replaceContentEditableText(element: HTMLElement, text: string): void {
 }
 
 function dispatchQueryInputEvents(element: HTMLElement, text: string): void {
-  element.dispatchEvent(new InputEvent('beforeinput', {
-    bubbles: true,
-    cancelable: true,
-    data: text,
-    inputType: 'insertText'
-  }));
+  element.dispatchEvent(
+    new InputEvent('beforeinput', {
+      bubbles: true,
+      cancelable: true,
+      data: text,
+      inputType: 'insertText',
+    }),
+  );
 
-  element.dispatchEvent(new InputEvent('input', {
-    bubbles: true,
-    data: text,
-    inputType: 'insertText'
-  }));
+  element.dispatchEvent(
+    new InputEvent('input', {
+      bubbles: true,
+      data: text,
+      inputType: 'insertText',
+    }),
+  );
 
   element.dispatchEvent(new Event('change', { bubbles: true }));
 }
@@ -84,7 +91,7 @@ function dispatchEnterKey(element: HTMLElement): void {
     keyCode: 13,
     which: 13,
     bubbles: true,
-    cancelable: true
+    cancelable: true,
   };
 
   element.dispatchEvent(new KeyboardEvent('keydown', keyboardEventInit));

@@ -23,7 +23,7 @@ const initializeSettingsMessageBridge = (): void => {
       thresholdYellow: message.thresholdYellow,
       thresholdRed: message.thresholdRed,
       compactFormat: message.compactFormat,
-      createdTagColored: message.createdTagColored
+      createdTagColored: message.createdTagColored,
     });
   });
 
@@ -77,7 +77,7 @@ class ContentScript {
 
     this.observer.observe(document.documentElement, {
       childList: true,
-      subtree: true
+      subtree: true,
     });
   }
 }

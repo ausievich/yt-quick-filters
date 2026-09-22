@@ -42,10 +42,12 @@ This extension brings a long-requested feature (see JetBrains request [JT-38623]
 ## Development
 
 ### Prerequisites
-- Node.js 16+ 
+
+- Node.js 16+
 - npm or yarn
 
 ### Setup
+
 ```bash
 # Clone the repo
 git clone https://github.com/ausievich/yt-quick-filters.git
@@ -62,6 +64,7 @@ npm run build
 ```
 
 ### Load the extension manually:
+
 1. Open `chrome://extensions/`
 2. Enable **Developer mode**
 3. Click **Load unpacked** and select this repo folder
@@ -72,10 +75,10 @@ npm run build
 
 - Jira has had quick filters for ages ([docs](https://support.atlassian.com/jira-service-management-cloud/docs/create-quick-filters-for-your-board/)).
 - YouTrack users have been requesting the same feature for almost 10 years:
-    - [YouTrack support forum thread](https://youtrack-support.jetbrains.com/hc/en-us/community/posts/115000751664-Agile-board-Quick-Filters)
-    - [Feature request in YouTrack itself](https://youtrack.jetbrains.com/issue/JT-38623/)
+  - [YouTrack support forum thread](https://youtrack-support.jetbrains.com/hc/en-us/community/posts/115000751664-Agile-board-Quick-Filters)
+  - [Feature request in YouTrack itself](https://youtrack.jetbrains.com/issue/JT-38623/)
 
-So I decided to just build it myself 
+So I decided to just build it myself
 
 ---
 

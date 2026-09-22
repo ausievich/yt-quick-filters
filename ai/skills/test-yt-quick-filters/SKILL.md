@@ -13,6 +13,7 @@ description: >-
 Runs end-to-end checks **without** the user's Chrome or `chrome://extensions`.
 
 Use **Playwright MCP** (`user-playwright`) to:
+
 1. Build the extension
 2. Open a public YouTrack agile board
 3. Inject `dist/content.js` + CSS with a `chrome.storage` mock
@@ -57,13 +58,13 @@ E2E Progress:
 
 Run **after** inject via `browser_run_code_unsafe` with absolute `filename`. Each script returns `passed: true` on success.
 
-| Script | What it checks |
-|--------|----------------|
-| `regression-suggestor.js` | Suggestor closes after applying `state: {In progress}` |
-| `regression-toggle-off.js` | Second click on active filter clears query |
-| `regression-query-types.js` | Must-pass queries apply with suggestor closed |
-| `regression-days-in-status.js` | Days In Status toggles on, tags appear on cards |
-| `regression-delete-filter.js` | Delete filter via context menu |
+| Script                         | What it checks                                         |
+| ------------------------------ | ------------------------------------------------------ |
+| `regression-suggestor.js`      | Suggestor closes after applying `state: {In progress}` |
+| `regression-toggle-off.js`     | Second click on active filter clears query             |
+| `regression-query-types.js`    | Must-pass queries apply with suggestor closed          |
+| `regression-days-in-status.js` | Days In Status toggles on, tags appear on cards        |
+| `regression-delete-filter.js`  | Delete filter via context menu                         |
 
 ### Default regression — suggestor closes after quick filter apply
 
@@ -84,10 +85,11 @@ Manual / extended checks:
     popupOpen: popup.getAttribute('data-test-shown') === 'true',
     dataTestShown: popup.getAttribute('data-test-shown'),
   };
-}
+};
 ```
 
 **Must-pass query types:**
+
 - `Assignee: me`
 - `state: {In progress}` (braces — original bug)
 - `Assignee: me State: Open`
@@ -104,23 +106,23 @@ Also verify toggle off (second click clears query) and rapid switching between f
 
 ## Key DOM selectors (YouTrack)
 
-| Element | Selector |
-|---------|----------|
-| Query input | `[data-test="ring-query-assist-input"]` |
-| Query assist root | `[data-test="queryAssist"]` |
-| **Suggestor popup** | `[data-test="ring-popup ring-query-assist-popup"]` (primary) |
-| Popup fallbacks | `[data-test~="ring-query-assist-popup"]`, `.yt-search-panel__popup` |
-| Popup visible flag | `data-test-shown="true"` |
-| Extension bar | `#ytqf-bar`, `#ytqf-modal` |
+| Element             | Selector                                                            |
+| ------------------- | ------------------------------------------------------------------- |
+| Query input         | `[data-test="ring-query-assist-input"]`                             |
+| Query assist root   | `[data-test="queryAssist"]`                                         |
+| **Suggestor popup** | `[data-test="ring-popup ring-query-assist-popup"]` (primary)        |
+| Popup fallbacks     | `[data-test~="ring-query-assist-popup"]`, `.yt-search-panel__popup` |
+| Popup visible flag  | `data-test-shown="true"`                                            |
+| Extension bar       | `#ytqf-bar`, `#ytqf-modal`                                          |
 
 YouTrack uses `data-test`, not `data-testid`.
 
 ## Troubleshooting
 
-| Symptom | Fix |
-|---------|-----|
-| Redirect to `/issues` | `browser_close`, re-navigate; never stale `addInitScript` |
-| Suggestor still open | Check `boardQueryApplicator.dismissQueryAssistSuggestor` |
-| Search input timeout | Wait longer after board navigation |
-| `require is not defined` | Use inject method, not `--load-extension` |
-| `ENOENT` on `dist/` | `EXT_ROOT` must be absolute repo path, not relative |
+| Symptom                  | Fix                                                       |
+| ------------------------ | --------------------------------------------------------- |
+| Redirect to `/issues`    | `browser_close`, re-navigate; never stale `addInitScript` |
+| Suggestor still open     | Check `boardQueryApplicator.dismissQueryAssistSuggestor`  |
+| Search input timeout     | Wait longer after board navigation                        |
+| `require is not defined` | Use inject method, not `--load-extension`                 |
+| `ENOENT` on `dist/`      | `EXT_ROOT` must be absolute repo path, not relative       |

@@ -39,21 +39,25 @@ explicitly asked to fix a failing test.
 **Scope:** <what was tested / what changed>
 
 ### Regression suite
-| Scenario | Result |
-|----------|--------|
+
+| Scenario                     | Result      |
+| ---------------------------- | ----------- |
 | suggestor closes after apply | pass / fail |
-| toggle off clears query | pass / fail |
-| must-pass query types | pass / fail |
-| days in status | pass / fail |
-| delete filter | pass / fail |
+| toggle off clears query      | pass / fail |
+| must-pass query types        | pass / fail |
+| days in status               | pass / fail |
+| delete filter                | pass / fail |
 
 ### Verdict
+
 PASS / FAIL
 
 ### Failures (if any)
+
 - Scenario, expected vs actual, relevant logs or script output
 
 ### Notes
+
 - Inject limitations, flaky steps, or manual follow-up
 ```
 

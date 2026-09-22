@@ -13,8 +13,10 @@ export function useQueryParams() {
       const currentQuery = getCurrentQuery();
       const currentPathname = window.location.pathname;
 
-      setQuery((previousQuery) => previousQuery === currentQuery ? previousQuery : currentQuery);
-      setPathname((previousPathname) => previousPathname === currentPathname ? previousPathname : currentPathname);
+      setQuery((previousQuery) => (previousQuery === currentQuery ? previousQuery : currentQuery));
+      setPathname((previousPathname) =>
+        previousPathname === currentPathname ? previousPathname : currentPathname,
+      );
     };
 
     const intervalId = window.setInterval(updateState, 300);
@@ -30,6 +32,6 @@ export function useQueryParams() {
 
   return {
     query,
-    pathname
+    pathname,
   };
 }

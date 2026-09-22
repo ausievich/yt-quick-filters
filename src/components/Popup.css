@@ -3,7 +3,17 @@
   min-height: 200px;
   padding: 16px 20px 0 20px;
   box-sizing: border-box;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Noto Sans,
+    Ubuntu,
+    Cantarell,
+    Helvetica Neue,
+    Arial,
+    sans-serif;
   font-size: 14px;
   line-height: 20px;
   color: rgb(39, 40, 46);
@@ -134,11 +144,11 @@
 }
 
 .popup-threshold-indicator--yellow {
-  background: #FED277;
+  background: #fed277;
 }
 
 .popup-threshold-indicator--red {
-  background: #DB3B4B;
+  background: #db3b4b;
 }
 
 .popup-threshold-label {
@@ -293,4 +303,3 @@
   flex-shrink: 0;
   margin: 0 2px;
 }
-

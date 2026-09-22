@@ -18,7 +18,7 @@ export class YouTrackVersionService {
   public getTargetElement(): Element | null {
     // Check for fallback test flag
     const forceFallback = localStorage.getItem('ytqf-force-fallback') === 'true';
-    
+
     if (forceFallback) {
       return this.findOldVersionTarget();
     }
@@ -42,7 +42,8 @@ export class YouTrackVersionService {
         if (!filterContainer) {
           filterContainer = document.createElement('div');
           filterContainer.id = 'ytqf-filter-container';
-          (filterContainer as HTMLElement).style.cssText = 'display: inline-flex; align-items: center; margin-left: 16px;';
+          (filterContainer as HTMLElement).style.cssText =
+            'display: inline-flex; align-items: center; margin-left: 16px;';
           topBar.insertBefore(filterContainer, searchPanel);
         }
         return filterContainer;
@@ -59,8 +60,9 @@ export class YouTrackVersionService {
       if (!filterContainer) {
         filterContainer = document.createElement('div');
         filterContainer.id = 'ytqf-filter-container';
-        (filterContainer as HTMLElement).style.cssText = 'display: inline-flex; align-items: center;'; // Add basic flex styles if needed, or rely on CSS
-        
+        (filterContainer as HTMLElement).style.cssText =
+          'display: inline-flex; align-items: center;'; // Add basic flex styles if needed, or rely on CSS
+
         // Find the ng-transclude element to insert before it
         const buttonToolbar = toolbar.querySelector('ng-transclude[rg-button-toolbar]');
         if (buttonToolbar && buttonToolbar.parentNode === toolbar) {
@@ -75,8 +77,9 @@ export class YouTrackVersionService {
   }
 
   public findToolbar(): Element | null {
-    return document.querySelector('.yt-agile-board__toolbar[data-test="yt-agile-board-toolbar"]') ||
-           document.querySelector('.yt-agile-board__toolbar');
+    return (
+      document.querySelector('.yt-agile-board__toolbar[data-test="yt-agile-board-toolbar"]') ||
+      document.querySelector('.yt-agile-board__toolbar')
+    );
   }
-
 }

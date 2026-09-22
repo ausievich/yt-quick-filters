@@ -53,7 +53,6 @@ export interface IssueInfo {
   };
 }
 
-
 export interface DaysInStatusInfo {
   issueId: string;
   created: number;

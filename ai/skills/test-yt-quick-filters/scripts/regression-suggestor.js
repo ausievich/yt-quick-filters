@@ -53,4 +53,4 @@ async (page) => {
     popup,
     passed: popup.found && !popup.open,
   };
-}
+};

@@ -36,4 +36,4 @@ async (page) => {
     ...state,
     passed: state.buttonActive && state.tagsOnBoard > 0,
   };
-}
+};

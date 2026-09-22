@@ -38,7 +38,8 @@ async (page) => {
   await page.locator('#ytqf-menu .mi.danger', { hasText: 'Delete' }).click();
   await page.waitForTimeout(1000);
 
-  const filterGone = (await page.locator('#ytqf-bar button.btn').filter({ hasText: deleteLabel }).count()) === 0;
+  const filterGone =
+    (await page.locator('#ytqf-bar button.btn').filter({ hasText: deleteLabel }).count()) === 0;
 
   return { deleteLabel, filterGone, passed: filterGone };
-}
+};
