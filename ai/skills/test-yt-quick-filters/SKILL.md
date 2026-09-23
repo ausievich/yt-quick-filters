@@ -37,7 +37,7 @@ https://youtrack.jetbrains.com/agiles/153-6143/current
 E2E Progress:
 - [ ] npm run build
 - [ ] browser_close (reset polluted MCP context)
-- [ ] Navigate to agile board, wait for load
+- [ ] Run `scripts/open-public-board.js` via `browser_run_code_unsafe` (sets CookieHub consent, then opens the board)
 - [ ] Inject extension (see reference.md — replace EXT_ROOT, pass as `code`)
 - [ ] Confirm `hasFilterBar: true`
 - [ ] `browser_run_code_unsafe` → critical scenarios (absolute `filename`, all `passed: true`):
@@ -53,6 +53,7 @@ E2E Progress:
 
 - Read inject block from [reference.md](reference.md), substitute `EXT_ROOT` with repo root (absolute, forward slashes).
 - Pass result to `browser_run_code_unsafe` as **`code`** — never `addInitScript`, never relative `dist/` paths.
+- Before injection, run `scripts/open-public-board.js` by absolute filename. It sets the CookieHub session cookie before navigation, so the consent notice cannot cover the board.
 
 ### Regression scenarios
 
