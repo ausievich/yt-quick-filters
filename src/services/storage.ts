@@ -34,7 +34,7 @@ export class StorageService {
     const { storageKey } = this.getBoardInfo();
     return new Promise((resolve) => {
       chrome.storage.sync.get(storageKey, (data: StorageData) => {
-        resolve(data[storageKey] || DEFAULT_FILTERS);
+        resolve(data[storageKey] || DEFAULT_FILTERS.map((filter) => ({ ...filter })));
       });
     });
   }
