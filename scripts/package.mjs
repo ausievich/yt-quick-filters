@@ -7,8 +7,8 @@ import { ZipArchive } from 'archiver';
 const rootDirectory = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const target = process.argv[2];
 
-if (target !== 'chrome' && target !== 'firefox') {
-  throw new Error('Usage: npm run package:archive -- <chrome|firefox>');
+if (!['chrome', 'firefox', 'source'].includes(target)) {
+  throw new Error('Usage: npm run package:archive -- <chrome|firefox|source>');
 }
 
 const artifactsDirectory = path.join(rootDirectory, 'artifacts');
@@ -16,6 +16,19 @@ const stagingDirectory = path.join(artifactsDirectory, `.staging-${target}`);
 
 const readManifest = async () =>
   JSON.parse(await readFile(path.join(rootDirectory, 'manifest.json'), 'utf8'));
+
+const getSourceFiles = () => [
+  'README.md',
+  'manifest.json',
+  'package.json',
+  'package-lock.json',
+  'tsconfig.json',
+  'webpack.config.js',
+  'eslint.config.mjs',
+  'src',
+  'public',
+  'icons',
+];
 
 const createArchive = (sourceDirectory, archivePath) =>
   new Promise((resolve, reject) => {
@@ -40,8 +53,10 @@ const packageExtension = async () => {
   await mkdir(stagingDirectory, { recursive: true });
 
   try {
-    for (const directory of ['dist', 'public', 'icons', 'manifest.json']) {
-      await cp(path.join(rootDirectory, directory), path.join(stagingDirectory, directory), {
+    const files =
+      target === 'source' ? getSourceFiles() : ['dist', 'public', 'icons', 'manifest.json'];
+    for (const file of files) {
+      await cp(path.join(rootDirectory, file), path.join(stagingDirectory, file), {
         recursive: true,
       });
     }
