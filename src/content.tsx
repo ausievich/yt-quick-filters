@@ -82,17 +82,32 @@ class ContentScript {
   }
 }
 
-// Initialize content script with delay to ensure service worker is ready
+let contentScriptStarted = false;
+
+const isAgileRoute = (): boolean => /\/agiles(?:\/|$)/.test(location.pathname);
+
 const initializeContentScript = async () => {
-  // Check if extension is ready
+  if (contentScriptStarted || !isAgileRoute()) {
+    return;
+  }
+
   if (chrome.runtime?.id) {
+    contentScriptStarted = true;
     const contentScript = new ContentScript();
     await contentScript.start();
   } else {
-    // Retry after a short delay
-    setTimeout(initializeContentScript, 100);
+    setTimeout(() => void initializeContentScript(), 100);
   }
 };
 
-// Start initialization
-initializeContentScript();
+void initializeContentScript();
+
+const routeObserver = new MutationObserver(() => {
+  void initializeContentScript();
+
+  if (contentScriptStarted) {
+    routeObserver.disconnect();
+  }
+});
+
+routeObserver.observe(document.documentElement, { childList: true, subtree: true });
