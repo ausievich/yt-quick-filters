@@ -1,5 +1,14 @@
 # Playwright MCP reference
 
+## Open the public board
+
+After `browser_close`, run `scripts/open-public-board.js` with
+`browser_run_code_unsafe` and an absolute filename. It installs the observed
+CookieHub consent cookie (`cookiehub` for `.youtrack.jetbrains.com`) before
+navigating to the default board, then waits for the board query input. The
+cookie is deliberately a session cookie: the captured consent value is stable
+for the run, without inheriting a calendar expiry date.
+
 ## Extension inject
 
 Read the block below, replace `EXT_ROOT` with the repo root (absolute path, forward slashes), pass as `code` to `browser_run_code_unsafe`. Do not use `addInitScript`.

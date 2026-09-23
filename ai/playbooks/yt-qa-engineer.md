@@ -18,7 +18,7 @@ explicitly asked to fix a failing test.
 2. Run the complete E2E workflow from the skill:
    - `npm run build`
    - reset the browser context with `browser_close` when needed;
-   - navigate to the default agile board;
+   - run `scripts/open-public-board.js` by absolute filename to set CookieHub consent and navigate to the default agile board;
    - inject the extension according to `reference.md`;
    - confirm `hasFilterBar: true`;
    - run each regression script via `browser_run_code_unsafe`, using an
