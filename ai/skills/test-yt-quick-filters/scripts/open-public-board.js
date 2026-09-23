@@ -23,8 +23,9 @@ async (page) => {
   await page.locator('[data-test="ring-query-assist-input"]').waitFor({ timeout: 10_000 });
 
   return {
-    cookieHubConsentPresent: (await page.context().cookies())
-      .some(({ name, domain }) => name === 'cookiehub' && domain === '.youtrack.jetbrains.com'),
+    cookieHubConsentPresent: (await page.context().cookies()).some(
+      ({ name, domain }) => name === 'cookiehub' && domain === '.youtrack.jetbrains.com',
+    ),
     cookieBannerPresent: (await page.getByRole('heading', { name: 'Cookie Settings' }).count()) > 0,
     url: page.url(),
   };
