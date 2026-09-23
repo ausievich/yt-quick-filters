@@ -21,6 +21,7 @@ async (page) => {
 
   await page.evaluate(() => {
     const store = {};
+    const clone = (value) => (value === undefined ? undefined : structuredClone(value));
     window.chrome = {
       runtime: { id: 'ytqf-test', onMessage: { addListener: () => {} } },
       storage: {
@@ -32,12 +33,12 @@ async (page) => {
               : typeof keys === 'string'
                 ? [keys]
                 : Object.keys(keys || {});
-            for (const key of list) result[key] = store[key];
+            for (const key of list) result[key] = clone(store[key]);
             if (cb) cb(result);
             return Promise.resolve(result);
           },
           set: (items, cb) => {
-            Object.assign(store, items);
+            for (const [key, value] of Object.entries(items)) store[key] = clone(value);
             if (cb) cb();
             return Promise.resolve();
           },

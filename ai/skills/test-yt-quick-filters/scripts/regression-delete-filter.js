@@ -36,7 +36,7 @@ async (page) => {
   await filterBtn.click({ button: 'right' });
   await page.locator('#ytqf-menu').waitFor({ state: 'visible', timeout: 5000 });
   await page.locator('#ytqf-menu .mi.danger', { hasText: 'Delete' }).click();
-  await page.waitForTimeout(1000);
+  await filterBtn.waitFor({ state: 'detached', timeout: 5000 });
 
   const filterGone =
     (await page.locator('#ytqf-bar button.btn').filter({ hasText: deleteLabel }).count()) === 0;
