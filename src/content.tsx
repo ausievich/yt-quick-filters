@@ -82,30 +82,32 @@ class ContentScript {
   }
 }
 
-// The flag lives in the extension's isolated world and survives bundle reinjection.
-declare global {
-  interface Window {
-    __ytqfStarted?: boolean;
-  }
-}
+let contentScriptStarted = false;
 
-// Initialize at most once per document, including while async startup is pending.
+const isAgileRoute = (): boolean => /\/agiles(?:\/|$)/.test(location.pathname);
+
 const initializeContentScript = async () => {
-  if (window.__ytqfStarted) return;
-
-  // Recheck at execution time: frame-targeted navigation may have moved on.
-  // The background listener will start us later if this is not an Agile view.
-  if (location.protocol !== 'https:' || !/\/agiles(?:\/|$)/.test(location.pathname)) return;
+  if (contentScriptStarted || !isAgileRoute()) {
+    return;
+  }
 
   if (chrome.runtime?.id) {
-    window.__ytqfStarted = true;
+    contentScriptStarted = true;
     const contentScript = new ContentScript();
     await contentScript.start();
   } else {
-    // Retry after a short delay
-    setTimeout(initializeContentScript, 100);
+    setTimeout(() => void initializeContentScript(), 100);
   }
 };
 
-// Start initialization
-initializeContentScript();
+void initializeContentScript();
+
+const routeObserver = new MutationObserver(() => {
+  void initializeContentScript();
+
+  if (contentScriptStarted) {
+    routeObserver.disconnect();
+  }
+});
+
+routeObserver.observe(document.documentElement, { childList: true, subtree: true });
