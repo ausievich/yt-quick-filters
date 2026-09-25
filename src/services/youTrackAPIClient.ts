@@ -8,7 +8,7 @@ import { IssueInfo } from '../types';
 
 interface APIResponse {
   success: boolean;
-  data?: any;
+  data?: unknown;
   error?: string;
 }
 
@@ -128,7 +128,7 @@ export class YouTrackAPIClient {
       const response = await this.makeRequestWithRetry(url);
 
       if (response.success && response.data) {
-        const data = response.data;
+        const data = response.data as Pick<IssueInfo, 'id'> & Partial<IssueInfo>;
 
         return {
           id: data.id,
