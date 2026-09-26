@@ -1,12 +1,12 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
+import { createRoot, Root } from 'react-dom/client';
 import { DaysInStatusTags } from '../components/DaysInStatusTags';
 import { DaysInStatusAPI } from './daysInStatusAPI';
 
 export class DaysInStatusUI {
   private static instance: DaysInStatusUI;
   private observer: MutationObserver | null = null;
-  private mountedComponents: Map<string, { root: any; element: HTMLElement }> = new Map();
+  private mountedComponents: Map<string, { root: Root; element: HTMLElement }> = new Map();
   private isEnabled: boolean = true;
 
   public static getInstance(): DaysInStatusUI {
