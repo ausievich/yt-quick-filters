@@ -17,8 +17,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgb(255, 255, 255);
-  border: 1px solid rgb(223, 229, 235);
+  background-color: var(--ring-popup-background-color, rgb(255, 255, 255));
+  border: 1px solid var(--ring-popup-border-color, rgb(223, 229, 235));
   border-radius: 4px;
   display: flex;
   flex-direction: column;
@@ -27,8 +27,8 @@
   overflow-wrap: break-word;
   width: calc(8px * 58);
   box-shadow:
-    0 4px 24px rgba(0, 28, 54, 0.1),
-    0 2px 6px rgba(0, 28, 54, 0.04);
+    0 4px 24px var(--ring-popup-shadow-color, rgba(0, 28, 54, 0.1)),
+    0 2px 6px var(--ring-popup-secondary-shadow-color, rgba(0, 28, 54, 0.04));
   z-index: 99999;
 }
 
@@ -40,7 +40,7 @@
 
 #ytqf-modal .hdr {
   padding: 32px 32px 16px;
-  background: rgb(255, 255, 255);
+  background: var(--ring-popup-background-color, rgb(255, 255, 255));
   font:
     600 24px system-ui,
     -apple-system,
@@ -52,7 +52,7 @@
     Helvetica Neue,
     Arial,
     sans-serif;
-  color: rgb(31, 35, 38);
+  color: var(--ring-text-color, rgb(31, 35, 38));
   margin: 0;
 }
 
@@ -76,13 +76,13 @@
     Helvetica Neue,
     Arial,
     sans-serif;
-  color: rgb(115, 117, 119);
+  color: var(--ring-secondary-color, rgb(115, 117, 119));
 }
 
 #ytqf-modal input {
   width: 100%;
   padding: 1px 8px;
-  border: 1px solid rgb(197, 209, 219);
+  border: 1px solid var(--ring-borders-color, rgb(197, 209, 219));
   border-radius: 4px;
   font:
     14px system-ui,
@@ -95,8 +95,8 @@
     Helvetica Neue,
     Arial,
     sans-serif;
-  color: rgb(31, 35, 38);
-  background: rgb(255, 255, 255);
+  color: var(--ring-text-color, rgb(31, 35, 38));
+  background: var(--ring-content-background-color, rgb(255, 255, 255));
   box-sizing: border-box;
   margin-bottom: 16px;
   height: 24px;
@@ -105,16 +105,16 @@
 
 #ytqf-modal input:focus {
   outline: none;
-  border-color: rgb(128, 198, 255);
+  border-color: var(--ring-border-hover-color, rgb(128, 198, 255));
 }
 
 #ytqf-modal input.error {
-  background-color: rgb(255, 255, 255);
+  background-color: var(--ring-content-background-color, rgb(255, 255, 255));
 }
 
 #ytqf-modal .f {
   padding: 16px 32px 32px;
-  background: rgb(255, 255, 255);
+  background: var(--ring-content-background-color, rgb(255, 255, 255));
   display: flex;
   gap: 8px;
   justify-content: flex-end;
@@ -127,7 +127,7 @@
   padding: 0 16px;
   cursor: pointer;
   text-decoration: none;
-  color: rgb(31, 35, 38);
+  color: var(--ring-text-color, rgb(31, 35, 38));
   border: 0;
   outline: 0;
   font-family:
@@ -144,8 +144,8 @@
   font-size: 12px;
   line-height: 24px;
   transition: none;
-  background-color: rgb(255, 255, 255);
-  box-shadow: inset 0 0 0 1px rgb(197, 209, 219);
+  background-color: var(--ring-content-background-color, rgb(255, 255, 255));
+  box-shadow: inset 0 0 0 1px var(--ring-borders-color, rgb(197, 209, 219));
   border-radius: 4px;
   margin: 0;
   position: relative;
@@ -154,30 +154,30 @@
 
 #ytqf-modal .f button:hover {
   z-index: 3;
-  box-shadow: inset 0 0 0 1px rgb(128, 198, 255);
+  box-shadow: inset 0 0 0 1px var(--ring-border-hover-color, rgb(128, 198, 255));
 }
 
 #ytqf-modal .f button.primary {
-  background-color: rgb(0, 128, 229);
+  background-color: var(--ring-main-color, rgb(0, 128, 229));
   box-shadow: none;
-  color: rgb(255, 255, 255);
+  color: var(--ring-white-text-color, rgb(255, 255, 255));
 }
 
 #ytqf-modal .f button.primary:hover {
-  background-color: rgb(0, 112, 204);
+  background-color: var(--ring-main-hover-color, rgb(0, 112, 204));
   box-shadow: none;
 }
 
 #ytqf-modal .f button:disabled {
-  background-color: rgb(245, 245, 245);
-  box-shadow: inset 0 0 0 1px rgb(232, 232, 232);
-  color: rgb(153, 153, 153);
+  background-color: var(--ring-disabled-background-color, rgb(245, 245, 245));
+  box-shadow: inset 0 0 0 1px var(--ring-border-disabled-color, rgb(232, 232, 232));
+  color: var(--ring-disabled-color, rgb(153, 153, 153));
   cursor: not-allowed;
   z-index: 0;
 }
 
 #ytqf-modal .f button.primary:disabled {
-  background-color: rgb(245, 245, 245);
-  box-shadow: inset 0 0 0 1px rgb(232, 232, 232);
-  color: rgb(153, 153, 153);
+  background-color: var(--ring-disabled-background-color, rgb(245, 245, 245));
+  box-shadow: inset 0 0 0 1px var(--ring-border-disabled-color, rgb(232, 232, 232));
+  color: var(--ring-disabled-color, rgb(153, 153, 153));
 }
