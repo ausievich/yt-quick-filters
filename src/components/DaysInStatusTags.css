@@ -22,8 +22,6 @@
 }
 
 .days-in-status__tag--green {
-  /* Closest live Ring UI variable: --ring-icon-success-color, rgb(32, 138, 60) */
-  /* 2nd closest: --ring-main-success-color, rgb(31, 128, 57) */
   background: rgb(46, 160, 67);
   color: white;
 }
@@ -35,14 +33,11 @@
 }
 
 .days-in-status__tag--red {
-  /* Closest live Ring UI variable: --ring-button-danger-hover-color, rgb(219, 59, 75) */
-  /* 2nd closest: --ring-main-error-color, rgb(204, 54, 69) */
   background: rgb(220, 53, 69);
   color: white;
 }
 
 .days-in-status__tag--gray {
-  /* Closest live Ring UI variable: --ring-secondary-color, rgb(108, 112, 126) */
   background-color: rgb(108, 117, 125);
   color: white;
 }
