@@ -44,6 +44,14 @@
     "react-dom": "^18.2.0"
   },
   "lint-staged": {
-    "*.{js,mjs,cjs,ts,tsx,json,css,md,yml,yaml,html}": "prettier --write"
+    "src/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "webpack.config.js": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{js,mjs,cjs,json,css,md,yml,yaml,html}": "prettier --write"
   }
 }
