@@ -4,9 +4,9 @@ This is the shared entry point for AI coding tools. Keep reusable project
 guidance and workflows in `ai/`; do not copy full instructions into
 tool-specific configuration folders.
 
-## Verification after extension changes
+## E2E verification
 
-After changing browser-extension behavior, run the `yt-qa-engineer` workflow.
+Run the `yt-qa-engineer` workflow only when the user explicitly asks for it.
 Its authoritative instructions are:
 
 - `ai/skills/test-yt-quick-filters/SKILL.md`
