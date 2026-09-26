@@ -22,18 +22,18 @@
 }
 
 .days-in-status__tag--green {
-  background: #2ea043;
+  background: var(--ring-main-success-color, #2ea043);
   color: white;
 }
 
 .days-in-status__tag--yellow {
-  background: #ffc107;
+  background: var(--ring-main-warning-color, #ffc107);
   color: #2c3e50;
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
 }
 
 .days-in-status__tag--red {
-  background: #dc3545;
+  background: var(--ring-main-error-color, #dc3545);
 }
 
 .days-in-status--loading .days-in-status__tag {
@@ -57,6 +57,6 @@
 }
 
 .days-in-status__tag--gray {
-  background-color: #6c757d;
+  background-color: var(--ring-secondary-color, #6c757d);
   color: white;
 }
