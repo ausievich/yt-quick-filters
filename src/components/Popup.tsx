@@ -5,6 +5,7 @@ import {
   DEFAULT_THRESHOLD_YELLOW,
   DEFAULT_THRESHOLD_RED,
 } from '../services/storage';
+import { DaysInStatusSettings } from '../types';
 import manifest from '../../manifest.json';
 import './Popup.css';
 
@@ -26,7 +27,7 @@ const Popup: React.FC = () => {
   const storageService = StorageService.getInstance();
 
   // Helper function to notify content script about settings changes
-  const notifyContentScript = async (message: any) => {
+  const notifyContentScript = async (message: Partial<DaysInStatusSettings>) => {
     try {
       const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
       if (!tab?.id) return;

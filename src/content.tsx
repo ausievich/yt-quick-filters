@@ -1,9 +1,12 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
+import { createRoot, Root } from 'react-dom/client';
 import { QuickFiltersApp } from './components/QuickFiltersApp';
 import { TokenManager } from './services/tokenManager';
 import { DaysInStatusSettingsService } from './services/daysInStatusSettings';
+import { DaysInStatusSettings } from './types';
 import './styles.css';
+
+type SettingsMessage = { type?: string } & Partial<DaysInStatusSettings>;
 
 let isSettingsMessageBridgeInitialized = false;
 
@@ -12,7 +15,7 @@ const initializeSettingsMessageBridge = (): void => {
     return;
   }
 
-  chrome.runtime.onMessage.addListener((message: any) => {
+  chrome.runtime.onMessage.addListener((message: SettingsMessage | undefined) => {
     if (message?.type !== 'UPDATE_DAYS_IN_STATUS_SETTINGS') {
       return;
     }
@@ -31,7 +34,7 @@ const initializeSettingsMessageBridge = (): void => {
 };
 
 class ContentScript {
-  private root: any = null;
+  private root: Root | null = null;
 
   private inject(): void {
     // Check if already injected
