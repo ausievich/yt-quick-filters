@@ -1,0 +1,10 @@
+{
+  "extensionName": {
+    "message": "YouTrack Quick Filters",
+    "description": "在 Chrome 和 Chrome 网上应用店中显示的扩展程序名称。"
+  },
+  "extensionDescription": {
+    "message": "为 YouTrack 敏捷看板添加快捷筛选按钮。通过对话框创建筛选器。",
+    "description": "在 Chrome 和 Chrome 网上应用店中显示的扩展程序简短说明。"
+  }
+}
