@@ -1,8 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "YouTrack Quick Filters",
+  "name": "__MSG_extensionName__",
   "version": "2.2.7",
-  "description": "Add quick filter buttons to YouTrack Agile Boards. Create filters via a modal.",
+  "description": "__MSG_extensionDescription__",
+  "default_locale": "en",
   "icons": { "128": "icons/logo_128.png" },
   "browser_specific_settings": {
     "gecko": {
