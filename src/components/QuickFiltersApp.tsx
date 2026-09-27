@@ -7,6 +7,7 @@ import { YouTrackVersionService } from '../services/youTrackVersion';
 import { useQueryParams } from '../hooks/useQueryParams';
 import { FilterBar } from './FilterBar';
 import { FilterModal } from './FilterModal';
+import { SaveFilterButton } from './SaveFilterButton';
 import { ContextMenu } from './ContextMenu';
 import { DaysInStatusUI } from '../services/daysInStatusUI';
 
@@ -48,6 +49,7 @@ export const QuickFiltersApp: React.FC = () => {
 
   // State to hold the DOM node for the portal
   const [portalTarget, setPortalTarget] = useState<Element | null>(null);
+  const [searchSaveTarget, setSearchSaveTarget] = useState<Element | null>(null);
 
   // Use custom hook for working with query parameters
   const { query: currentQuery, pathname } = useQueryParams();
@@ -65,20 +67,27 @@ export const QuickFiltersApp: React.FC = () => {
   useEffect(() => {
     const findTargetElements = () => {
       const filterTarget = versionService.getTargetElement();
-      return { filterTarget };
+      const searchTarget = versionService.getSearchSaveButtonTarget();
+      return { filterTarget, searchTarget };
     };
 
     // Try immediately first
-    const { filterTarget } = findTargetElements();
+    const { filterTarget, searchTarget } = findTargetElements();
     if (filterTarget) {
       setPortalTarget(filterTarget);
+    }
+    if (searchTarget) {
+      setSearchSaveTarget(searchTarget);
     }
 
     // Keep observing DOM changes to reattach after SPA navigation
     const observer = new MutationObserver(() => {
-      const { filterTarget } = findTargetElements();
+      const { filterTarget, searchTarget } = findTargetElements();
       if (filterTarget) {
         setPortalTarget(filterTarget);
+      }
+      if (searchTarget) {
+        setSearchSaveTarget(searchTarget);
       }
     });
 
@@ -132,6 +141,19 @@ export const QuickFiltersApp: React.FC = () => {
       isEdit: false,
     });
   }, []);
+
+  const handleSaveFromSearch = useCallback(() => {
+    const query = (optimisticQuery ?? currentQuery).trim();
+    if (!query) {
+      return;
+    }
+
+    setModal({
+      isOpen: true,
+      isEdit: false,
+      initialQuery: query,
+    });
+  }, [optimisticQuery, currentQuery]);
 
   const handleContextMenu = useCallback((e: React.MouseEvent, item: Filter, index: number) => {
     e.preventDefault();
@@ -222,6 +244,8 @@ export const QuickFiltersApp: React.FC = () => {
   // Determine active filter based on current query
   const effectiveQuery = optimisticQuery ?? currentQuery;
   const activeFilter = utilsService.findActiveFilter(filters, effectiveQuery);
+  const canSaveFromSearch =
+    effectiveQuery.trim() !== '' && !utilsService.findActiveFilter(filters, effectiveQuery);
 
   return (
     <>
@@ -247,6 +271,11 @@ export const QuickFiltersApp: React.FC = () => {
         />
       )}
 
+      {searchSaveTarget &&
+        ReactDOM.createPortal(
+          <SaveFilterButton visible={canSaveFromSearch} onSave={handleSaveFromSearch} />,
+          searchSaveTarget,
+        )}
       {/* Render context menu and modal in document.body for proper layering */}
       {contextMenu.isOpen &&
         contextMenu.item &&
