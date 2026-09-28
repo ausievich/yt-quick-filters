@@ -1,0 +1,10 @@
+{
+  "extensionName": {
+    "message": "YouTrack クイックフィルター",
+    "description": "Chrome と Chrome ウェブストアに表示される拡張機能の名前。"
+  },
+  "extensionDescription": {
+    "message": "YouTrack のアジャイルボードにクイックフィルターボタンを追加します。ダイアログでフィルターを作成できます。",
+    "description": "Chrome と Chrome ウェブストアに表示される拡張機能の短い説明。"
+  }
+}
