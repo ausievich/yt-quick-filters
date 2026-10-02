@@ -4,7 +4,7 @@
     "description": "Nazwa rozszerzenia wyświetlana w Chrome i Chrome Web Store."
   },
   "extensionDescription": {
-    "message": "Dodaje przyciski szybkich filtrów do tablic Agile w YouTrack. Wyświetla tagi Created i Updated na kartach.",
+    "message": "Dodaj przyciski szybkich filtrów do tablic Agile w YouTrack. Wyświetl tagi Created i Updated na kartach.",
     "description": "Krótki opis rozszerzenia wyświetlany w Chrome i Chrome Web Store."
   }
 }

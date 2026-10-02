@@ -4,7 +4,7 @@
     "description": "Le nom de l’extension affiché dans Chrome et le Chrome Web Store."
   },
   "extensionDescription": {
-    "message": "Ajoute des boutons de filtres rapides aux tableaux Agile YouTrack. Affiche les étiquettes Created et Updated sur les cartes.",
+    "message": "Ajoutez des boutons de filtres rapides aux tableaux Agile YouTrack. Affichez les étiquettes Created et Updated sur les cartes.",
     "description": "La brève description de l’extension affichée dans Chrome et le Chrome Web Store."
   }
 }

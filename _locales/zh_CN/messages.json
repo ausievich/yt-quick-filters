@@ -4,7 +4,7 @@
     "description": "在 Chrome 和 Chrome 网上应用店中显示的扩展程序名称。"
   },
   "extensionDescription": {
-    "message": "为 YouTrack 敏捷看板添加快捷筛选按钮。在卡片上显示 Created 和 Updated 标签。",
+    "message": "在 YouTrack 敏捷看板中添加快捷筛选按钮。在卡片上显示 Created 和 Updated 标签。",
     "description": "在 Chrome 和 Chrome 网上应用店中显示的扩展程序简短说明。"
   }
 }
