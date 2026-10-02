@@ -4,7 +4,7 @@
     "description": "Chrome と Chrome ウェブストアに表示される拡張機能の名前。"
   },
   "extensionDescription": {
-    "message": "YouTrack のアジャイルボードにクイックフィルターボタンを追加してください。カードに Created と Updated のタグを表示してください。",
+    "message": "YouTrack のアジャイルボードにクイックフィルターボタンを追加します。カードに Created と Updated のタグを表示します。",
     "description": "Chrome と Chrome ウェブストアに表示される拡張機能の短い説明。"
   }
 }

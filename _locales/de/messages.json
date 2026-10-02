@@ -4,7 +4,7 @@
     "description": "Der Name der Erweiterung, der in Chrome und im Chrome Web Store angezeigt wird."
   },
   "extensionDescription": {
-    "message": "Fügen Sie YouTrack-Agile-Boards Schaltflächen für Schnellfilter hinzu. Zeigen Sie Created- und Updated-Tags auf Karten an.",
+    "message": "Fügt YouTrack-Agile-Boards Schaltflächen für Schnellfilter hinzu und zeigt Created- und Updated-Tags auf Karten an.",
     "description": "Die kurze Beschreibung der Erweiterung, die in Chrome und im Chrome Web Store angezeigt wird."
   }
 }
