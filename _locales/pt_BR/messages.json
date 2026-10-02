@@ -1,0 +1,10 @@
+{
+  "extensionName": {
+    "message": "Filtros rápidos do YouTrack",
+    "description": "O nome da extensão exibido no Chrome e na Chrome Web Store."
+  },
+  "extensionDescription": {
+    "message": "Adicione botões de filtros rápidos aos quadros Agile do YouTrack. Exiba as tags Created e Updated nos cartões.",
+    "description": "A descrição curta da extensão exibida no Chrome e na Chrome Web Store."
+  }
+}

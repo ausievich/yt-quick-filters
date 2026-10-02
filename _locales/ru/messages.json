@@ -1,0 +1,10 @@
+{
+  "extensionName": {
+    "message": "Быстрые фильтры YouTrack",
+    "description": "Название расширения на русском языке."
+  },
+  "extensionDescription": {
+    "message": "Добавляйте кнопки быстрых фильтров на Agile-доски YouTrack. Отображайте теги Created и Updated на карточках.",
+    "description": "Краткое описание расширения на русском языке."
+  }
+}

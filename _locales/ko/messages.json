@@ -1,0 +1,10 @@
+{
+  "extensionName": {
+    "message": "YouTrack 빠른 필터",
+    "description": "Chrome 및 Chrome 웹 스토어에 표시되는 확장 프로그램 이름입니다."
+  },
+  "extensionDescription": {
+    "message": "YouTrack 애자일 보드에 빠른 필터 버튼을 추가합니다. 카드에 Created 및 Updated 태그를 표시합니다.",
+    "description": "Chrome 및 Chrome 웹 스토어에 표시되는 확장 프로그램의 짧은 설명입니다."
+  }
+}

@@ -25,6 +25,7 @@ const getSourceFiles = () => [
   'tsconfig.json',
   'webpack.config.js',
   'eslint.config.mjs',
+  '_locales',
   'src',
   'public',
   'icons',
@@ -54,7 +55,9 @@ const packageExtension = async () => {
 
   try {
     const files =
-      target === 'source' ? getSourceFiles() : ['dist', 'public', 'icons', 'manifest.json'];
+      target === 'source'
+        ? getSourceFiles()
+        : ['dist', 'public', 'icons', '_locales', 'manifest.json'];
     for (const file of files) {
       await cp(path.join(rootDirectory, file), path.join(stagingDirectory, file), {
         recursive: true,
