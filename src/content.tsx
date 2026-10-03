@@ -3,22 +3,36 @@ import { createRoot, Root } from 'react-dom/client';
 import { QuickFiltersApp } from './components/QuickFiltersApp';
 import { TokenManager } from './services/tokenManager';
 import { DaysInStatusSettingsService } from './services/daysInStatusSettings';
-import { DaysInStatusSettings } from './types';
+import { StorageService } from './services/storage';
+import { ColorTheme, DaysInStatusSettings } from './types';
 import './styles.css';
 
-type SettingsMessage = { type?: string } & Partial<DaysInStatusSettings>;
+type ContentMessage = { type?: string; colorTheme?: ColorTheme } & Partial<DaysInStatusSettings>;
 
 let isSettingsMessageBridgeInitialized = false;
+let isThemeSupportInitialized = false;
+
+const applyColorTheme = (theme: ColorTheme): void => {
+  if (theme === 'ring') {
+    delete document.documentElement.dataset.ytqfTheme;
+    return;
+  }
+
+  document.documentElement.dataset.ytqfTheme = theme;
+};
 
 const initializeSettingsMessageBridge = (): void => {
   if (isSettingsMessageBridgeInitialized) {
     return;
   }
 
-  chrome.runtime.onMessage.addListener((message: SettingsMessage | undefined) => {
-    if (message?.type !== 'UPDATE_DAYS_IN_STATUS_SETTINGS') {
+  chrome.runtime.onMessage.addListener((message: ContentMessage | undefined) => {
+    if (message?.type === 'UPDATE_COLOR_THEME' && message.colorTheme) {
+      applyColorTheme(message.colorTheme);
       return;
     }
+
+    if (message?.type !== 'UPDATE_DAYS_IN_STATUS_SETTINGS') return;
 
     const settingsService = DaysInStatusSettingsService.getInstance();
     settingsService.update({
@@ -31,6 +45,27 @@ const initializeSettingsMessageBridge = (): void => {
   });
 
   isSettingsMessageBridgeInitialized = true;
+};
+
+const initializeThemeSupport = (): void => {
+  if (isThemeSupportInitialized) {
+    return;
+  }
+
+  if (!chrome.runtime?.id) {
+    setTimeout(initializeThemeSupport, 100);
+    return;
+  }
+
+  isThemeSupportInitialized = true;
+  initializeSettingsMessageBridge();
+
+  void StorageService.getInstance()
+    .getColorTheme()
+    .then(applyColorTheme)
+    .catch((error) => {
+      console.warn('Failed to initialize color theme:', error);
+    });
 };
 
 class ContentScript {
@@ -54,8 +89,6 @@ class ContentScript {
   }
 
   public async start(): Promise<void> {
-    initializeSettingsMessageBridge();
-
     // Prime settings cache once per content script context.
     try {
       await DaysInStatusSettingsService.getInstance().init();
@@ -102,6 +135,7 @@ const initializeContentScript = async () => {
   }
 };
 
+initializeThemeSupport();
 void initializeContentScript();
 
 const routeObserver = new MutationObserver(() => {

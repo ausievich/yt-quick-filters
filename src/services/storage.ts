@@ -1,4 +1,4 @@
-import { Filter, StorageData, BoardInfo, DaysInStatusSettings } from '../types';
+import { Filter, StorageData, BoardInfo, ColorTheme, DaysInStatusSettings } from '../types';
 
 const KEY_PREFIX = 'ytQuickFilters_';
 const DEFAULT_FILTERS: Filter[] = [{ label: 'My Tasks', query: 'Assignee: me' }];
@@ -6,6 +6,7 @@ const DEFAULT_FILTERS: Filter[] = [{ label: 'My Tasks', query: 'Assignee: me' }]
 export const DEFAULT_THRESHOLD_YELLOW = 14;
 export const DEFAULT_THRESHOLD_RED = 60;
 export const DEFAULT_COMPACT_FORMAT = true;
+export const DEFAULT_COLOR_THEME: ColorTheme = 'ring';
 
 export class StorageService {
   private static instance: StorageService;
@@ -121,6 +122,14 @@ export class StorageService {
   }
 
   // Days In Status settings (global, not board-specific)
+  public async getColorTheme(): Promise<ColorTheme> {
+    return this.getStorageValue('ytqf_colorTheme', DEFAULT_COLOR_THEME);
+  }
+
+  public async setColorTheme(theme: ColorTheme): Promise<void> {
+    return this.setStorageValue('ytqf_colorTheme', theme);
+  }
+
   public async getHideCreatedTag(): Promise<boolean> {
     return new Promise((resolve) => {
       chrome.storage.sync.get('ytqf_hideCreatedTag', (data) => {

@@ -1,0 +1,266 @@
+/*
+ * YouTrack consumes Ring UI tokens from the document root. Applying a theme to
+ * html therefore recolors both YouTrack and the extension without selector
+ * overrides. The default `ring` theme has no attribute and remains untouched.
+ */
+:root {
+  --ytqf-surface: var(--ring-content-background-color);
+  --ytqf-popup-surface: var(--ring-popup-background-color);
+  --ytqf-text: var(--ring-text-color);
+  --ytqf-text-secondary: var(--ring-secondary-color);
+  --ytqf-border: var(--ring-borders-color);
+  --ytqf-popup-border: var(--ring-popup-border-color);
+  --ytqf-border-hover: var(--ring-border-hover-color);
+  --ytqf-hover-surface: var(--ring-hover-background-color);
+  --ytqf-selected-surface: var(--ring-selected-background-color);
+  --ytqf-accent: var(--ring-main-color);
+  --ytqf-accent-hover: var(--ring-main-hover-color);
+  --ytqf-on-accent: var(--ring-white-text-color);
+  --ytqf-danger: var(--ring-main-error-color);
+  --ytqf-danger-surface: var(--ring-removed-background-color);
+  --ytqf-disabled-surface: var(--ring-disabled-background-color);
+  --ytqf-disabled-border: var(--ring-border-disabled-color);
+  --ytqf-disabled-text: var(--ring-disabled-color);
+  --ytqf-popup-shadow: var(--ring-popup-shadow-color);
+  --ytqf-popup-secondary-shadow: var(--ring-popup-secondary-shadow-color);
+  --ytqf-tag-success: var(--ring-main-success-color);
+  --ytqf-tag-warning: var(--ring-main-warning-color);
+  --ytqf-tag-warning-text: var(--ring-warning-color);
+  --ytqf-tag-danger: var(--ring-main-error-color);
+  --ytqf-tag-neutral: var(--ring-secondary-color);
+  --ytqf-tag-border: rgb(var(--ring-white-text-components) / 10%);
+  --ytqf-tag-warning-shadow: rgb(var(--ring-white-text-components) / 30%);
+  --ytqf-tag-loading: rgb(var(--ring-secondary-components) / 90%);
+  --ytqf-tag-shadow: rgb(var(--ring-text-components) / 40%);
+}
+
+:root[data-ytqf-theme='ocean'] {
+  --ytqf-canvas: 240, 249, 255;
+  --ytqf-theme-surface: 255, 255, 255;
+  --ytqf-sidebar: 231, 246, 253;
+  --ytqf-theme-text: 12, 55, 87;
+  --ytqf-secondary: 57, 104, 134;
+  --ytqf-theme-border: 156, 210, 234;
+  --ytqf-theme-accent: 0, 124, 181;
+  --ytqf-accent-hover: 0, 99, 154;
+  --ytqf-hover: 218, 242, 252;
+  --ytqf-selected: 191, 232, 249;
+  --ytqf-success: 0, 133, 104;
+  --ytqf-warning: 219, 142, 0;
+  --ytqf-error: 193, 47, 61;
+  --ytqf-purple: 93, 93, 204;
+  --ytqf-shadow: 0, 78, 120;
+}
+
+:root[data-ytqf-theme='violet'] {
+  --ytqf-canvas: 249, 247, 255;
+  --ytqf-theme-surface: 255, 255, 255;
+  --ytqf-sidebar: 242, 238, 253;
+  --ytqf-theme-text: 54, 41, 86;
+  --ytqf-secondary: 106, 88, 142;
+  --ytqf-theme-border: 205, 193, 235;
+  --ytqf-theme-accent: 103, 66, 178;
+  --ytqf-accent-hover: 82, 51, 146;
+  --ytqf-hover: 237, 231, 255;
+  --ytqf-selected: 222, 210, 255;
+  --ytqf-success: 45, 138, 90;
+  --ytqf-warning: 201, 131, 0;
+  --ytqf-error: 184, 55, 86;
+  --ytqf-purple: 126, 80, 203;
+  --ytqf-shadow: 70, 43, 122;
+}
+
+:root[data-ytqf-theme='forest'] {
+  --ytqf-canvas: 244, 250, 245;
+  --ytqf-theme-surface: 255, 255, 255;
+  --ytqf-sidebar: 233, 245, 235;
+  --ytqf-theme-text: 31, 67, 45;
+  --ytqf-secondary: 78, 112, 89;
+  --ytqf-theme-border: 177, 211, 184;
+  --ytqf-theme-accent: 37, 124, 73;
+  --ytqf-accent-hover: 28, 99, 57;
+  --ytqf-hover: 220, 241, 225;
+  --ytqf-selected: 197, 232, 206;
+  --ytqf-success: 27, 130, 74;
+  --ytqf-warning: 184, 124, 12;
+  --ytqf-error: 184, 61, 76;
+  --ytqf-purple: 104, 91, 179;
+  --ytqf-shadow: 28, 76, 45;
+}
+
+/* Premium palettes are intentionally present for the visual upsell prototype. */
+:root[data-ytqf-theme='midnight'] {
+  color-scheme: dark;
+  --ytqf-canvas: 20, 22, 30;
+  --ytqf-theme-surface: 28, 31, 42;
+  --ytqf-sidebar: 35, 39, 52;
+  --ytqf-theme-text: 230, 234, 245;
+  --ytqf-secondary: 166, 177, 200;
+  --ytqf-theme-border: 71, 78, 101;
+  --ytqf-theme-accent: 126, 170, 255;
+  --ytqf-accent-hover: 157, 193, 255;
+  --ytqf-hover: 45, 54, 73;
+  --ytqf-selected: 57, 70, 96;
+  --ytqf-success: 74, 185, 128;
+  --ytqf-warning: 242, 190, 86;
+  --ytqf-error: 245, 115, 130;
+  --ytqf-purple: 190, 150, 255;
+  --ytqf-shadow: 0, 0, 0;
+}
+
+:root[data-ytqf-theme='sunset'] {
+  --ytqf-canvas: 255, 248, 242;
+  --ytqf-theme-surface: 255, 255, 255;
+  --ytqf-sidebar: 255, 237, 224;
+  --ytqf-theme-text: 92, 50, 37;
+  --ytqf-secondary: 138, 91, 72;
+  --ytqf-theme-border: 234, 190, 166;
+  --ytqf-theme-accent: 199, 83, 47;
+  --ytqf-accent-hover: 163, 63, 34;
+  --ytqf-hover: 255, 227, 207;
+  --ytqf-selected: 255, 207, 176;
+  --ytqf-success: 42, 133, 94;
+  --ytqf-warning: 194, 119, 13;
+  --ytqf-error: 191, 57, 68;
+  --ytqf-purple: 141, 82, 177;
+  --ytqf-shadow: 102, 49, 28;
+}
+
+:root[data-ytqf-theme='ocean'],
+:root[data-ytqf-theme='violet'],
+:root[data-ytqf-theme='forest'],
+:root[data-ytqf-theme='midnight'],
+:root[data-ytqf-theme='sunset'] {
+  --ring-content-background-color: rgb(var(--ytqf-canvas));
+  --ring-content-background-components: var(--ytqf-canvas);
+  --ring-navigation-background-color: rgb(var(--ytqf-theme-surface));
+  --ring-navigation-background-components: var(--ytqf-theme-surface);
+  --ring-popup-background-color: rgb(var(--ytqf-theme-surface));
+  --ring-popup-background-components: var(--ytqf-theme-surface);
+  --ring-sidebar-background-color: rgb(var(--ytqf-sidebar));
+  --ring-sidebar-background-components: var(--ytqf-sidebar);
+  --ring-secondary-background-color: rgb(var(--ytqf-sidebar));
+  --ring-secondary-background-components: var(--ytqf-sidebar);
+  --ring-text-color: rgb(var(--ytqf-theme-text));
+  --ring-text-components: var(--ytqf-theme-text);
+  --ring-heading-color: rgb(var(--ytqf-theme-text));
+  --ring-active-text-color: rgb(var(--ytqf-theme-text));
+  --ring-secondary-color: rgb(var(--ytqf-secondary));
+  --ring-secondary-components: var(--ytqf-secondary);
+  --ring-icon-color: rgb(var(--ytqf-secondary));
+  --ring-icon-components: var(--ytqf-secondary);
+  --ring-icon-secondary-color: rgb(var(--ytqf-secondary));
+  --ring-icon-secondary-components: var(--ytqf-secondary);
+  --ring-borders-color: rgb(var(--ytqf-theme-border));
+  --ring-borders-components: var(--ytqf-theme-border);
+  --ring-popup-border-color: rgb(var(--ytqf-theme-border));
+  --ring-popup-border-components: var(--ytqf-theme-border);
+  --ring-line-color: rgb(var(--ytqf-theme-border));
+  --ring-line-components: var(--ytqf-theme-border);
+  --ring-border-hover-color: rgb(var(--ytqf-theme-accent));
+  --ring-border-hover-components: var(--ytqf-theme-accent);
+  --ring-border-accent-color: rgb(var(--ytqf-theme-accent));
+  --ring-border-accent-components: var(--ytqf-theme-accent);
+  --ring-main-color: rgb(var(--ytqf-theme-accent));
+  --ring-main-components: var(--ytqf-theme-accent);
+  --ring-main-hover-color: rgb(var(--ytqf-accent-hover));
+  --ring-main-hover-components: var(--ytqf-accent-hover);
+  --ring-main-container-light-color: rgb(var(--ytqf-hover));
+  --ring-main-container-light-components: var(--ytqf-hover);
+  --ring-hover-background-color: rgb(var(--ytqf-hover));
+  --ring-hover-background-components: var(--ytqf-hover);
+  --ring-selected-background-color: rgb(var(--ytqf-selected));
+  --ring-selected-background-components: var(--ytqf-selected);
+  --ring-pale-control-color: rgb(var(--ytqf-selected));
+  --ring-pale-control-components: var(--ytqf-selected);
+  --ring-link-color: rgb(var(--ytqf-accent-hover));
+  --ring-link-components: var(--ytqf-accent-hover);
+  --ring-link-hover-color: rgb(var(--ytqf-theme-accent));
+  --ring-link-hover-components: var(--ytqf-theme-accent);
+  --ring-action-link-color: rgb(var(--ytqf-accent-hover));
+  --ring-action-link-components: var(--ytqf-accent-hover);
+  --ring-header-link-color: rgb(var(--ytqf-accent-hover));
+  --ring-button-primary-background-color: rgb(var(--ytqf-theme-accent));
+  --ring-button-primary-border-color: rgb(var(--ytqf-accent-hover));
+  --ring-button-primary-border-components: var(--ytqf-accent-hover);
+  --ring-button-focus-border-color: rgb(var(--ytqf-theme-accent));
+  --ring-disabled-background-color: rgb(var(--ytqf-sidebar));
+  --ring-disabled-background-components: var(--ytqf-sidebar);
+  --ring-disabled-selected-background-color: rgb(var(--ytqf-theme-border));
+  --ring-disabled-selected-background-components: var(--ytqf-theme-border);
+  --ring-disabled-color: rgb(var(--ytqf-secondary));
+  --ring-disabled-components: var(--ytqf-secondary);
+  --ring-border-disabled-color: rgb(var(--ytqf-theme-border));
+  --ring-border-disabled-components: var(--ytqf-theme-border);
+  --ring-border-selected-disabled-color: rgb(var(--ytqf-theme-border));
+  --ring-border-selected-disabled-components: var(--ytqf-theme-border);
+  --ring-main-success-color: rgb(var(--ytqf-success));
+  --ring-main-success-components: var(--ytqf-success);
+  --ring-main-success-hover-color: rgb(var(--ytqf-success));
+  --ring-main-success-hover-components: var(--ytqf-success);
+  --ring-success-color: rgb(var(--ytqf-success));
+  --ring-success-components: var(--ytqf-success);
+  --ring-success-border-color: rgb(var(--ytqf-success));
+  --ring-success-border-components: var(--ytqf-success);
+  --ring-success-container-light-color: rgb(var(--ytqf-hover));
+  --ring-success-container-light-components: var(--ytqf-hover);
+  --ring-added-background-color: rgb(var(--ytqf-hover));
+  --ring-added-background-components: var(--ytqf-hover);
+  --ring-added-subtle-background-color: rgb(var(--ytqf-hover));
+  --ring-added-subtle-background-components: var(--ytqf-hover);
+  --ring-main-warning-color: rgb(var(--ytqf-warning));
+  --ring-main-warning-components: var(--ytqf-warning);
+  --ring-main-warning-hover-color: rgb(var(--ytqf-warning));
+  --ring-main-warning-hover-components: var(--ytqf-warning);
+  --ring-warning-color: rgb(var(--ytqf-warning));
+  --ring-warning-components: var(--ytqf-warning);
+  --ring-warning-background-color: rgb(var(--ytqf-hover));
+  --ring-warning-background-components: var(--ytqf-hover);
+  --ring-warning-border-color: rgb(var(--ytqf-warning));
+  --ring-warning-border-components: var(--ytqf-warning);
+  --ring-warning-container-light-color: rgb(var(--ytqf-hover));
+  --ring-warning-container-light-components: var(--ytqf-hover);
+  --ring-main-error-color: rgb(var(--ytqf-error));
+  --ring-main-error-components: var(--ytqf-error);
+  --ring-main-error-hover-color: rgb(var(--ytqf-error));
+  --ring-main-error-hover-components: var(--ytqf-error);
+  --ring-error-color: rgb(var(--ytqf-error));
+  --ring-error-components: var(--ytqf-error);
+  --ring-error-border-color: rgb(var(--ytqf-error));
+  --ring-error-border-components: var(--ytqf-error);
+  --ring-error-container-light-color: rgb(var(--ytqf-hover));
+  --ring-error-container-light-components: var(--ytqf-hover);
+  --ring-removed-background-color: rgb(var(--ytqf-hover));
+  --ring-removed-background-components: var(--ytqf-hover);
+  --ring-removed-subtle-background-color: rgb(var(--ytqf-hover));
+  --ring-removed-subtle-background-components: var(--ytqf-hover);
+  --ring-main-purple-color: rgb(var(--ytqf-purple));
+  --ring-main-purple-components: var(--ytqf-purple);
+  --ring-main-purple-hover-color: rgb(var(--ytqf-purple));
+  --ring-main-purple-hover-components: var(--ytqf-purple);
+  --ring-purple-text-color: rgb(var(--ytqf-purple));
+  --ring-purple-text-components: var(--ytqf-purple);
+  --ring-purple-background-color: rgb(var(--ytqf-hover));
+  --ring-purple-background-components: var(--ytqf-hover);
+  --ring-purple-border-color: rgb(var(--ytqf-purple));
+  --ring-purple-border-components: var(--ytqf-purple);
+  --ring-tag-background-color: rgb(var(--ytqf-sidebar));
+  --ring-tag-background-components: var(--ytqf-sidebar);
+  --ring-tag-hover-background-color: rgb(var(--ytqf-theme-border));
+  --ring-tag-hover-background-components: var(--ytqf-theme-border);
+  --ring-code-background-color: rgb(var(--ytqf-theme-surface));
+  --ring-code-color: rgb(var(--ytqf-theme-text));
+  --ring-code-comment-color: rgb(var(--ytqf-secondary));
+  --ring-code-keyword-color: rgb(var(--ytqf-accent-hover));
+  --ring-code-string-color: rgb(var(--ytqf-success));
+  --ring-code-number-color: rgb(var(--ytqf-purple));
+  --ring-tooltip-background-color: rgb(var(--ytqf-theme-surface));
+  --ring-tooltip-text-color: rgb(var(--ytqf-theme-text));
+  --ring-dialog-shadow:
+    0 4px 24px rgb(var(--ytqf-shadow) / 16%), 0 2px 6px rgb(var(--ytqf-shadow) / 6%);
+  --ring-popup-shadow:
+    0 2px 8px rgb(var(--ytqf-shadow) / 16%), 0 1px 2px rgb(var(--ytqf-shadow) / 6%);
+  --ring-popup-shadow-color: rgb(var(--ytqf-shadow) / 16%);
+  --ring-popup-shadow-components: rgb(var(--ytqf-shadow) / 16%);
+  --ring-popup-secondary-shadow-color: rgb(var(--ytqf-shadow) / 6%);
+}

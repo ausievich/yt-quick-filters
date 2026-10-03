@@ -5,7 +5,7 @@ import {
   DEFAULT_THRESHOLD_YELLOW,
   DEFAULT_THRESHOLD_RED,
 } from '../services/storage';
-import { DaysInStatusSettings } from '../types';
+import { ColorTheme, DaysInStatusSettings } from '../types';
 import manifest from '../../manifest.json';
 import './Popup.css';
 
@@ -14,7 +14,26 @@ const GITHUB_ISSUES_URL = 'https://github.com/ausievich/yt-quick-filters/issues'
 const CHROME_WEB_STORE_REVIEWS_URL =
   'https://chromewebstore.google.com/detail/youtrack-quick-filters/iaddgmcajdiblafjfhloadmphkbplddo/reviews';
 
+type ColorThemeOption = {
+  value: ColorTheme;
+  label: string;
+  premium?: boolean;
+};
+
+const COLOR_THEMES: ColorThemeOption[] = [
+  { value: 'ring', label: 'YouTrack' },
+  { value: 'ocean', label: 'Ocean' },
+  { value: 'violet', label: 'Violet' },
+  { value: 'forest', label: 'Forest' },
+  { value: 'midnight', label: 'Midnight', premium: true },
+  { value: 'sunset', label: 'Sunset', premium: true },
+];
+
+// Visual prototype only. Replace with verified subscription entitlement before release.
+const hasPremiumAccess = false;
+
 const Popup: React.FC = () => {
+  const [colorTheme, setColorTheme] = useState<ColorTheme>('ring');
   const [showCreated, setShowCreated] = useState<boolean>(true);
   const [thresholdYellowInput, setThresholdYellowInput] = useState<string>('');
   const [thresholdRedInput, setThresholdRedInput] = useState<string>('');
@@ -47,6 +66,7 @@ const Popup: React.FC = () => {
     const loadSettings = async () => {
       try {
         // Load Days In Status settings
+        const colorThemeValue = await storageService.getColorTheme();
         const hideCreatedValue = await storageService.getHideCreatedTag();
         const thresholdYellowValue = await storageService.getDaysInStatusThresholdYellow();
         const thresholdRedValue = await storageService.getDaysInStatusThresholdRed();
@@ -57,6 +77,7 @@ const Popup: React.FC = () => {
         const normalizedRed = thresholdRedValue > 0 ? thresholdRedValue : DEFAULT_THRESHOLD_RED;
 
         // Invert logic: hideCreated = false means showCreated = true
+        setColorTheme(colorThemeValue);
         setShowCreated(!hideCreatedValue);
         setThresholdYellowInput(normalizedYellow.toString());
         setThresholdRedInput(normalizedRed.toString());
@@ -81,6 +102,25 @@ const Popup: React.FC = () => {
     // Invert: showCreated = true means hideCreated = false
     await storageService.setHideCreatedTag(!value);
     await notifyContentScript({ hideCreated: !value });
+  };
+
+  const handleColorThemeChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value as ColorTheme;
+    const theme = COLOR_THEMES.find((option) => option.value === value);
+    if (!theme || (theme.premium && !hasPremiumAccess)) return;
+
+    setColorTheme(value);
+    await storageService.setColorTheme(value);
+
+    try {
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      if (!tab?.id) return;
+      await chrome.tabs.sendMessage(tab.id, { type: 'UPDATE_COLOR_THEME', colorTheme: value });
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : String(error);
+      if (msg.includes('Receiving end does not exist')) return;
+      console.warn('Failed to notify content script about color theme:', error);
+    }
   };
 
   // Generic handler for threshold input changes
@@ -259,6 +299,23 @@ const Popup: React.FC = () => {
     <div className="popup-container">
       <div className="popup-section">
         <h3 className="popup-section-title">Settings</h3>
+
+        <div className="popup-setting">
+          <label className="popup-select-label">
+            <span className="popup-select-text">Color theme</span>
+            <select value={colorTheme} onChange={handleColorThemeChange} className="popup-select">
+              {COLOR_THEMES.map((theme) => (
+                <option
+                  key={theme.value}
+                  value={theme.value}
+                  disabled={theme.premium && !hasPremiumAccess}
+                >
+                  {theme.premium ? `${theme.label} — Premium` : theme.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
 
         <div className="popup-setting">
           <label className="popup-toggle-label">

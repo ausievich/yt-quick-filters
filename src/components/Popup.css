@@ -59,6 +59,29 @@
   margin-bottom: 0;
 }
 
+.popup-select-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 2px 0;
+}
+
+.popup-select-text {
+  font-size: 13px;
+}
+
+.popup-select {
+  min-width: 112px;
+  height: 24px;
+  padding: 1px 6px;
+  border: 1px solid rgb(211, 213, 219);
+  border-radius: 4px;
+  color: rgb(39, 40, 46);
+  background: rgb(255, 255, 255);
+  font: inherit;
+}
+
 .popup-toggle-label {
   display: flex;
   align-items: center;
