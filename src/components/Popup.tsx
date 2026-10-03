@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   StorageService,
@@ -17,7 +17,6 @@ const CHROME_WEB_STORE_REVIEWS_URL =
 type ColorThemeOption = {
   value: ColorTheme;
   label: string;
-  premium?: boolean;
 };
 
 const COLOR_THEMES: ColorThemeOption[] = [
@@ -25,12 +24,10 @@ const COLOR_THEMES: ColorThemeOption[] = [
   { value: 'ocean', label: 'Ocean' },
   { value: 'violet', label: 'Violet' },
   { value: 'forest', label: 'Forest' },
-  { value: 'midnight', label: 'Midnight', premium: true },
-  { value: 'sunset', label: 'Sunset', premium: true },
+  { value: 'sunset', label: 'Sunset' },
+  { value: 'rose', label: 'Rose' },
+  { value: 'harbor', label: 'Harbor' },
 ];
-
-// Visual prototype only. Replace with verified subscription entitlement before release.
-const hasPremiumAccess = false;
 
 const Popup: React.FC = () => {
   const [colorTheme, setColorTheme] = useState<ColorTheme>('ring');
@@ -42,6 +39,8 @@ const Popup: React.FC = () => {
   const [compactFormat, setCompactFormat] = useState<boolean>(false);
   const [createdTagColored, setCreatedTagColored] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isThemeMenuOpen, setIsThemeMenuOpen] = useState<boolean>(false);
+  const themePickerRef = useRef<HTMLDivElement>(null);
 
   const storageService = StorageService.getInstance();
 
@@ -76,8 +75,15 @@ const Popup: React.FC = () => {
           thresholdYellowValue > 0 ? thresholdYellowValue : DEFAULT_THRESHOLD_YELLOW;
         const normalizedRed = thresholdRedValue > 0 ? thresholdRedValue : DEFAULT_THRESHOLD_RED;
 
+        const selectedTheme = COLOR_THEMES.some((theme) => theme.value === colorThemeValue)
+          ? colorThemeValue
+          : 'ring';
+
         // Invert logic: hideCreated = false means showCreated = true
-        setColorTheme(colorThemeValue);
+        setColorTheme(selectedTheme);
+        if (selectedTheme !== colorThemeValue) {
+          await storageService.setColorTheme(selectedTheme);
+        }
         setShowCreated(!hideCreatedValue);
         setThresholdYellowInput(normalizedYellow.toString());
         setThresholdRedInput(normalizedRed.toString());
@@ -104,12 +110,12 @@ const Popup: React.FC = () => {
     await notifyContentScript({ hideCreated: !value });
   };
 
-  const handleColorThemeChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value as ColorTheme;
+  const handleColorThemeChange = async (value: ColorTheme) => {
     const theme = COLOR_THEMES.find((option) => option.value === value);
-    if (!theme || (theme.premium && !hasPremiumAccess)) return;
+    if (!theme) return;
 
     setColorTheme(value);
+    setIsThemeMenuOpen(false);
     await storageService.setColorTheme(value);
 
     try {
@@ -122,6 +128,17 @@ const Popup: React.FC = () => {
       console.warn('Failed to notify content script about color theme:', error);
     }
   };
+
+  useEffect(() => {
+    const closeThemeMenu = (event: MouseEvent) => {
+      if (!themePickerRef.current?.contains(event.target as Node)) {
+        setIsThemeMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', closeThemeMenu);
+    return () => document.removeEventListener('mousedown', closeThemeMenu);
+  }, []);
 
   // Generic handler for threshold input changes
   const createThresholdChangeHandler =
@@ -295,26 +312,57 @@ const Popup: React.FC = () => {
     );
   }
 
+  const selectedTheme = COLOR_THEMES.find((theme) => theme.value === colorTheme) ?? COLOR_THEMES[0];
+
   return (
     <div className="popup-container">
       <div className="popup-section">
         <h3 className="popup-section-title">Settings</h3>
 
-        <div className="popup-setting">
-          <label className="popup-select-label">
-            <span className="popup-select-text">Color theme</span>
-            <select value={colorTheme} onChange={handleColorThemeChange} className="popup-select">
-              {COLOR_THEMES.map((theme) => (
-                <option
-                  key={theme.value}
-                  value={theme.value}
-                  disabled={theme.premium && !hasPremiumAccess}
-                >
-                  {theme.premium ? `${theme.label} — Premium` : theme.label}
-                </option>
-              ))}
-            </select>
-          </label>
+        <div className="popup-setting popup-theme-setting">
+          <span className="popup-theme-label">Color theme</span>
+          <div className="popup-theme-picker" ref={themePickerRef}>
+            <button
+              type="button"
+              className="popup-theme-trigger"
+              aria-haspopup="menu"
+              aria-expanded={isThemeMenuOpen}
+              onClick={() => setIsThemeMenuOpen((isOpen) => !isOpen)}
+            >
+              <span
+                aria-hidden="true"
+                className={`popup-theme-preview popup-theme-preview--${selectedTheme.value}`}
+              ></span>
+              <span className="popup-theme-trigger-label">{selectedTheme.label}</span>
+              <span aria-hidden="true" className="popup-theme-chevron"></span>
+            </button>
+
+            {isThemeMenuOpen && (
+              <div className="popup-theme-menu" role="menu" aria-label="Color theme">
+                {COLOR_THEMES.map((theme) => (
+                  <button
+                    key={theme.value}
+                    type="button"
+                    role="menuitemradio"
+                    aria-checked={theme.value === colorTheme}
+                    className="popup-theme-option"
+                    onClick={() => void handleColorThemeChange(theme.value)}
+                  >
+                    <span
+                      aria-hidden="true"
+                      className={`popup-theme-preview popup-theme-preview--${theme.value}`}
+                    ></span>
+                    <span>{theme.label}</span>
+                    {theme.value === colorTheme && (
+                      <span aria-hidden="true" className="popup-theme-check">
+                        ✓
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="popup-setting">

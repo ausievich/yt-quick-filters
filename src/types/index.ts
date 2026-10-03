@@ -60,7 +60,7 @@ export interface DaysInStatusInfo {
   updated: number;
 }
 
-export type ColorTheme = 'ring' | 'ocean' | 'violet' | 'forest' | 'midnight' | 'sunset';
+export type ColorTheme = 'ring' | 'ocean' | 'violet' | 'forest' | 'sunset' | 'rose' | 'harbor';
 
 export interface DaysInStatusSettings {
   hideCreated: boolean;

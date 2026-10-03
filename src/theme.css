@@ -88,26 +88,6 @@
   --ytqf-shadow: 28, 76, 45;
 }
 
-/* Premium palettes are intentionally present for the visual upsell prototype. */
-:root[data-ytqf-theme='midnight'] {
-  color-scheme: dark;
-  --ytqf-canvas: 20, 22, 30;
-  --ytqf-theme-surface: 28, 31, 42;
-  --ytqf-sidebar: 35, 39, 52;
-  --ytqf-theme-text: 230, 234, 245;
-  --ytqf-secondary: 166, 177, 200;
-  --ytqf-theme-border: 71, 78, 101;
-  --ytqf-theme-accent: 126, 170, 255;
-  --ytqf-accent-hover: 157, 193, 255;
-  --ytqf-hover: 45, 54, 73;
-  --ytqf-selected: 57, 70, 96;
-  --ytqf-success: 74, 185, 128;
-  --ytqf-warning: 242, 190, 86;
-  --ytqf-error: 245, 115, 130;
-  --ytqf-purple: 190, 150, 255;
-  --ytqf-shadow: 0, 0, 0;
-}
-
 :root[data-ytqf-theme='sunset'] {
   --ytqf-canvas: 255, 248, 242;
   --ytqf-theme-surface: 255, 255, 255;
@@ -126,11 +106,48 @@
   --ytqf-shadow: 102, 49, 28;
 }
 
+:root[data-ytqf-theme='rose'] {
+  --ytqf-canvas: 255, 246, 248;
+  --ytqf-theme-surface: 255, 255, 255;
+  --ytqf-sidebar: 253, 232, 238;
+  --ytqf-theme-text: 84, 42, 56;
+  --ytqf-secondary: 131, 81, 98;
+  --ytqf-theme-border: 235, 190, 203;
+  --ytqf-theme-accent: 191, 72, 111;
+  --ytqf-accent-hover: 157, 53, 88;
+  --ytqf-hover: 252, 228, 235;
+  --ytqf-selected: 246, 207, 220;
+  --ytqf-success: 45, 132, 90;
+  --ytqf-warning: 190, 121, 16;
+  --ytqf-error: 183, 53, 76;
+  --ytqf-purple: 133, 79, 177;
+  --ytqf-shadow: 112, 47, 67;
+}
+
+:root[data-ytqf-theme='harbor'] {
+  --ytqf-canvas: 242, 246, 250;
+  --ytqf-theme-surface: 255, 255, 255;
+  --ytqf-sidebar: 228, 236, 244;
+  --ytqf-theme-text: 38, 59, 79;
+  --ytqf-secondary: 83, 108, 132;
+  --ytqf-theme-border: 184, 205, 222;
+  --ytqf-theme-accent: 57, 107, 149;
+  --ytqf-accent-hover: 41, 83, 122;
+  --ytqf-hover: 224, 237, 247;
+  --ytqf-selected: 205, 226, 241;
+  --ytqf-success: 36, 132, 101;
+  --ytqf-warning: 191, 126, 20;
+  --ytqf-error: 184, 60, 74;
+  --ytqf-purple: 101, 84, 176;
+  --ytqf-shadow: 31, 69, 101;
+}
+
 :root[data-ytqf-theme='ocean'],
 :root[data-ytqf-theme='violet'],
 :root[data-ytqf-theme='forest'],
-:root[data-ytqf-theme='midnight'],
-:root[data-ytqf-theme='sunset'] {
+:root[data-ytqf-theme='sunset'],
+:root[data-ytqf-theme='rose'],
+:root[data-ytqf-theme='harbor'] {
   --ring-content-background-color: rgb(var(--ytqf-canvas));
   --ring-content-background-components: var(--ytqf-canvas);
   --ring-navigation-background-color: rgb(var(--ytqf-theme-surface));
