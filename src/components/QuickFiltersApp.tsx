@@ -195,6 +195,18 @@ export const QuickFiltersApp: React.FC = () => {
     [closeContextMenu, storageService, loadFilters],
   );
 
+  const handleReorderFilter = useCallback(
+    async (from: number, to: number) => {
+      try {
+        await storageService.moveFilter(from, to);
+        await loadFilters();
+      } catch (error) {
+        console.error('Failed to reorder filter:', error);
+      }
+    },
+    [storageService, loadFilters],
+  );
+
   const handleModalClose = useCallback(() => {
     setModal({
       isOpen: false,
@@ -234,6 +246,7 @@ export const QuickFiltersApp: React.FC = () => {
             onFilterClick={handleFilterClick}
             onAddFilter={handleAddFilter}
             onContextMenu={handleContextMenu}
+            onReorder={handleReorderFilter}
           />,
           portalTarget,
         )
@@ -244,6 +257,7 @@ export const QuickFiltersApp: React.FC = () => {
           onFilterClick={handleFilterClick}
           onAddFilter={handleAddFilter}
           onContextMenu={handleContextMenu}
+          onReorder={handleReorderFilter}
         />
       )}
 

@@ -76,6 +76,11 @@ div.yt-agile-board__top-bar #ytqf-filter-container #ytqf-bar {
   background: var(--ring-hover-background-color, rgb(237, 243, 255));
 }
 
+/* Filter being dragged to a new position */
+#ytqf-bar .btn.dragging {
+  opacity: 0.5;
+}
+
 /* Ghost buttons */
 #ytqf-bar .ghost {
   opacity: 0.75;

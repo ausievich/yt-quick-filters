@@ -86,6 +86,14 @@ export class StorageService {
     }
   }
 
+  public async moveFilter(from: number, to: number): Promise<void> {
+    const filters = await this.getFilters();
+    if (from >= 0 && from < filters.length && to >= 0 && to < filters.length) {
+      filters.splice(to, 0, ...filters.splice(from, 1));
+      await this.saveFilters(filters);
+    }
+  }
+
   public async duplicateFilter(index: number): Promise<void> {
     const filters = await this.getFilters();
     if (index >= 0 && index < filters.length) {
