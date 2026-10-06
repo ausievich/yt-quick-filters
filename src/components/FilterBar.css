@@ -41,7 +41,11 @@ div.yt-agile-board__top-bar #ytqf-filter-container #ytqf-bar {
   overflow: hidden;
   white-space: nowrap; /* Prevent text wrapping */
   flex-shrink: 0; /* Prevent button shrinking */
-  transition: all 0.15s ease; /* Smooth transitions */
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    opacity 0.15s ease;
 }
 
 /* Hover states */
@@ -76,9 +80,38 @@ div.yt-agile-board__top-bar #ytqf-filter-container #ytqf-bar {
   background: var(--ring-hover-background-color, rgb(237, 243, 255));
 }
 
-/* Filter being dragged to a new position */
+/* While dragging, neighbours glide into the gap instead of jumping. */
+#ytqf-bar .btn.shifting {
+  transition:
+    margin 0.4s cubic-bezier(0.45, 0, 0.25, 1),
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+#ytqf-bar.is-dragging {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* The lifted button follows the pointer and leaves nothing behind in the bar. */
 #ytqf-bar .btn.dragging {
-  opacity: 0.5;
+  cursor: grabbing;
+  box-shadow: 0 8px 20px rgb(39 40 46 / 22%);
+  background: var(--ring-content-background-color, #fff);
+  border-color: var(--ring-border-hover-color, rgb(160, 189, 248));
+  transition: none;
+  animation: ytqf-lift 0.15s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes ytqf-lift {
+  from {
+    scale: 1;
+    box-shadow: 0 0 0 rgb(39 40 46 / 0%);
+  }
+  to {
+    scale: 1.05;
+    box-shadow: 0 8px 20px rgb(39 40 46 / 22%);
+  }
 }
 
 /* Ghost buttons */

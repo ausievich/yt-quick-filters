@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FilterBarProps } from '../types';
+import { useDragReorder } from '../hooks/useDragReorder';
 import { DaysInStatusButton } from './DaysInStatusButton';
 import './FilterBar.css';
 
@@ -11,38 +12,39 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   onContextMenu,
   onReorder,
 }) => {
-  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const { containerRef, isDragging, getItemProps } = useDragReorder(filters.length, onReorder);
+
+  // Stable keys keep each button's DOM node alive across a reorder.
+  const occurrences = new Map<string, number>();
 
   return (
-    <div id="ytqf-bar">
+    <div id="ytqf-bar" ref={containerRef} className={isDragging ? 'is-dragging' : undefined}>
       <DaysInStatusButton />
 
       <button className="btn ghost" onClick={onAddFilter}>
         Add filter...
       </button>
 
-      {filters.map((filter, index) => (
-        <button
-          key={index}
-          className={`btn ${activeFilter === filter ? 'active' : ''} ${dragIndex === index ? 'dragging' : ''}`}
-          title={filter.query}
-          draggable
-          onClick={() => onFilterClick(filter.query)}
-          onContextMenu={(e) => onContextMenu(e, filter, index)}
-          onDragStart={(e) => {
-            e.dataTransfer.setData('text/plain', ''); // Required by Firefox to start dragging
-            setDragIndex(index);
-          }}
-          onDragOver={(e) => dragIndex !== null && e.preventDefault()}
-          onDrop={(e) => {
-            e.preventDefault();
-            if (dragIndex !== null && dragIndex !== index) onReorder(dragIndex, index);
-          }}
-          onDragEnd={() => setDragIndex(null)}
-        >
-          <span className="lbl">{filter.label}</span>
-        </button>
-      ))}
+      {filters.map((filter, index) => {
+        const fingerprint = JSON.stringify([filter.label, filter.query]);
+        const occurrence = occurrences.get(fingerprint) ?? 0;
+        occurrences.set(fingerprint, occurrence + 1);
+
+        const { className, ...dragProps } = getItemProps(index);
+
+        return (
+          <button
+            key={`${fingerprint}:${occurrence}`}
+            className={`btn ytqf-filter ${activeFilter === filter ? 'active' : ''} ${className}`}
+            title={filter.query}
+            onClick={() => onFilterClick(filter.query)}
+            onContextMenu={(e) => onContextMenu(e, filter, index)}
+            {...dragProps}
+          >
+            <span className="lbl">{filter.label}</span>
+          </button>
+        );
+      })}
     </div>
   );
 };
