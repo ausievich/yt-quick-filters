@@ -92,8 +92,12 @@ export const useDragReorder = (count: number, onReorder: (from: number, to: numb
     item.style.zIndex = '3';
     const animation = item.animate(
       [
-        { transform: `translate(${deltaX}px, ${deltaY}px) scale(1.05)`, boxShadow: LIFT_SHADOW },
-        { transform: 'none', boxShadow: '0 0 0 rgb(39 40 46 / 0%)' },
+        {
+          transform: `translate(${deltaX}px, ${deltaY}px) scale(1.05)`,
+          boxShadow: LIFT_SHADOW,
+          opacity: 0.85,
+        },
+        { transform: 'none', boxShadow: '0 0 0 rgb(39 40 46 / 0%)', opacity: 1 },
       ],
       SETTLE_OPTIONS,
     );

@@ -97,8 +97,8 @@ div.yt-agile-board__top-bar #ytqf-filter-container #ytqf-bar {
 #ytqf-bar .btn.dragging {
   cursor: grabbing;
   box-shadow: 0 8px 20px rgb(39 40 46 / 22%);
-  background: var(--ring-content-background-color, #fff);
   border-color: var(--ring-border-hover-color, rgb(160, 189, 248));
+  opacity: 0.85;
   transition: none;
   animation: ytqf-lift 0.15s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
