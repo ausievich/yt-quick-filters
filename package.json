@@ -1,6 +1,6 @@
 {
   "name": "yt-quick-filters",
-  "version": "2.2.8",
+  "version": "2.3.0",
   "description": "Add quick filter buttons to YouTrack Agile Boards. Display Created and Updated tags on cards.",
   "scripts": {
     "build": "webpack",

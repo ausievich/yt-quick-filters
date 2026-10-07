@@ -46,6 +46,7 @@ E2E Progress:
   - `scripts/regression-query-types.js`
   - `scripts/regression-days-in-status.js`
   - `scripts/regression-delete-filter.js`
+  - `scripts/regression-drag-reorder.js`
 - [ ] Report results
 ```
 
@@ -66,6 +67,7 @@ Run **after** inject via `browser_run_code_unsafe` with absolute `filename`. Eac
 | `regression-query-types.js`    | Must-pass queries apply with suggestor closed          |
 | `regression-days-in-status.js` | Days In Status toggles on, tags appear on cards        |
 | `regression-delete-filter.js`  | Delete filter via context menu                         |
+| `regression-drag-reorder.js`   | Drag reorder persists without applying a filter        |
 
 ### Default regression — suggestor closes after quick filter apply
 

@@ -28,6 +28,7 @@ explicitly asked to fix a failing test.
      - `scripts/regression-query-types.js`
      - `scripts/regression-days-in-status.js`
      - `scripts/regression-delete-filter.js`
+     - `scripts/regression-drag-reorder.js`
 3. If the change touches a specific area, add the targeted checks from the
    skill (modal, context menu, Days In Status, and so on).
 
@@ -47,6 +48,7 @@ explicitly asked to fix a failing test.
 | must-pass query types        | pass / fail |
 | days in status               | pass / fail |
 | delete filter                | pass / fail |
+| drag reorder                 | pass / fail |
 
 ### Verdict
 

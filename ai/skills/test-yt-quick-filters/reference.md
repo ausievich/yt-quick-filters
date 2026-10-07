@@ -67,6 +67,7 @@ Run **after** inject. Use `browser_run_code_unsafe` with `filename` (absolute pa
 | `scripts/regression-query-types.js`    | Must-pass query types + suggestor closed      |
 | `scripts/regression-days-in-status.js` | Days In Status on, tags on cards              |
 | `scripts/regression-delete-filter.js`  | Delete filter via context menu                |
+| `scripts/regression-drag-reorder.js`   | Drag reorder updates the UI and storage       |
 
 ## Default regression (suggestor closes)
 
