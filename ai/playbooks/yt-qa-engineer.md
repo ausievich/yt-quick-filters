@@ -29,6 +29,7 @@ explicitly asked to fix a failing test.
      - `scripts/regression-days-in-status.js`
      - `scripts/regression-delete-filter.js`
      - `scripts/regression-drag-reorder.js`
+     - `scripts/regression-dashboard-to-agile.js`
      - `scripts/regression-board-isolation.js` (last; navigates between boards)
 3. If the change touches a specific area, add the targeted checks from the
    skill (modal, context menu, Days In Status, and so on).
@@ -50,6 +51,7 @@ explicitly asked to fix a failing test.
 | days in status               | pass / fail |
 | delete filter                | pass / fail |
 | drag reorder                 | pass / fail |
+| dashboard to agile           | pass / fail |
 | board isolation              | pass / fail |
 
 ### Verdict

@@ -53,6 +53,7 @@ E2E Progress:
   - `scripts/regression-days-in-status.js`
   - `scripts/regression-delete-filter.js`
   - `scripts/regression-drag-reorder.js`
+  - `scripts/regression-dashboard-to-agile.js`
   - `scripts/regression-board-isolation.js` (last; navigates between boards)
 - [ ] Report results
 ```
@@ -67,15 +68,16 @@ E2E Progress:
 
 Run **after** inject via `browser_run_code_unsafe` with absolute `filename`. Each script returns `passed: true` on success.
 
-| Script                          | What it checks                                         |
-| ------------------------------- | ------------------------------------------------------ |
-| `regression-suggestor.js`       | Suggestor closes after applying `state: {In progress}` |
-| `regression-toggle-off.js`      | Second click on active filter clears query             |
-| `regression-query-types.js`     | Must-pass queries apply with suggestor closed          |
-| `regression-days-in-status.js`  | Days In Status toggles on, tags appear on cards        |
-| `regression-delete-filter.js`   | Delete filter via context menu                         |
-| `regression-drag-reorder.js`    | Drag reorder persists without applying a filter        |
-| `regression-board-isolation.js` | Filters remain separate across two boards              |
+| Script                             | What it checks                                         |
+| ---------------------------------- | ------------------------------------------------------ |
+| `regression-suggestor.js`          | Suggestor closes after applying `state: {In progress}` |
+| `regression-toggle-off.js`         | Second click on active filter clears query             |
+| `regression-query-types.js`        | Must-pass queries apply with suggestor closed          |
+| `regression-days-in-status.js`     | Days In Status toggles on, tags appear on cards        |
+| `regression-delete-filter.js`      | Delete filter via context menu                         |
+| `regression-drag-reorder.js`       | Drag reorder persists without applying a filter        |
+| `regression-dashboard-to-agile.js` | Filters appear after Dashboards → Agiles navigation    |
+| `regression-board-isolation.js`    | Filters remain separate across two boards              |
 
 ### Default regression — suggestor closes after quick filter apply
 

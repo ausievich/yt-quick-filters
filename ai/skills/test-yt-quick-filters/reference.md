@@ -60,15 +60,20 @@ async (page) => {
 
 Run **after** inject. Use `browser_run_code_unsafe` with `filename` (absolute path, forward slashes). All scripts return `passed: true` on success.
 
-| Script                                  | Checks                                        |
-| --------------------------------------- | --------------------------------------------- |
-| `scripts/regression-suggestor.js`       | Suggestor closes after `state: {In progress}` |
-| `scripts/regression-toggle-off.js`      | Toggle off clears query                       |
-| `scripts/regression-query-types.js`     | Must-pass query types + suggestor closed      |
-| `scripts/regression-days-in-status.js`  | Days In Status on, tags on cards              |
-| `scripts/regression-delete-filter.js`   | Delete filter via context menu                |
-| `scripts/regression-drag-reorder.js`    | Drag reorder updates the UI and storage       |
-| `scripts/regression-board-isolation.js` | Filters stay separate across two boards       |
+| Script                                     | Checks                                                  |
+| ------------------------------------------ | ------------------------------------------------------- |
+| `scripts/regression-suggestor.js`          | Suggestor closes after `state: {In progress}`           |
+| `scripts/regression-toggle-off.js`         | Toggle off clears query                                 |
+| `scripts/regression-query-types.js`        | Must-pass query types + suggestor closed                |
+| `scripts/regression-days-in-status.js`     | Days In Status on, tags on cards                        |
+| `scripts/regression-delete-filter.js`      | Delete filter via context menu                          |
+| `scripts/regression-drag-reorder.js`       | Drag reorder updates the UI and storage                 |
+| `scripts/regression-dashboard-to-agile.js` | Filters appear after Dashboards → Agiles SPA navigation |
+| `scripts/regression-board-isolation.js`    | Filters stay separate across two boards                 |
+
+Run `regression-dashboard-to-agile.js` after the other single-board scenarios.
+It starts the content script on Dashboards, uses YouTrack's Agile Boards link,
+and verifies the document did not reload before the filter bar appeared.
 
 Run `regression-board-isolation.js` last. It captures the already-injected
 content script and CSS, then re-injects them after each board navigation with
