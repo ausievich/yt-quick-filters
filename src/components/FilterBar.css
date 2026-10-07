@@ -40,6 +40,7 @@ div.yt-agile-board__top-bar #ytqf-filter-container #ytqf-bar {
   line-height: 22px;
   overflow: hidden;
   white-space: nowrap; /* Prevent text wrapping */
+  user-select: none;
   flex-shrink: 0; /* Prevent button shrinking */
   transition:
     background-color 0.15s ease,
@@ -90,7 +91,6 @@ div.yt-agile-board__top-bar #ytqf-filter-container #ytqf-bar {
 
 #ytqf-bar.is-dragging {
   user-select: none;
-  -webkit-user-select: none;
 }
 
 /* The lifted button follows the pointer and leaves nothing behind in the bar. */
