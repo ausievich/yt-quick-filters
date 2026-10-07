@@ -26,6 +26,17 @@ interface ModalState {
   index?: number;
 }
 
+const reorderFilters = (filters: Filter[], from: number, to: number): Filter[] => {
+  if (from < 0 || from >= filters.length || to < 0 || to >= filters.length) {
+    return filters;
+  }
+
+  const reorderedFilters = [...filters];
+  const [movedFilter] = reorderedFilters.splice(from, 1);
+  reorderedFilters.splice(to, 0, movedFilter);
+  return reorderedFilters;
+};
+
 export const QuickFiltersApp: React.FC = () => {
   const [filters, setFilters] = useState<Filter[]>([]);
   const [optimisticQuery, setOptimisticQuery] = useState<string | null>(null);
@@ -195,6 +206,20 @@ export const QuickFiltersApp: React.FC = () => {
     [closeContextMenu, storageService, loadFilters],
   );
 
+  const handleReorderFilter = useCallback(
+    async (from: number, to: number) => {
+      setFilters((currentFilters) => reorderFilters(currentFilters, from, to));
+
+      try {
+        await storageService.moveFilter(from, to);
+      } catch (error) {
+        console.error('Failed to reorder filter:', error);
+        await loadFilters();
+      }
+    },
+    [storageService, loadFilters],
+  );
+
   const handleModalClose = useCallback(() => {
     setModal({
       isOpen: false,
@@ -234,6 +259,7 @@ export const QuickFiltersApp: React.FC = () => {
             onFilterClick={handleFilterClick}
             onAddFilter={handleAddFilter}
             onContextMenu={handleContextMenu}
+            onReorder={handleReorderFilter}
           />,
           portalTarget,
         )
@@ -244,6 +270,7 @@ export const QuickFiltersApp: React.FC = () => {
           onFilterClick={handleFilterClick}
           onAddFilter={handleAddFilter}
           onContextMenu={handleContextMenu}
+          onReorder={handleReorderFilter}
         />
       )}
 
