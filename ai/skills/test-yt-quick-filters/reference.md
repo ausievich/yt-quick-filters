@@ -60,14 +60,19 @@ async (page) => {
 
 Run **after** inject. Use `browser_run_code_unsafe` with `filename` (absolute path, forward slashes). All scripts return `passed: true` on success.
 
-| Script                                 | Checks                                        |
-| -------------------------------------- | --------------------------------------------- |
-| `scripts/regression-suggestor.js`      | Suggestor closes after `state: {In progress}` |
-| `scripts/regression-toggle-off.js`     | Toggle off clears query                       |
-| `scripts/regression-query-types.js`    | Must-pass query types + suggestor closed      |
-| `scripts/regression-days-in-status.js` | Days In Status on, tags on cards              |
-| `scripts/regression-delete-filter.js`  | Delete filter via context menu                |
-| `scripts/regression-drag-reorder.js`   | Drag reorder updates the UI and storage       |
+| Script                                  | Checks                                        |
+| --------------------------------------- | --------------------------------------------- |
+| `scripts/regression-suggestor.js`       | Suggestor closes after `state: {In progress}` |
+| `scripts/regression-toggle-off.js`      | Toggle off clears query                       |
+| `scripts/regression-query-types.js`     | Must-pass query types + suggestor closed      |
+| `scripts/regression-days-in-status.js`  | Days In Status on, tags on cards              |
+| `scripts/regression-delete-filter.js`   | Delete filter via context menu                |
+| `scripts/regression-drag-reorder.js`    | Drag reorder updates the UI and storage       |
+| `scripts/regression-board-isolation.js` | Filters stay separate across two boards       |
+
+Run `regression-board-isolation.js` last. It captures the already-injected
+content script and CSS, then re-injects them after each board navigation with
+one mock storage state shared across the run.
 
 ## Default regression (suggestor closes)
 
