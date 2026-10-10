@@ -1,4 +1,11 @@
-import { Filter, StorageData, BoardInfo, ColorTheme, DaysInStatusSettings } from '../types';
+import {
+  Filter,
+  StorageData,
+  BoardInfo,
+  ColorTheme,
+  DaysInStatusSettings,
+  FilterCombineMode,
+} from '../types';
 
 const KEY_PREFIX = 'ytQuickFilters_';
 const DEFAULT_FILTERS: Filter[] = [{ label: 'My Tasks', query: 'Assignee: me' }];
@@ -7,6 +14,8 @@ export const DEFAULT_THRESHOLD_YELLOW = 14;
 export const DEFAULT_THRESHOLD_RED = 60;
 export const DEFAULT_COMPACT_FORMAT = true;
 export const DEFAULT_COLOR_THEME: ColorTheme = 'ring';
+export const DEFAULT_FILTER_COMBINE_MODE: FilterCombineMode = 'and';
+export const FILTER_COMBINE_MODE_KEY = 'ytqf_filterCombineMode';
 
 export class StorageService {
   private static instance: StorageService;
@@ -128,6 +137,14 @@ export class StorageService {
 
   public async setColorTheme(theme: ColorTheme): Promise<void> {
     return this.setStorageValue('ytqf_colorTheme', theme);
+  }
+
+  public async getFilterCombineMode(): Promise<FilterCombineMode> {
+    return this.getStorageValue(FILTER_COMBINE_MODE_KEY, DEFAULT_FILTER_COMBINE_MODE);
+  }
+
+  public async setFilterCombineMode(mode: FilterCombineMode): Promise<void> {
+    return this.setStorageValue(FILTER_COMBINE_MODE_KEY, mode);
   }
 
   public async getHideCreatedTag(): Promise<boolean> {

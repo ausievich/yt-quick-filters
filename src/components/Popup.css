@@ -61,7 +61,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 18px;
+  margin-bottom: 10px;
 }
 
 .popup-theme-label {
@@ -253,6 +253,54 @@
 .popup-theme-preview--cocoa {
   --swatch: rgb(121, 79, 54);
   background: var(--swatch);
+}
+
+.popup-combine-setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.popup-segmented {
+  display: flex;
+  height: 24px;
+  border: 1px solid rgb(211, 213, 219);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.popup-segmented-option {
+  min-width: 40px;
+  padding: 0 8px;
+  border: none;
+  color: rgb(39, 40, 46);
+  background: rgb(255, 255, 255);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease-out,
+    color 0.15s ease-out;
+}
+
+.popup-segmented-option + .popup-segmented-option {
+  border-left: 1px solid rgb(211, 213, 219);
+}
+
+.popup-segmented-option:hover:not(.popup-segmented-option--selected) {
+  background: rgb(244, 245, 247);
+}
+
+.popup-segmented-option:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px rgb(0 128 229 / 24%);
+}
+
+.popup-segmented-option--selected {
+  color: rgb(255, 255, 255);
+  background: rgb(0, 128, 229);
 }
 
 .popup-section-title--days-in-status {
