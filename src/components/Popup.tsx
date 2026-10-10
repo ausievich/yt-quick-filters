@@ -22,19 +22,19 @@ type ColorThemeOption = {
 const COLOR_THEMES: ColorThemeOption[] = [
   { value: 'ring', label: 'YouTrack' },
   { value: 'ocean', label: 'Ocean' },
-  { value: 'violet', label: 'Violet' },
-  { value: 'forest', label: 'Forest' },
-  { value: 'sunset', label: 'Sunset' },
-  { value: 'rose', label: 'Rose' },
   { value: 'harbor', label: 'Harbor' },
   { value: 'arctic', label: 'Arctic' },
   { value: 'indigo', label: 'Indigo' },
-  { value: 'mint', label: 'Mint' },
-  { value: 'amber', label: 'Amber' },
-  { value: 'terracotta', label: 'Terracotta' },
+  { value: 'violet', label: 'Violet' },
+  { value: 'rose', label: 'Rose' },
   { value: 'raspberry', label: 'Raspberry' },
-  { value: 'slate', label: 'Slate' },
+  { value: 'sunset', label: 'Sunset' },
+  { value: 'terracotta', label: 'Terracotta' },
+  { value: 'amber', label: 'Amber' },
   { value: 'cocoa', label: 'Cocoa' },
+  { value: 'forest', label: 'Forest' },
+  { value: 'mint', label: 'Mint' },
+  { value: 'slate', label: 'Slate' },
 ];
 
 const Popup: React.FC = () => {
@@ -47,8 +47,6 @@ const Popup: React.FC = () => {
   const [compactFormat, setCompactFormat] = useState<boolean>(false);
   const [createdTagColored, setCreatedTagColored] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isThemeMenuOpen, setIsThemeMenuOpen] = useState<boolean>(false);
-  const themePickerRef = useRef<HTMLDivElement>(null);
 
   const storageService = StorageService.getInstance();
 
@@ -118,12 +116,34 @@ const Popup: React.FC = () => {
     await notifyContentScript({ hideCreated: !value });
   };
 
+  const [isThemePaletteOpen, setIsThemePaletteOpen] = useState<boolean>(false);
+  const themePickerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isThemePaletteOpen) return;
+
+    const closeOnOutsideClick = (event: MouseEvent) => {
+      if (!themePickerRef.current?.contains(event.target as Node)) {
+        setIsThemePaletteOpen(false);
+      }
+    };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsThemePaletteOpen(false);
+    };
+
+    document.addEventListener('mousedown', closeOnOutsideClick);
+    document.addEventListener('keydown', closeOnEscape);
+    return () => {
+      document.removeEventListener('mousedown', closeOnOutsideClick);
+      document.removeEventListener('keydown', closeOnEscape);
+    };
+  }, [isThemePaletteOpen]);
+
   const handleColorThemeChange = async (value: ColorTheme) => {
     const theme = COLOR_THEMES.find((option) => option.value === value);
     if (!theme) return;
 
     setColorTheme(value);
-    setIsThemeMenuOpen(false);
     await storageService.setColorTheme(value);
 
     try {
@@ -136,17 +156,6 @@ const Popup: React.FC = () => {
       console.warn('Failed to notify content script about color theme:', error);
     }
   };
-
-  useEffect(() => {
-    const closeThemeMenu = (event: MouseEvent) => {
-      if (!themePickerRef.current?.contains(event.target as Node)) {
-        setIsThemeMenuOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', closeThemeMenu);
-    return () => document.removeEventListener('mousedown', closeThemeMenu);
-  }, []);
 
   // Generic handler for threshold input changes
   const createThresholdChangeHandler =
@@ -333,45 +342,43 @@ const Popup: React.FC = () => {
             <button
               type="button"
               className="popup-theme-trigger"
-              aria-haspopup="menu"
-              aria-expanded={isThemeMenuOpen}
-              onClick={() => setIsThemeMenuOpen((isOpen) => !isOpen)}
+              aria-haspopup="true"
+              aria-expanded={isThemePaletteOpen}
+              onClick={() => setIsThemePaletteOpen((isOpen) => !isOpen)}
             >
               <span
                 aria-hidden="true"
-                className={`popup-theme-preview popup-theme-preview--${selectedTheme.value}`}
+                className={`popup-theme-trigger-preview popup-theme-preview--${selectedTheme.value}`}
               ></span>
               <span className="popup-theme-trigger-label">{selectedTheme.label}</span>
               <span aria-hidden="true" className="popup-theme-chevron"></span>
             </button>
 
-            {isThemeMenuOpen && (
-              <div className="popup-theme-menu" role="menu" aria-label="Color theme">
+            {isThemePaletteOpen && (
+              <div className="popup-theme-palette" role="radiogroup" aria-label="Color theme">
                 {COLOR_THEMES.map((theme) => (
                   <button
                     key={theme.value}
                     type="button"
-                    role="menuitemradio"
+                    role="radio"
                     aria-checked={theme.value === colorTheme}
-                    className="popup-theme-option"
+                    aria-label={theme.label}
+                    title={theme.label}
+                    className={`popup-theme-swatch-button${theme.value === colorTheme ? ' popup-theme-swatch-button--selected' : ''}`}
                     onClick={() => void handleColorThemeChange(theme.value)}
                   >
                     <span
                       aria-hidden="true"
-                      className={`popup-theme-preview popup-theme-preview--${theme.value}`}
+                      className={`popup-theme-swatch popup-theme-preview--${theme.value}`}
                     ></span>
-                    <span>{theme.label}</span>
-                    {theme.value === colorTheme && (
-                      <span aria-hidden="true" className="popup-theme-check">
-                        ✓
-                      </span>
-                    )}
                   </button>
                 ))}
               </div>
             )}
           </div>
         </div>
+
+        <h3 className="popup-section-title popup-section-title--days-in-status">Days in status</h3>
 
         <div className="popup-setting">
           <label className="popup-toggle-label">
@@ -411,10 +418,6 @@ const Popup: React.FC = () => {
             <span className="popup-toggle-text">Use compact format</span>
           </label>
         </div>
-      </div>
-
-      <div className="popup-section popup-section-thresholds">
-        <h3 className="popup-section-title">thresholds</h3>
 
         <div className="popup-setting popup-setting-thresholds">
           <div className="popup-threshold-row">

@@ -39,8 +39,6 @@
   margin-bottom: 0;
 }
 
-/* .popup-section-thresholds inherits margin-bottom from .popup-section */
-
 .popup-section-title {
   margin: 0 0 10px 0;
   font-size: 12px;
@@ -63,8 +61,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  min-height: 30px;
+  margin-bottom: 18px;
 }
 
 .popup-theme-label {
@@ -74,172 +71,192 @@
 
 .popup-theme-picker {
   position: relative;
-  min-width: 136px;
 }
 
 .popup-theme-trigger {
   display: flex;
   align-items: center;
-  width: 100%;
+  gap: 8px;
   height: 30px;
-  padding: 0 9px;
+  padding: 0 10px 0 9px;
   border: 1px solid rgb(211, 213, 219);
   border-radius: 6px;
   color: rgb(39, 40, 46);
-  background: rgb(250, 251, 253);
+  background: rgb(255, 255, 255);
   font-family: inherit;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   transition:
     border-color 0.15s ease-out,
-    background-color 0.15s ease-out,
     box-shadow 0.15s ease-out;
 }
 
 .popup-theme-trigger:hover,
 .popup-theme-trigger[aria-expanded='true'] {
   border-color: rgb(174, 184, 199);
-  background: rgb(255, 255, 255);
 }
 
-.popup-theme-trigger:focus-visible,
-.popup-theme-option:focus-visible {
+.popup-theme-trigger:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px rgb(0 128 229 / 16%);
+  box-shadow: 0 0 0 2px rgb(0 128 229 / 24%);
 }
 
-.popup-theme-trigger-label {
-  margin-left: 8px;
+.popup-theme-trigger-preview {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 10%);
 }
 
 .popup-theme-chevron {
   width: 6px;
   height: 6px;
-  margin-left: auto;
+  margin: -2px 0 0 4px;
   border-right: 1.5px solid rgb(94, 99, 112);
   border-bottom: 1.5px solid rgb(94, 99, 112);
-  transform: translateY(-2px) rotate(45deg);
+  transform: rotate(45deg);
   transition: transform 0.15s ease-out;
 }
 
 .popup-theme-trigger[aria-expanded='true'] .popup-theme-chevron {
-  transform: translateY(2px) rotate(225deg);
+  margin-top: 3px;
+  transform: rotate(225deg);
 }
 
-.popup-theme-preview {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border: 1px solid rgb(0 0 0 / 12%);
+.popup-theme-palette {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 6px);
+  right: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 16px);
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid rgb(211, 213, 219);
+  border-radius: 8px;
+  background: rgb(255, 255, 255);
+  box-shadow: 0 6px 18px rgb(31 35 38 / 16%);
+}
+
+.popup-theme-swatch-button {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 0;
   border-radius: 50%;
-  box-shadow: inset 0 0 0 3px rgb(255 255 255 / 72%);
-  flex: 0 0 auto;
+  background: transparent;
+  cursor: pointer;
+  transition: transform 0.15s ease-out;
+}
+
+.popup-theme-swatch-button:hover {
+  transform: scale(1.12);
+}
+
+.popup-theme-swatch-button:focus-visible {
+  outline: none;
+}
+
+.popup-theme-swatch-button:focus-visible:not(.popup-theme-swatch-button--selected)
+  .popup-theme-swatch {
+  box-shadow:
+    0 0 0 2px rgb(255 255 255),
+    0 0 0 3px rgb(0 128 229 / 60%);
+}
+
+.popup-theme-swatch {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 8%);
+  transition: box-shadow 0.15s ease-out;
+}
+
+.popup-theme-swatch-button--selected .popup-theme-swatch {
+  box-shadow:
+    0 0 0 2px rgb(255 255 255),
+    0 0 0 3.5px var(--swatch);
 }
 
 .popup-theme-preview--ring {
+  --swatch: rgb(0, 128, 229);
   background: linear-gradient(135deg, rgb(0, 128, 229) 0 50%, rgb(255, 255, 255) 50%);
 }
 
 .popup-theme-preview--ocean {
-  background: rgb(0, 124, 181);
+  --swatch: rgb(0, 124, 181);
+  background: var(--swatch);
 }
 
 .popup-theme-preview--violet {
-  background: rgb(103, 66, 178);
+  --swatch: rgb(103, 66, 178);
+  background: var(--swatch);
 }
 
 .popup-theme-preview--forest {
-  background: rgb(37, 124, 73);
+  --swatch: rgb(37, 124, 73);
+  background: var(--swatch);
 }
 
 .popup-theme-preview--sunset {
-  background: rgb(199, 83, 47);
+  --swatch: rgb(199, 83, 47);
+  background: var(--swatch);
 }
 
 .popup-theme-preview--rose {
-  background: rgb(191, 72, 111);
+  --swatch: rgb(191, 72, 111);
+  background: var(--swatch);
 }
 
 .popup-theme-preview--harbor {
-  background: rgb(57, 107, 149);
+  --swatch: rgb(57, 107, 149);
+  background: var(--swatch);
 }
 
 .popup-theme-preview--arctic {
-  background: rgb(0, 128, 157);
+  --swatch: rgb(0, 128, 157);
+  background: var(--swatch);
 }
 
 .popup-theme-preview--indigo {
-  background: rgb(72, 82, 184);
+  --swatch: rgb(72, 82, 184);
+  background: var(--swatch);
 }
 
 .popup-theme-preview--mint {
-  background: rgb(19, 137, 112);
+  --swatch: rgb(19, 137, 112);
+  background: var(--swatch);
 }
 
 .popup-theme-preview--amber {
-  background: rgb(193, 119, 0);
+  --swatch: rgb(193, 119, 0);
+  background: var(--swatch);
 }
 
 .popup-theme-preview--terracotta {
-  background: rgb(181, 77, 50);
+  --swatch: rgb(181, 77, 50);
+  background: var(--swatch);
 }
 
 .popup-theme-preview--raspberry {
-  background: rgb(179, 47, 96);
+  --swatch: rgb(179, 47, 96);
+  background: var(--swatch);
 }
 
 .popup-theme-preview--slate {
-  background: rgb(75, 93, 112);
+  --swatch: rgb(75, 93, 112);
+  background: var(--swatch);
 }
 
 .popup-theme-preview--cocoa {
-  background: rgb(121, 79, 54);
+  --swatch: rgb(121, 79, 54);
+  background: var(--swatch);
 }
 
-.popup-theme-menu {
-  position: absolute;
-  z-index: 10;
-  top: calc(100% + 5px);
-  right: 0;
-  width: 164px;
-  padding: 4px;
-  border: 1px solid rgb(211, 213, 219);
-  border-radius: 7px;
-  background: rgb(255, 255, 255);
-  box-shadow: 0 5px 14px rgb(31 35 38 / 16%);
-}
-
-.popup-theme-option {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  min-height: 30px;
-  padding: 5px 7px;
-  border: 0;
-  border-radius: 4px;
-  color: rgb(39, 40, 46);
-  background: transparent;
-  font-family: inherit;
-  font-size: 13px;
-  text-align: left;
-  cursor: pointer;
-}
-
-.popup-theme-option:hover,
-.popup-theme-option[aria-checked='true'] {
-  background: rgb(237, 244, 251);
-}
-
-.popup-theme-option > .popup-theme-preview {
-  margin-right: 8px;
-}
-
-.popup-theme-check {
-  margin-left: auto;
-  color: rgb(0, 102, 204);
-  font-size: 14px;
-  font-weight: 700;
+.popup-section-title--days-in-status {
+  margin-top: 0;
 }
 
 .popup-toggle-label {
@@ -307,6 +324,7 @@
 
 .popup-setting-thresholds {
   display: flex;
+  margin-top: 16px;
   flex-direction: column;
   gap: 8px;
 }
