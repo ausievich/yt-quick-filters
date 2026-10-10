@@ -27,6 +27,14 @@ const COLOR_THEMES: ColorThemeOption[] = [
   { value: 'sunset', label: 'Sunset' },
   { value: 'rose', label: 'Rose' },
   { value: 'harbor', label: 'Harbor' },
+  { value: 'arctic', label: 'Arctic' },
+  { value: 'indigo', label: 'Indigo' },
+  { value: 'mint', label: 'Mint' },
+  { value: 'amber', label: 'Amber' },
+  { value: 'terracotta', label: 'Terracotta' },
+  { value: 'raspberry', label: 'Raspberry' },
+  { value: 'slate', label: 'Slate' },
+  { value: 'cocoa', label: 'Cocoa' },
 ];
 
 const Popup: React.FC = () => {

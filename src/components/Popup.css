@@ -165,6 +165,38 @@
   background: rgb(57, 107, 149);
 }
 
+.popup-theme-preview--arctic {
+  background: rgb(0, 128, 157);
+}
+
+.popup-theme-preview--indigo {
+  background: rgb(72, 82, 184);
+}
+
+.popup-theme-preview--mint {
+  background: rgb(19, 137, 112);
+}
+
+.popup-theme-preview--amber {
+  background: rgb(193, 119, 0);
+}
+
+.popup-theme-preview--terracotta {
+  background: rgb(181, 77, 50);
+}
+
+.popup-theme-preview--raspberry {
+  background: rgb(179, 47, 96);
+}
+
+.popup-theme-preview--slate {
+  background: rgb(75, 93, 112);
+}
+
+.popup-theme-preview--cocoa {
+  background: rgb(121, 79, 54);
+}
+
 .popup-theme-menu {
   position: absolute;
   z-index: 10;

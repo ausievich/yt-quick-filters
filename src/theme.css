@@ -1,7 +1,8 @@
 /*
  * YouTrack consumes Ring UI tokens from the document root. Applying a theme to
- * html therefore recolors both YouTrack and the extension without selector
- * overrides. The default `ring` theme has no attribute and remains untouched.
+ * html recolors its surrounding UI and the extension without selector overrides.
+ * Content surfaces remain neutral so cards and text stay easy to read. The
+ * default `ring` theme has no attribute and remains untouched.
  */
 :root {
   --ytqf-surface: var(--ring-content-background-color);
@@ -142,22 +143,176 @@
   --ytqf-shadow: 31, 69, 101;
 }
 
+:root[data-ytqf-theme='arctic'] {
+  --ytqf-canvas: 238, 250, 252;
+  --ytqf-theme-surface: 255, 255, 255;
+  --ytqf-sidebar: 220, 244, 248;
+  --ytqf-theme-text: 20, 59, 69;
+  --ytqf-secondary: 63, 105, 115;
+  --ytqf-theme-border: 157, 211, 219;
+  --ytqf-theme-accent: 0, 128, 157;
+  --ytqf-accent-hover: 0, 101, 127;
+  --ytqf-hover: 213, 243, 247;
+  --ytqf-selected: 183, 232, 238;
+  --ytqf-success: 24, 133, 95;
+  --ytqf-warning: 190, 125, 8;
+  --ytqf-error: 187, 55, 69;
+  --ytqf-purple: 101, 83, 184;
+  --ytqf-shadow: 19, 79, 92;
+}
+
+:root[data-ytqf-theme='indigo'] {
+  --ytqf-canvas: 243, 244, 255;
+  --ytqf-theme-surface: 255, 255, 255;
+  --ytqf-sidebar: 230, 233, 253;
+  --ytqf-theme-text: 42, 48, 88;
+  --ytqf-secondary: 83, 94, 141;
+  --ytqf-theme-border: 181, 190, 232;
+  --ytqf-theme-accent: 72, 82, 184;
+  --ytqf-accent-hover: 54, 63, 153;
+  --ytqf-hover: 225, 229, 253;
+  --ytqf-selected: 205, 211, 248;
+  --ytqf-success: 32, 132, 87;
+  --ytqf-warning: 190, 125, 8;
+  --ytqf-error: 184, 55, 76;
+  --ytqf-purple: 112, 72, 190;
+  --ytqf-shadow: 49, 58, 127;
+}
+
+:root[data-ytqf-theme='mint'] {
+  --ytqf-canvas: 240, 251, 247;
+  --ytqf-theme-surface: 255, 255, 255;
+  --ytqf-sidebar: 220, 244, 236;
+  --ytqf-theme-text: 28, 68, 58;
+  --ytqf-secondary: 72, 112, 101;
+  --ytqf-theme-border: 163, 214, 197;
+  --ytqf-theme-accent: 19, 137, 112;
+  --ytqf-accent-hover: 11, 108, 87;
+  --ytqf-hover: 211, 243, 232;
+  --ytqf-selected: 184, 233, 216;
+  --ytqf-success: 19, 137, 112;
+  --ytqf-warning: 189, 123, 7;
+  --ytqf-error: 184, 56, 71;
+  --ytqf-purple: 104, 80, 181;
+  --ytqf-shadow: 28, 85, 69;
+}
+
+:root[data-ytqf-theme='amber'] {
+  --ytqf-canvas: 255, 250, 240;
+  --ytqf-theme-surface: 255, 255, 255;
+  --ytqf-sidebar: 255, 240, 210;
+  --ytqf-theme-text: 78, 57, 24;
+  --ytqf-secondary: 128, 101, 55;
+  --ytqf-theme-border: 234, 205, 148;
+  --ytqf-theme-accent: 193, 119, 0;
+  --ytqf-accent-hover: 157, 95, 0;
+  --ytqf-hover: 255, 237, 196;
+  --ytqf-selected: 255, 219, 154;
+  --ytqf-success: 39, 130, 83;
+  --ytqf-warning: 193, 119, 0;
+  --ytqf-error: 184, 55, 63;
+  --ytqf-purple: 119, 81, 174;
+  --ytqf-shadow: 104, 74, 22;
+}
+
+:root[data-ytqf-theme='terracotta'] {
+  --ytqf-canvas: 255, 246, 240;
+  --ytqf-theme-surface: 255, 255, 255;
+  --ytqf-sidebar: 251, 230, 217;
+  --ytqf-theme-text: 81, 48, 38;
+  --ytqf-secondary: 130, 82, 67;
+  --ytqf-theme-border: 228, 181, 160;
+  --ytqf-theme-accent: 181, 77, 50;
+  --ytqf-accent-hover: 148, 57, 36;
+  --ytqf-hover: 250, 222, 207;
+  --ytqf-selected: 243, 199, 177;
+  --ytqf-success: 43, 130, 88;
+  --ytqf-warning: 190, 120, 10;
+  --ytqf-error: 185, 53, 64;
+  --ytqf-purple: 129, 76, 173;
+  --ytqf-shadow: 103, 51, 32;
+}
+
+:root[data-ytqf-theme='raspberry'] {
+  --ytqf-canvas: 255, 244, 248;
+  --ytqf-theme-surface: 255, 255, 255;
+  --ytqf-sidebar: 250, 226, 237;
+  --ytqf-theme-text: 82, 38, 59;
+  --ytqf-secondary: 132, 74, 102;
+  --ytqf-theme-border: 229, 176, 201;
+  --ytqf-theme-accent: 179, 47, 96;
+  --ytqf-accent-hover: 147, 34, 76;
+  --ytqf-hover: 249, 219, 232;
+  --ytqf-selected: 241, 193, 215;
+  --ytqf-success: 42, 132, 89;
+  --ytqf-warning: 188, 119, 12;
+  --ytqf-error: 179, 44, 69;
+  --ytqf-purple: 126, 74, 178;
+  --ytqf-shadow: 104, 38, 69;
+}
+
+:root[data-ytqf-theme='slate'] {
+  --ytqf-canvas: 244, 247, 250;
+  --ytqf-theme-surface: 255, 255, 255;
+  --ytqf-sidebar: 228, 235, 241;
+  --ytqf-theme-text: 38, 51, 63;
+  --ytqf-secondary: 82, 98, 113;
+  --ytqf-theme-border: 184, 198, 209;
+  --ytqf-theme-accent: 75, 93, 112;
+  --ytqf-accent-hover: 57, 73, 90;
+  --ytqf-hover: 224, 234, 241;
+  --ytqf-selected: 205, 219, 229;
+  --ytqf-success: 39, 129, 91;
+  --ytqf-warning: 188, 122, 13;
+  --ytqf-error: 181, 55, 69;
+  --ytqf-purple: 99, 81, 169;
+  --ytqf-shadow: 42, 57, 71;
+}
+
+:root[data-ytqf-theme='cocoa'] {
+  --ytqf-canvas: 253, 248, 244;
+  --ytqf-theme-surface: 255, 255, 255;
+  --ytqf-sidebar: 245, 233, 222;
+  --ytqf-theme-text: 69, 48, 37;
+  --ytqf-secondary: 112, 83, 66;
+  --ytqf-theme-border: 215, 190, 171;
+  --ytqf-theme-accent: 121, 79, 54;
+  --ytqf-accent-hover: 94, 59, 39;
+  --ytqf-hover: 241, 226, 212;
+  --ytqf-selected: 228, 207, 189;
+  --ytqf-success: 42, 128, 88;
+  --ytqf-warning: 184, 117, 10;
+  --ytqf-error: 179, 54, 65;
+  --ytqf-purple: 116, 77, 166;
+  --ytqf-shadow: 82, 56, 40;
+}
+
 :root[data-ytqf-theme='ocean'],
 :root[data-ytqf-theme='violet'],
 :root[data-ytqf-theme='forest'],
 :root[data-ytqf-theme='sunset'],
 :root[data-ytqf-theme='rose'],
-:root[data-ytqf-theme='harbor'] {
-  --ring-content-background-color: rgb(var(--ytqf-canvas));
-  --ring-content-background-components: var(--ytqf-canvas);
-  --ring-navigation-background-color: rgb(var(--ytqf-theme-surface));
-  --ring-navigation-background-components: var(--ytqf-theme-surface);
-  --ring-popup-background-color: rgb(var(--ytqf-theme-surface));
-  --ring-popup-background-components: var(--ytqf-theme-surface);
+:root[data-ytqf-theme='harbor'],
+:root[data-ytqf-theme='arctic'],
+:root[data-ytqf-theme='indigo'],
+:root[data-ytqf-theme='mint'],
+:root[data-ytqf-theme='amber'],
+:root[data-ytqf-theme='terracotta'],
+:root[data-ytqf-theme='raspberry'],
+:root[data-ytqf-theme='slate'],
+:root[data-ytqf-theme='cocoa'] {
+  /* Keep text-bearing content and cards neutral; tint only the surrounding UI. */
+  --ytqf-content-surface: 255, 255, 255;
+  --ring-content-background-color: rgb(var(--ytqf-content-surface));
+  --ring-content-background-components: var(--ytqf-content-surface);
+  --ring-navigation-background-color: rgb(var(--ytqf-canvas));
+  --ring-navigation-background-components: var(--ytqf-canvas);
+  --ring-popup-background-color: rgb(var(--ytqf-content-surface));
+  --ring-popup-background-components: var(--ytqf-content-surface);
   --ring-sidebar-background-color: rgb(var(--ytqf-sidebar));
   --ring-sidebar-background-components: var(--ytqf-sidebar);
-  --ring-secondary-background-color: rgb(var(--ytqf-sidebar));
-  --ring-secondary-background-components: var(--ytqf-sidebar);
+  --ring-secondary-background-color: rgb(var(--ytqf-content-surface));
+  --ring-secondary-background-components: var(--ytqf-content-surface);
   --ring-text-color: rgb(var(--ytqf-theme-text));
   --ring-text-components: var(--ytqf-theme-text);
   --ring-heading-color: rgb(var(--ytqf-theme-text));
@@ -265,13 +420,13 @@
   --ring-tag-background-components: var(--ytqf-sidebar);
   --ring-tag-hover-background-color: rgb(var(--ytqf-theme-border));
   --ring-tag-hover-background-components: var(--ytqf-theme-border);
-  --ring-code-background-color: rgb(var(--ytqf-theme-surface));
+  --ring-code-background-color: rgb(var(--ytqf-content-surface));
   --ring-code-color: rgb(var(--ytqf-theme-text));
   --ring-code-comment-color: rgb(var(--ytqf-secondary));
   --ring-code-keyword-color: rgb(var(--ytqf-accent-hover));
   --ring-code-string-color: rgb(var(--ytqf-success));
   --ring-code-number-color: rgb(var(--ytqf-purple));
-  --ring-tooltip-background-color: rgb(var(--ytqf-theme-surface));
+  --ring-tooltip-background-color: rgb(var(--ytqf-content-surface));
   --ring-tooltip-text-color: rgb(var(--ytqf-theme-text));
   --ring-dialog-shadow:
     0 4px 24px rgb(var(--ytqf-shadow) / 16%), 0 2px 6px rgb(var(--ytqf-shadow) / 6%);
