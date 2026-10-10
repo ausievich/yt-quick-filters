@@ -5,34 +5,25 @@
  * default `ring` theme has no attribute and remains untouched.
  */
 :root {
-  --ytqf-surface: var(--ring-content-background-color);
-  --ytqf-popup-surface: var(--ring-popup-background-color);
-  --ytqf-text: var(--ring-text-color);
-  --ytqf-text-secondary: var(--ring-secondary-color);
-  --ytqf-border: var(--ring-borders-color);
-  --ytqf-popup-border: var(--ring-popup-border-color);
-  --ytqf-border-hover: var(--ring-border-hover-color);
-  --ytqf-hover-surface: var(--ring-hover-background-color);
-  --ytqf-selected-surface: var(--ring-selected-background-color);
-  --ytqf-accent: var(--ring-main-color);
-  --ytqf-accent-hover: var(--ring-main-hover-color);
-  --ytqf-on-accent: var(--ring-white-text-color);
-  --ytqf-danger: var(--ring-main-error-color);
-  --ytqf-danger-surface: var(--ring-removed-background-color);
-  --ytqf-disabled-surface: var(--ring-disabled-background-color);
-  --ytqf-disabled-border: var(--ring-border-disabled-color);
-  --ytqf-disabled-text: var(--ring-disabled-color);
-  --ytqf-popup-shadow: var(--ring-popup-shadow-color);
-  --ytqf-popup-secondary-shadow: var(--ring-popup-secondary-shadow-color);
-  --ytqf-tag-success: var(--ring-main-success-color);
-  --ytqf-tag-warning: var(--ring-main-warning-color);
-  --ytqf-tag-warning-text: var(--ring-warning-color);
-  --ytqf-tag-danger: var(--ring-main-error-color);
-  --ytqf-tag-neutral: var(--ring-secondary-color);
-  --ytqf-tag-border: rgb(var(--ring-white-text-components) / 10%);
-  --ytqf-tag-warning-shadow: rgb(var(--ring-white-text-components) / 30%);
-  --ytqf-tag-loading: rgb(var(--ring-secondary-components) / 90%);
-  --ytqf-tag-shadow: rgb(var(--ring-text-components) / 40%);
+  --ytqf-surface: var(--ring-content-background-color, rgb(255, 255, 255));
+  --ytqf-popup-surface: var(--ring-popup-background-color, rgb(255, 255, 255));
+  --ytqf-text: var(--ring-text-color, rgb(39, 40, 46));
+  --ytqf-text-secondary: var(--ring-secondary-color, rgb(108, 112, 126));
+  --ytqf-border: var(--ring-borders-color, rgb(211, 213, 219));
+  --ytqf-popup-border: var(--ring-popup-border-color, rgb(223, 225, 229));
+  --ytqf-border-hover: var(--ring-border-hover-color, rgb(160, 189, 248));
+  --ytqf-hover-surface: var(--ring-hover-background-color, rgb(237, 243, 255));
+  --ytqf-selected-surface: var(--ring-selected-background-color, rgb(212, 226, 255));
+  --ytqf-accent: var(--ring-main-color, rgb(51, 105, 214));
+  --ytqf-accent-hover: var(--ring-main-hover-color, rgb(49, 95, 189));
+  --ytqf-on-accent: var(--ring-white-text-color, rgb(255, 255, 255));
+  --ytqf-danger: var(--ring-main-error-color, rgb(204, 54, 69));
+  --ytqf-danger-surface: var(--ring-removed-background-color, rgb(250, 212, 216));
+  --ytqf-disabled-surface: var(--ring-disabled-background-color, rgb(247, 248, 250));
+  --ytqf-disabled-border: var(--ring-border-disabled-color, rgb(235, 236, 240));
+  --ytqf-disabled-text: var(--ring-disabled-color, rgb(168, 173, 189));
+  --ytqf-popup-shadow: var(--ring-popup-shadow-color, rgba(0, 28, 54, 0.1));
+  --ytqf-popup-secondary-shadow: var(--ring-popup-secondary-shadow-color, rgba(0, 28, 54, 0.04));
 }
 
 :root[data-ytqf-theme='ocean'] {
@@ -43,7 +34,7 @@
   --ytqf-secondary: 57, 104, 134;
   --ytqf-theme-border: 156, 210, 234;
   --ytqf-theme-accent: 0, 124, 181;
-  --ytqf-accent-hover: 0, 99, 154;
+  --ytqf-theme-accent-hover: 0, 99, 154;
   --ytqf-hover: 218, 242, 252;
   --ytqf-selected: 191, 232, 249;
   --ytqf-success: 0, 133, 104;
@@ -61,7 +52,7 @@
   --ytqf-secondary: 106, 88, 142;
   --ytqf-theme-border: 205, 193, 235;
   --ytqf-theme-accent: 103, 66, 178;
-  --ytqf-accent-hover: 82, 51, 146;
+  --ytqf-theme-accent-hover: 82, 51, 146;
   --ytqf-hover: 237, 231, 255;
   --ytqf-selected: 222, 210, 255;
   --ytqf-success: 45, 138, 90;
@@ -79,7 +70,7 @@
   --ytqf-secondary: 78, 112, 89;
   --ytqf-theme-border: 177, 211, 184;
   --ytqf-theme-accent: 37, 124, 73;
-  --ytqf-accent-hover: 28, 99, 57;
+  --ytqf-theme-accent-hover: 28, 99, 57;
   --ytqf-hover: 220, 241, 225;
   --ytqf-selected: 197, 232, 206;
   --ytqf-success: 27, 130, 74;
@@ -97,7 +88,7 @@
   --ytqf-secondary: 138, 91, 72;
   --ytqf-theme-border: 234, 190, 166;
   --ytqf-theme-accent: 199, 83, 47;
-  --ytqf-accent-hover: 163, 63, 34;
+  --ytqf-theme-accent-hover: 163, 63, 34;
   --ytqf-hover: 255, 227, 207;
   --ytqf-selected: 255, 207, 176;
   --ytqf-success: 42, 133, 94;
@@ -115,7 +106,7 @@
   --ytqf-secondary: 131, 81, 98;
   --ytqf-theme-border: 235, 190, 203;
   --ytqf-theme-accent: 191, 72, 111;
-  --ytqf-accent-hover: 157, 53, 88;
+  --ytqf-theme-accent-hover: 157, 53, 88;
   --ytqf-hover: 252, 228, 235;
   --ytqf-selected: 246, 207, 220;
   --ytqf-success: 45, 132, 90;
@@ -133,7 +124,7 @@
   --ytqf-secondary: 83, 108, 132;
   --ytqf-theme-border: 184, 205, 222;
   --ytqf-theme-accent: 57, 107, 149;
-  --ytqf-accent-hover: 41, 83, 122;
+  --ytqf-theme-accent-hover: 41, 83, 122;
   --ytqf-hover: 224, 237, 247;
   --ytqf-selected: 205, 226, 241;
   --ytqf-success: 36, 132, 101;
@@ -151,7 +142,7 @@
   --ytqf-secondary: 63, 105, 115;
   --ytqf-theme-border: 157, 211, 219;
   --ytqf-theme-accent: 0, 128, 157;
-  --ytqf-accent-hover: 0, 101, 127;
+  --ytqf-theme-accent-hover: 0, 101, 127;
   --ytqf-hover: 213, 243, 247;
   --ytqf-selected: 183, 232, 238;
   --ytqf-success: 24, 133, 95;
@@ -169,7 +160,7 @@
   --ytqf-secondary: 83, 94, 141;
   --ytqf-theme-border: 181, 190, 232;
   --ytqf-theme-accent: 72, 82, 184;
-  --ytqf-accent-hover: 54, 63, 153;
+  --ytqf-theme-accent-hover: 54, 63, 153;
   --ytqf-hover: 225, 229, 253;
   --ytqf-selected: 205, 211, 248;
   --ytqf-success: 32, 132, 87;
@@ -187,7 +178,7 @@
   --ytqf-secondary: 72, 112, 101;
   --ytqf-theme-border: 163, 214, 197;
   --ytqf-theme-accent: 19, 137, 112;
-  --ytqf-accent-hover: 11, 108, 87;
+  --ytqf-theme-accent-hover: 11, 108, 87;
   --ytqf-hover: 211, 243, 232;
   --ytqf-selected: 184, 233, 216;
   --ytqf-success: 19, 137, 112;
@@ -205,7 +196,7 @@
   --ytqf-secondary: 128, 101, 55;
   --ytqf-theme-border: 234, 205, 148;
   --ytqf-theme-accent: 193, 119, 0;
-  --ytqf-accent-hover: 157, 95, 0;
+  --ytqf-theme-accent-hover: 157, 95, 0;
   --ytqf-hover: 255, 237, 196;
   --ytqf-selected: 255, 219, 154;
   --ytqf-success: 39, 130, 83;
@@ -223,7 +214,7 @@
   --ytqf-secondary: 130, 82, 67;
   --ytqf-theme-border: 228, 181, 160;
   --ytqf-theme-accent: 181, 77, 50;
-  --ytqf-accent-hover: 148, 57, 36;
+  --ytqf-theme-accent-hover: 148, 57, 36;
   --ytqf-hover: 250, 222, 207;
   --ytqf-selected: 243, 199, 177;
   --ytqf-success: 43, 130, 88;
@@ -241,7 +232,7 @@
   --ytqf-secondary: 132, 74, 102;
   --ytqf-theme-border: 229, 176, 201;
   --ytqf-theme-accent: 179, 47, 96;
-  --ytqf-accent-hover: 147, 34, 76;
+  --ytqf-theme-accent-hover: 147, 34, 76;
   --ytqf-hover: 249, 219, 232;
   --ytqf-selected: 241, 193, 215;
   --ytqf-success: 42, 132, 89;
@@ -259,7 +250,7 @@
   --ytqf-secondary: 82, 98, 113;
   --ytqf-theme-border: 184, 198, 209;
   --ytqf-theme-accent: 75, 93, 112;
-  --ytqf-accent-hover: 57, 73, 90;
+  --ytqf-theme-accent-hover: 57, 73, 90;
   --ytqf-hover: 224, 234, 241;
   --ytqf-selected: 205, 219, 229;
   --ytqf-success: 39, 129, 91;
@@ -277,7 +268,7 @@
   --ytqf-secondary: 112, 83, 66;
   --ytqf-theme-border: 215, 190, 171;
   --ytqf-theme-accent: 121, 79, 54;
-  --ytqf-accent-hover: 94, 59, 39;
+  --ytqf-theme-accent-hover: 94, 59, 39;
   --ytqf-hover: 241, 226, 212;
   --ytqf-selected: 228, 207, 189;
   --ytqf-success: 42, 128, 88;
@@ -335,8 +326,8 @@
   --ring-border-accent-components: var(--ytqf-theme-accent);
   --ring-main-color: rgb(var(--ytqf-theme-accent));
   --ring-main-components: var(--ytqf-theme-accent);
-  --ring-main-hover-color: rgb(var(--ytqf-accent-hover));
-  --ring-main-hover-components: var(--ytqf-accent-hover);
+  --ring-main-hover-color: rgb(var(--ytqf-theme-accent-hover));
+  --ring-main-hover-components: var(--ytqf-theme-accent-hover);
   --ring-main-container-light-color: rgb(var(--ytqf-hover));
   --ring-main-container-light-components: var(--ytqf-hover);
   --ring-hover-background-color: rgb(var(--ytqf-hover));
@@ -345,16 +336,16 @@
   --ring-selected-background-components: var(--ytqf-selected);
   --ring-pale-control-color: rgb(var(--ytqf-selected));
   --ring-pale-control-components: var(--ytqf-selected);
-  --ring-link-color: rgb(var(--ytqf-accent-hover));
-  --ring-link-components: var(--ytqf-accent-hover);
+  --ring-link-color: rgb(var(--ytqf-theme-accent-hover));
+  --ring-link-components: var(--ytqf-theme-accent-hover);
   --ring-link-hover-color: rgb(var(--ytqf-theme-accent));
   --ring-link-hover-components: var(--ytqf-theme-accent);
-  --ring-action-link-color: rgb(var(--ytqf-accent-hover));
-  --ring-action-link-components: var(--ytqf-accent-hover);
-  --ring-header-link-color: rgb(var(--ytqf-accent-hover));
+  --ring-action-link-color: rgb(var(--ytqf-theme-accent-hover));
+  --ring-action-link-components: var(--ytqf-theme-accent-hover);
+  --ring-header-link-color: rgb(var(--ytqf-theme-accent-hover));
   --ring-button-primary-background-color: rgb(var(--ytqf-theme-accent));
-  --ring-button-primary-border-color: rgb(var(--ytqf-accent-hover));
-  --ring-button-primary-border-components: var(--ytqf-accent-hover);
+  --ring-button-primary-border-color: rgb(var(--ytqf-theme-accent-hover));
+  --ring-button-primary-border-components: var(--ytqf-theme-accent-hover);
   --ring-button-focus-border-color: rgb(var(--ytqf-theme-accent));
   --ring-disabled-background-color: rgb(var(--ytqf-sidebar));
   --ring-disabled-background-components: var(--ytqf-sidebar);
@@ -423,7 +414,7 @@
   --ring-code-background-color: rgb(var(--ytqf-content-surface));
   --ring-code-color: rgb(var(--ytqf-theme-text));
   --ring-code-comment-color: rgb(var(--ytqf-secondary));
-  --ring-code-keyword-color: rgb(var(--ytqf-accent-hover));
+  --ring-code-keyword-color: rgb(var(--ytqf-theme-accent-hover));
   --ring-code-string-color: rgb(var(--ytqf-success));
   --ring-code-number-color: rgb(var(--ytqf-purple));
   --ring-tooltip-background-color: rgb(var(--ytqf-content-surface));
