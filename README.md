@@ -18,7 +18,7 @@ Try it out on one of the [public boards](https://youtrack.jetbrains.com/agiles/1
 - Apply them with a single click — no need to type search strings every time.
 - Edit, duplicate, or remove filters via a clean UI.
 - Display Created and Updated tags on cards.
-- Seamlessly integrated into YouTrack Agile Boards.
+- Choose from custom color themes (beta).
 
 This extension brings a long-requested feature (see JetBrains request [JT-38623](https://youtrack.jetbrains.com/issue/JT-38623)) directly into YouTrack.
 
