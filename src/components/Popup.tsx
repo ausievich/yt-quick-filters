@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   StorageService,
   DEFAULT_THRESHOLD_YELLOW,
   DEFAULT_THRESHOLD_RED,
 } from '../services/storage';
-import { DaysInStatusSettings } from '../types';
+import { ColorTheme, DaysInStatusSettings } from '../types';
 import manifest from '../../manifest.json';
 import './Popup.css';
 
@@ -14,7 +14,31 @@ const GITHUB_ISSUES_URL = 'https://github.com/ausievich/yt-quick-filters/issues'
 const CHROME_WEB_STORE_REVIEWS_URL =
   'https://chromewebstore.google.com/detail/youtrack-quick-filters/iaddgmcajdiblafjfhloadmphkbplddo/reviews';
 
+type ColorThemeOption = {
+  value: ColorTheme;
+  label: string;
+};
+
+const COLOR_THEMES: ColorThemeOption[] = [
+  { value: 'ring', label: 'YouTrack' },
+  { value: 'ocean', label: 'Ocean' },
+  { value: 'harbor', label: 'Harbor' },
+  { value: 'arctic', label: 'Arctic' },
+  { value: 'indigo', label: 'Indigo' },
+  { value: 'violet', label: 'Violet' },
+  { value: 'rose', label: 'Rose' },
+  { value: 'raspberry', label: 'Raspberry' },
+  { value: 'sunset', label: 'Sunset' },
+  { value: 'terracotta', label: 'Terracotta' },
+  { value: 'amber', label: 'Amber' },
+  { value: 'cocoa', label: 'Cocoa' },
+  { value: 'forest', label: 'Forest' },
+  { value: 'mint', label: 'Mint' },
+  { value: 'slate', label: 'Slate' },
+];
+
 const Popup: React.FC = () => {
+  const [colorTheme, setColorTheme] = useState<ColorTheme>('ring');
   const [showCreated, setShowCreated] = useState<boolean>(true);
   const [thresholdYellowInput, setThresholdYellowInput] = useState<string>('');
   const [thresholdRedInput, setThresholdRedInput] = useState<string>('');
@@ -47,6 +71,7 @@ const Popup: React.FC = () => {
     const loadSettings = async () => {
       try {
         // Load Days In Status settings
+        const colorThemeValue = await storageService.getColorTheme();
         const hideCreatedValue = await storageService.getHideCreatedTag();
         const thresholdYellowValue = await storageService.getDaysInStatusThresholdYellow();
         const thresholdRedValue = await storageService.getDaysInStatusThresholdRed();
@@ -56,7 +81,15 @@ const Popup: React.FC = () => {
           thresholdYellowValue > 0 ? thresholdYellowValue : DEFAULT_THRESHOLD_YELLOW;
         const normalizedRed = thresholdRedValue > 0 ? thresholdRedValue : DEFAULT_THRESHOLD_RED;
 
+        const selectedTheme = COLOR_THEMES.some((theme) => theme.value === colorThemeValue)
+          ? colorThemeValue
+          : 'ring';
+
         // Invert logic: hideCreated = false means showCreated = true
+        setColorTheme(selectedTheme);
+        if (selectedTheme !== colorThemeValue) {
+          await storageService.setColorTheme(selectedTheme);
+        }
         setShowCreated(!hideCreatedValue);
         setThresholdYellowInput(normalizedYellow.toString());
         setThresholdRedInput(normalizedRed.toString());
@@ -81,6 +114,47 @@ const Popup: React.FC = () => {
     // Invert: showCreated = true means hideCreated = false
     await storageService.setHideCreatedTag(!value);
     await notifyContentScript({ hideCreated: !value });
+  };
+
+  const [isThemePaletteOpen, setIsThemePaletteOpen] = useState<boolean>(false);
+  const themePickerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isThemePaletteOpen) return;
+
+    const closeOnOutsideClick = (event: MouseEvent) => {
+      if (!themePickerRef.current?.contains(event.target as Node)) {
+        setIsThemePaletteOpen(false);
+      }
+    };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsThemePaletteOpen(false);
+    };
+
+    document.addEventListener('mousedown', closeOnOutsideClick);
+    document.addEventListener('keydown', closeOnEscape);
+    return () => {
+      document.removeEventListener('mousedown', closeOnOutsideClick);
+      document.removeEventListener('keydown', closeOnEscape);
+    };
+  }, [isThemePaletteOpen]);
+
+  const handleColorThemeChange = async (value: ColorTheme) => {
+    const theme = COLOR_THEMES.find((option) => option.value === value);
+    if (!theme) return;
+
+    setColorTheme(value);
+    await storageService.setColorTheme(value);
+
+    try {
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      if (!tab?.id) return;
+      await chrome.tabs.sendMessage(tab.id, { type: 'UPDATE_COLOR_THEME', colorTheme: value });
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : String(error);
+      if (msg.includes('Receiving end does not exist')) return;
+      console.warn('Failed to notify content script about color theme:', error);
+    }
   };
 
   // Generic handler for threshold input changes
@@ -255,10 +329,56 @@ const Popup: React.FC = () => {
     );
   }
 
+  const selectedTheme = COLOR_THEMES.find((theme) => theme.value === colorTheme) ?? COLOR_THEMES[0];
+
   return (
     <div className="popup-container">
       <div className="popup-section">
         <h3 className="popup-section-title">Settings</h3>
+
+        <div className="popup-setting popup-theme-setting">
+          <span className="popup-theme-label">Color theme</span>
+          <div className="popup-theme-picker" ref={themePickerRef}>
+            <button
+              type="button"
+              className="popup-theme-trigger"
+              aria-haspopup="true"
+              aria-expanded={isThemePaletteOpen}
+              onClick={() => setIsThemePaletteOpen((isOpen) => !isOpen)}
+            >
+              <span
+                aria-hidden="true"
+                className={`popup-theme-trigger-preview popup-theme-preview--${selectedTheme.value}`}
+              ></span>
+              <span className="popup-theme-trigger-label">{selectedTheme.label}</span>
+              <span aria-hidden="true" className="popup-theme-chevron"></span>
+            </button>
+
+            {isThemePaletteOpen && (
+              <div className="popup-theme-palette" role="radiogroup" aria-label="Color theme">
+                {COLOR_THEMES.map((theme) => (
+                  <button
+                    key={theme.value}
+                    type="button"
+                    role="radio"
+                    aria-checked={theme.value === colorTheme}
+                    aria-label={theme.label}
+                    title={theme.label}
+                    className={`popup-theme-swatch-button${theme.value === colorTheme ? ' popup-theme-swatch-button--selected' : ''}`}
+                    onClick={() => void handleColorThemeChange(theme.value)}
+                  >
+                    <span
+                      aria-hidden="true"
+                      className={`popup-theme-swatch popup-theme-preview--${theme.value}`}
+                    ></span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <h3 className="popup-section-title popup-section-title--days-in-status">Days in status</h3>
 
         <div className="popup-setting">
           <label className="popup-toggle-label">
@@ -298,10 +418,6 @@ const Popup: React.FC = () => {
             <span className="popup-toggle-text">Use compact format</span>
           </label>
         </div>
-      </div>
-
-      <div className="popup-section popup-section-thresholds">
-        <h3 className="popup-section-title">thresholds</h3>
 
         <div className="popup-setting popup-setting-thresholds">
           <div className="popup-threshold-row">

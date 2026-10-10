@@ -2,12 +2,12 @@
 #ytqf-menu {
   position: fixed;
   min-width: 160px;
-  background: var(--ring-popup-background-color, rgb(255, 255, 255));
-  border: 1px solid var(--ring-popup-border-color, rgb(223, 225, 229));
+  background: var(--ytqf-popup-surface);
+  border: 1px solid var(--ytqf-popup-border);
   border-radius: 4px;
   box-shadow:
-    0 2px 8px var(--ring-popup-shadow-color, rgba(0, 28, 54, 0.1)),
-    0 1px 2px var(--ring-popup-secondary-shadow-color, rgba(0, 28, 54, 0.04));
+    0 2px 8px var(--ytqf-popup-shadow),
+    0 1px 2px var(--ytqf-popup-secondary-shadow);
   z-index: 99999;
   overflow: hidden;
   font-family:
@@ -23,7 +23,7 @@
     sans-serif;
   font-size: 14px;
   line-height: 20px;
-  color: var(--ring-text-color, rgb(39, 40, 46));
+  color: var(--ytqf-text);
 }
 
 #ytqf-menu .mi {
@@ -34,19 +34,19 @@
 }
 
 #ytqf-menu .mi:hover {
-  background: var(--ring-hover-background-color, rgb(237, 243, 255));
+  background: var(--ytqf-hover-surface);
 }
 
 #ytqf-menu .danger {
-  color: var(--ring-main-error-color, rgb(204, 54, 69));
+  color: var(--ytqf-danger);
 }
 
 #ytqf-menu .danger:hover {
-  background: var(--ring-removed-background-color, rgb(250, 212, 216));
+  background: var(--ytqf-danger-surface);
 }
 
 #ytqf-menu .sep {
   height: 1px;
-  background: var(--ring-popup-border-color, rgb(223, 225, 229));
+  background: var(--ytqf-popup-border);
   margin: 0;
 }

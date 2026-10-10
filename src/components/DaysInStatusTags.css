@@ -18,7 +18,7 @@
   min-width: 28px;
   text-align: center;
   backdrop-filter: blur(2px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgb(255 255 255 / 10%);
 }
 
 .days-in-status__tag--green {
@@ -29,7 +29,7 @@
 .days-in-status__tag--yellow {
   background: rgb(255, 193, 7);
   color: rgb(44, 62, 80);
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+  text-shadow: 0 1px 2px rgb(255 255 255 / 30%);
 }
 
 .days-in-status__tag--red {
@@ -43,7 +43,7 @@
 }
 
 .days-in-status--loading .days-in-status__tag {
-  background: rgba(102, 102, 102, 0.9);
+  background: rgb(102 102 102 / 90%);
   animation: pulse 1.5s ease-in-out infinite;
 }
 
@@ -59,5 +59,5 @@
 
 /* Ensure the tags are visible on different card backgrounds */
 .yt-agile-card .days-in-status__tag {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 40%);
 }
