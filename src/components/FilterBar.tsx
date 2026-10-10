@@ -4,9 +4,11 @@ import { useDragReorder } from '../hooks/useDragReorder';
 import { DaysInStatusButton } from './DaysInStatusButton';
 import './FilterBar.css';
 
+const COMBINE_HINT = `${/mac/i.test(navigator.platform) ? '⌘' : 'Ctrl'}+click to combine with other filters`;
+
 export const FilterBar: React.FC<FilterBarProps> = ({
   filters,
-  activeFilter,
+  activeFilterIndices,
   onFilterClick,
   onAddFilter,
   onContextMenu,
@@ -35,9 +37,9 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         return (
           <button
             key={`${fingerprint}:${occurrence}`}
-            className={`btn ytqf-filter ${activeFilter === filter ? 'active' : ''} ${className}`}
-            title={filter.query}
-            onClick={() => onFilterClick(filter.query)}
+            className={`btn ytqf-filter ${activeFilterIndices.has(index) ? 'active' : ''} ${className}`}
+            title={`${filter.query}\n\n${COMBINE_HINT}`}
+            onClick={(e) => onFilterClick(filter.query, e.metaKey || e.ctrlKey || e.shiftKey)}
             onContextMenu={(e) => onContextMenu(e, filter, index)}
             {...dragProps}
           >

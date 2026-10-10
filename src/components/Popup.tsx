@@ -5,7 +5,7 @@ import {
   DEFAULT_THRESHOLD_YELLOW,
   DEFAULT_THRESHOLD_RED,
 } from '../services/storage';
-import { ColorTheme, DaysInStatusSettings } from '../types';
+import { ColorTheme, DaysInStatusSettings, FilterCombineMode } from '../types';
 import manifest from '../../manifest.json';
 import './Popup.css';
 
@@ -37,8 +37,14 @@ const COLOR_THEMES: ColorThemeOption[] = [
   { value: 'slate', label: 'Slate' },
 ];
 
+const FILTER_COMBINE_MODES: { value: FilterCombineMode; label: string; hint: string }[] = [
+  { value: 'and', label: 'AND', hint: 'Cards must match all selected filters' },
+  { value: 'or', label: 'OR', hint: 'Cards can match any selected filter' },
+];
+
 const Popup: React.FC = () => {
   const [colorTheme, setColorTheme] = useState<ColorTheme>('ring');
+  const [filterCombineMode, setFilterCombineMode] = useState<FilterCombineMode>('and');
   const [showCreated, setShowCreated] = useState<boolean>(true);
   const [thresholdYellowInput, setThresholdYellowInput] = useState<string>('');
   const [thresholdRedInput, setThresholdRedInput] = useState<string>('');
@@ -72,6 +78,7 @@ const Popup: React.FC = () => {
       try {
         // Load Days In Status settings
         const colorThemeValue = await storageService.getColorTheme();
+        const filterCombineModeValue = await storageService.getFilterCombineMode();
         const hideCreatedValue = await storageService.getHideCreatedTag();
         const thresholdYellowValue = await storageService.getDaysInStatusThresholdYellow();
         const thresholdRedValue = await storageService.getDaysInStatusThresholdRed();
@@ -90,6 +97,7 @@ const Popup: React.FC = () => {
         if (selectedTheme !== colorThemeValue) {
           await storageService.setColorTheme(selectedTheme);
         }
+        setFilterCombineMode(filterCombineModeValue);
         setShowCreated(!hideCreatedValue);
         setThresholdYellowInput(normalizedYellow.toString());
         setThresholdRedInput(normalizedRed.toString());
@@ -155,6 +163,12 @@ const Popup: React.FC = () => {
       if (msg.includes('Receiving end does not exist')) return;
       console.warn('Failed to notify content script about color theme:', error);
     }
+  };
+
+  // Open boards pick this up through chrome.storage.onChanged
+  const handleFilterCombineModeChange = async (value: FilterCombineMode) => {
+    setFilterCombineMode(value);
+    await storageService.setFilterCombineMode(value);
   };
 
   // Generic handler for threshold input changes
@@ -375,6 +389,25 @@ const Popup: React.FC = () => {
                 ))}
               </div>
             )}
+          </div>
+        </div>
+
+        <div className="popup-setting popup-combine-setting">
+          <span className="popup-theme-label">Combine filters with</span>
+          <div className="popup-segmented" role="radiogroup" aria-label="Combine filters with">
+            {FILTER_COMBINE_MODES.map((mode) => (
+              <button
+                key={mode.value}
+                type="button"
+                role="radio"
+                aria-checked={mode.value === filterCombineMode}
+                title={mode.hint}
+                className={`popup-segmented-option${mode.value === filterCombineMode ? ' popup-segmented-option--selected' : ''}`}
+                onClick={() => void handleFilterCombineModeChange(mode.value)}
+              >
+                {mode.label}
+              </button>
+            ))}
           </div>
         </div>
 

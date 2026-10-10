@@ -16,6 +16,7 @@ Try it out on one of the [public boards](https://youtrack.jetbrains.com/agiles/1
 
 - Create and manage your own quick filters (e.g. by assignee, state, or any search query).
 - Apply them with a single click — no need to type search strings every time.
+- Combine several filters with Ctrl+click (⌘+click on macOS) — joined with `and` or `or`, set in the extension popup.
 - Edit, duplicate, or remove filters via a clean UI.
 - Display Created and Updated tags on cards.
 - Choose from custom color themes (beta).
