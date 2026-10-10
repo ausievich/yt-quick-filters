@@ -1,0 +1,10 @@
+{
+  "extensionName": {
+    "message": "YouTrack-hurtigfiltre",
+    "description": "Navnet på utvidelsen som vises i Chrome og Chrome Web Store."
+  },
+  "extensionDescription": {
+    "message": "Legg til hurtigfilterknapper på YouTrack Agile-tavler. Vis Created- og Updated-etiketter på kort.",
+    "description": "Den korte beskrivelsen av utvidelsen som vises i Chrome og Chrome Web Store."
+  }
+}

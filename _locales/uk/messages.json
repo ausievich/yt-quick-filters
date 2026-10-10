@@ -1,0 +1,10 @@
+{
+  "extensionName": {
+    "message": "Швидкі фільтри YouTrack",
+    "description": "Назва розширення, що відображається в Chrome і Chrome Web Store."
+  },
+  "extensionDescription": {
+    "message": "Додавайте кнопки швидких фільтрів на Agile-дошки YouTrack. Відображайте позначки Created і Updated на картках.",
+    "description": "Короткий опис розширення, що відображається в Chrome і Chrome Web Store."
+  }
+}

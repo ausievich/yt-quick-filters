@@ -1,0 +1,10 @@
+{
+  "extensionName": {
+    "message": "YouTrack Hızlı Filtreleri",
+    "description": "Chrome ve Chrome Web Mağazası'nda gösterilen uzantının adı."
+  },
+  "extensionDescription": {
+    "message": "YouTrack Agile panolarına hızlı filtre düğmeleri ekleyin. Kartlarda Created ve Updated etiketlerini görüntüleyin.",
+    "description": "Chrome ve Chrome Web Mağazası'nda gösterilen uzantının kısa açıklaması."
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "extensionName": {
+    "message": "Rychlé filtry YouTrack",
+    "description": "Název rozšíření zobrazený v Chromu a Chrome Web Storu."
+  },
+  "extensionDescription": {
+    "message": "Přidejte tlačítka rychlých filtrů na agilní nástěnky YouTrack. Na kartách zobrazujte štítky Created a Updated.",
+    "description": "Krátký popis rozšíření zobrazený v Chromu a Chrome Web Storu."
+  }
+}
