@@ -75,7 +75,11 @@ export type ColorTheme =
   | 'terracotta'
   | 'raspberry'
   | 'slate'
-  | 'cocoa';
+  | 'cocoa'
+  | 'watermelon'
+  | 'coral-reef'
+  | 'citrus-pop'
+  | 'orchid-mint';
 
 export interface DaysInStatusSettings {
   hideCreated: boolean;

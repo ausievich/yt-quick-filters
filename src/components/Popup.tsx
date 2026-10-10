@@ -35,6 +35,10 @@ const COLOR_THEMES: ColorThemeOption[] = [
   { value: 'forest', label: 'Forest' },
   { value: 'mint', label: 'Mint' },
   { value: 'slate', label: 'Slate' },
+  { value: 'watermelon', label: 'Watermelon' },
+  { value: 'coral-reef', label: 'Coral Reef' },
+  { value: 'citrus-pop', label: 'Citrus Pop' },
+  { value: 'orchid-mint', label: 'Orchid Mint' },
 ];
 
 const Popup: React.FC = () => {

@@ -266,6 +266,30 @@
   background: var(--swatch);
 }
 
+.popup-theme-preview--watermelon {
+  --swatch: rgb(185, 52, 105);
+  background: linear-gradient(135deg, rgb(216, 244, 231) 0 50%, var(--swatch) 50%);
+}
+
+.popup-theme-preview--coral-reef {
+  --swatch: rgb(205, 79, 59);
+  background: linear-gradient(135deg, rgb(106, 206, 202) 0 50%, var(--swatch) 50%);
+}
+
+.popup-theme-preview--citrus-pop {
+  --swatch: rgb(103, 69, 185);
+  background: linear-gradient(135deg, rgb(249, 219, 87) 0 50%, var(--swatch) 50%);
+}
+
+.popup-theme-preview--orchid-mint {
+  --swatch: rgb(112, 63, 176);
+  background: linear-gradient(135deg, rgb(217, 245, 235) 0 50%, var(--swatch) 50%);
+}
+
+.popup-section-title--days-in-status {
+  margin-top: 0;
+}
+
 .popup-toggle-label {
   display: flex;
   align-items: center;
