@@ -62,6 +62,7 @@ export interface DaysInStatusInfo {
 
 export type ColorTheme =
   | 'ring'
+  | 'graphite'
   | 'ocean'
   | 'violet'
   | 'forest'

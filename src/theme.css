@@ -26,6 +26,24 @@
   --ytqf-popup-secondary-shadow: var(--ring-popup-secondary-shadow-color, rgba(0, 28, 54, 0.04));
 }
 
+:root[data-ytqf-theme='graphite'] {
+  --ytqf-canvas: 35, 33, 32;
+  --ytqf-theme-surface: 42, 39, 37;
+  --ytqf-sidebar: 38, 35, 33;
+  --ytqf-theme-text: 229, 224, 218;
+  --ytqf-secondary: 184, 172, 161;
+  --ytqf-theme-border: 91, 83, 76;
+  --ytqf-theme-accent: 144, 100, 63;
+  --ytqf-theme-accent-hover: 128, 88, 54;
+  --ytqf-hover: 62, 55, 50;
+  --ytqf-selected: 78, 65, 55;
+  --ytqf-success: 100, 160, 120;
+  --ytqf-warning: 208, 162, 76;
+  --ytqf-error: 212, 108, 107;
+  --ytqf-purple: 174, 137, 198;
+  --ytqf-shadow: 14, 11, 9;
+}
+
 :root[data-ytqf-theme='ocean'] {
   --ytqf-canvas: 240, 249, 255;
   --ytqf-theme-surface: 255, 255, 255;
@@ -316,21 +334,21 @@
 }
 
 :root[data-ytqf-theme='citrus-pop'] {
-  --ytqf-canvas: 255, 252, 232;
+  --ytqf-canvas: 235, 229, 255;
   --ytqf-theme-surface: 255, 255, 255;
-  --ytqf-sidebar: 235, 229, 255;
-  --ytqf-theme-text: 57, 48, 85;
-  --ytqf-secondary: 95, 86, 126;
-  --ytqf-theme-border: 226, 202, 121;
-  --ytqf-theme-accent: 103, 69, 185;
-  --ytqf-theme-accent-hover: 79, 50, 151;
-  --ytqf-hover: 255, 242, 181;
-  --ytqf-selected: 255, 225, 106;
+  --ytqf-sidebar: 255, 252, 232;
+  --ytqf-theme-text: 80, 67, 34;
+  --ytqf-secondary: 119, 105, 65;
+  --ytqf-theme-border: 194, 181, 231;
+  --ytqf-theme-accent: 137, 101, 0;
+  --ytqf-theme-accent-hover: 112, 81, 0;
+  --ytqf-hover: 239, 234, 255;
+  --ytqf-selected: 221, 213, 250;
   --ytqf-success: 32, 132, 86;
-  --ytqf-warning: 202, 137, 0;
+  --ytqf-warning: 178, 115, 0;
   --ytqf-error: 189, 54, 71;
-  --ytqf-purple: 103, 69, 185;
-  --ytqf-shadow: 65, 47, 120;
+  --ytqf-purple: 112, 81, 180;
+  --ytqf-shadow: 77, 58, 138;
 }
 
 :root[data-ytqf-theme='orchid-mint'] {
@@ -352,6 +370,7 @@
 }
 
 :root[data-ytqf-theme='ocean'],
+:root[data-ytqf-theme='graphite'],
 :root[data-ytqf-theme='violet'],
 :root[data-ytqf-theme='forest'],
 :root[data-ytqf-theme='sunset'],
@@ -503,4 +522,20 @@
   --ring-popup-shadow-color: rgb(var(--ytqf-shadow) / 16%);
   --ring-popup-shadow-components: rgb(var(--ytqf-shadow) / 16%);
   --ring-popup-secondary-shadow-color: rgb(var(--ytqf-shadow) / 6%);
+}
+
+/* Graphite uses off-white text and a clear, low-glare link tone. */
+:root[data-ytqf-theme='graphite'] {
+  --ytqf-content-surface: var(--ytqf-theme-surface);
+  --ring-white-text-color: rgb(246, 247, 248);
+  --ring-white-text-components: 246, 247, 248;
+  --ring-link-color: rgb(137, 202, 234);
+  --ring-link-components: 137, 202, 234;
+  --ring-link-hover-color: rgb(174, 219, 242);
+  --ring-link-hover-components: 174, 219, 242;
+  --ring-action-link-color: rgb(137, 202, 234);
+  --ring-action-link-components: 137, 202, 234;
+  --ring-header-link-color: rgb(137, 202, 234);
+  --ring-code-background-color: rgb(var(--ytqf-canvas));
+  --ring-tooltip-background-color: rgb(var(--ytqf-theme-surface));
 }

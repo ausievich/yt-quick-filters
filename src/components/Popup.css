@@ -196,6 +196,11 @@
   background: linear-gradient(135deg, rgb(0, 128, 229) 0 50%, rgb(255, 255, 255) 50%);
 }
 
+.popup-theme-preview--graphite {
+  --swatch: rgb(193, 151, 108);
+  background: linear-gradient(135deg, rgb(42, 39, 37) 0 50%, var(--swatch) 50%);
+}
+
 .popup-theme-preview--ocean {
   --swatch: rgb(0, 124, 181);
   background: var(--swatch);
@@ -277,8 +282,8 @@
 }
 
 .popup-theme-preview--citrus-pop {
-  --swatch: rgb(103, 69, 185);
-  background: linear-gradient(135deg, rgb(249, 219, 87) 0 50%, var(--swatch) 50%);
+  --swatch: rgb(137, 101, 0);
+  background: linear-gradient(135deg, rgb(235, 229, 255) 0 50%, var(--swatch) 50%);
 }
 
 .popup-theme-preview--orchid-mint {

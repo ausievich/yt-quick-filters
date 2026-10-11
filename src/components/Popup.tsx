@@ -21,6 +21,7 @@ type ColorThemeOption = {
 
 const COLOR_THEMES: ColorThemeOption[] = [
   { value: 'ring', label: 'YouTrack' },
+  { value: 'graphite', label: 'Graphite' },
   { value: 'ocean', label: 'Ocean' },
   { value: 'harbor', label: 'Harbor' },
   { value: 'arctic', label: 'Arctic' },
