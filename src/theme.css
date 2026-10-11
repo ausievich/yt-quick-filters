@@ -44,6 +44,24 @@
   --ytqf-shadow: 14, 11, 9;
 }
 
+:root[data-ytqf-theme='pine'] {
+  --ytqf-canvas: 23, 33, 32;
+  --ytqf-theme-surface: 29, 40, 38;
+  --ytqf-sidebar: 26, 36, 34;
+  --ytqf-theme-text: 219, 228, 222;
+  --ytqf-secondary: 159, 177, 167;
+  --ytqf-theme-border: 65, 88, 79;
+  --ytqf-theme-accent: 54, 126, 100;
+  --ytqf-theme-accent-hover: 45, 107, 84;
+  --ytqf-hover: 43, 59, 54;
+  --ytqf-selected: 49, 75, 66;
+  --ytqf-success: 84, 164, 121;
+  --ytqf-warning: 202, 161, 78;
+  --ytqf-error: 209, 108, 113;
+  --ytqf-purple: 162, 135, 202;
+  --ytqf-shadow: 5, 12, 10;
+}
+
 :root[data-ytqf-theme='ocean'] {
   --ytqf-canvas: 240, 249, 255;
   --ytqf-theme-surface: 255, 255, 255;
@@ -371,6 +389,7 @@
 
 :root[data-ytqf-theme='ocean'],
 :root[data-ytqf-theme='graphite'],
+:root[data-ytqf-theme='pine'],
 :root[data-ytqf-theme='violet'],
 :root[data-ytqf-theme='forest'],
 :root[data-ytqf-theme='sunset'],
@@ -524,8 +543,9 @@
   --ring-popup-secondary-shadow-color: rgb(var(--ytqf-shadow) / 6%);
 }
 
-/* Graphite uses off-white text and a clear, low-glare link tone. */
-:root[data-ytqf-theme='graphite'] {
+/* Dark themes use off-white text and a clear, low-glare link tone. */
+:root[data-ytqf-theme='graphite'],
+:root[data-ytqf-theme='pine'] {
   --ytqf-content-surface: var(--ytqf-theme-surface);
   --ring-white-text-color: rgb(246, 247, 248);
   --ring-white-text-components: 246, 247, 248;

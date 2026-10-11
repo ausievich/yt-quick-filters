@@ -201,6 +201,11 @@
   background: linear-gradient(135deg, rgb(42, 39, 37) 0 50%, var(--swatch) 50%);
 }
 
+.popup-theme-preview--pine {
+  --swatch: rgb(95, 172, 142);
+  background: linear-gradient(135deg, rgb(29, 40, 38) 0 50%, var(--swatch) 50%);
+}
+
 .popup-theme-preview--ocean {
   --swatch: rgb(0, 124, 181);
   background: var(--swatch);
