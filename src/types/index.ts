@@ -38,7 +38,7 @@ export interface ModalProps {
 export interface FilterBarProps {
   filters: Filter[];
   activeFilterIndices: Set<number>;
-  onFilterClick: (query: string, additive: boolean) => void;
+  onFilterClick: (query: string) => void;
   onAddFilter: () => void;
   onContextMenu: (e: React.MouseEvent, item: Filter, index: number) => void;
   onReorder: (from: number, to: number) => void;
@@ -59,8 +59,6 @@ export interface DaysInStatusInfo {
   created: number;
   updated: number;
 }
-
-export type FilterCombineMode = 'and' | 'or';
 
 export type ColorTheme =
   | 'ring'

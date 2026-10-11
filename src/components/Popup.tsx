@@ -5,7 +5,7 @@ import {
   DEFAULT_THRESHOLD_YELLOW,
   DEFAULT_THRESHOLD_RED,
 } from '../services/storage';
-import { ColorTheme, DaysInStatusSettings, FilterCombineMode } from '../types';
+import { ColorTheme, DaysInStatusSettings } from '../types';
 import manifest from '../../manifest.json';
 import './Popup.css';
 
@@ -37,14 +37,9 @@ const COLOR_THEMES: ColorThemeOption[] = [
   { value: 'slate', label: 'Slate' },
 ];
 
-const FILTER_COMBINE_MODES: { value: FilterCombineMode; label: string; hint: string }[] = [
-  { value: 'and', label: 'AND', hint: 'Cards must match all selected filters' },
-  { value: 'or', label: 'OR', hint: 'Cards can match any selected filter' },
-];
-
 const Popup: React.FC = () => {
   const [colorTheme, setColorTheme] = useState<ColorTheme>('ring');
-  const [filterCombineMode, setFilterCombineMode] = useState<FilterCombineMode>('and');
+  const [allowMultipleFilters, setAllowMultipleFilters] = useState<boolean>(false);
   const [showCreated, setShowCreated] = useState<boolean>(true);
   const [thresholdYellowInput, setThresholdYellowInput] = useState<string>('');
   const [thresholdRedInput, setThresholdRedInput] = useState<string>('');
@@ -78,7 +73,7 @@ const Popup: React.FC = () => {
       try {
         // Load Days In Status settings
         const colorThemeValue = await storageService.getColorTheme();
-        const filterCombineModeValue = await storageService.getFilterCombineMode();
+        const allowMultipleFiltersValue = await storageService.getAllowMultipleFilters();
         const hideCreatedValue = await storageService.getHideCreatedTag();
         const thresholdYellowValue = await storageService.getDaysInStatusThresholdYellow();
         const thresholdRedValue = await storageService.getDaysInStatusThresholdRed();
@@ -97,7 +92,7 @@ const Popup: React.FC = () => {
         if (selectedTheme !== colorThemeValue) {
           await storageService.setColorTheme(selectedTheme);
         }
-        setFilterCombineMode(filterCombineModeValue);
+        setAllowMultipleFilters(allowMultipleFiltersValue);
         setShowCreated(!hideCreatedValue);
         setThresholdYellowInput(normalizedYellow.toString());
         setThresholdRedInput(normalizedRed.toString());
@@ -165,10 +160,10 @@ const Popup: React.FC = () => {
     }
   };
 
-  // Open boards pick this up through chrome.storage.onChanged
-  const handleFilterCombineModeChange = async (value: FilterCombineMode) => {
-    setFilterCombineMode(value);
-    await storageService.setFilterCombineMode(value);
+  const handleAllowMultipleFiltersChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.checked;
+    setAllowMultipleFilters(value);
+    await storageService.setAllowMultipleFilters(value);
   };
 
   // Generic handler for threshold input changes
@@ -348,139 +343,141 @@ const Popup: React.FC = () => {
   return (
     <div className="popup-container">
       <div className="popup-section">
-        <h3 className="popup-section-title">Settings</h3>
+        <section className="popup-settings-group">
+          <h3 className="popup-section-title">Quick filters</h3>
 
-        <div className="popup-setting popup-theme-setting">
-          <span className="popup-theme-label">Color theme</span>
-          <div className="popup-theme-picker" ref={themePickerRef}>
-            <button
-              type="button"
-              className="popup-theme-trigger"
-              aria-haspopup="true"
-              aria-expanded={isThemePaletteOpen}
-              onClick={() => setIsThemePaletteOpen((isOpen) => !isOpen)}
-            >
-              <span
-                aria-hidden="true"
-                className={`popup-theme-trigger-preview popup-theme-preview--${selectedTheme.value}`}
-              ></span>
-              <span className="popup-theme-trigger-label">{selectedTheme.label}</span>
-              <span aria-hidden="true" className="popup-theme-chevron"></span>
-            </button>
-
-            {isThemePaletteOpen && (
-              <div className="popup-theme-palette" role="radiogroup" aria-label="Color theme">
-                {COLOR_THEMES.map((theme) => (
-                  <button
-                    key={theme.value}
-                    type="button"
-                    role="radio"
-                    aria-checked={theme.value === colorTheme}
-                    aria-label={theme.label}
-                    title={theme.label}
-                    className={`popup-theme-swatch-button${theme.value === colorTheme ? ' popup-theme-swatch-button--selected' : ''}`}
-                    onClick={() => void handleColorThemeChange(theme.value)}
-                  >
-                    <span
-                      aria-hidden="true"
-                      className={`popup-theme-swatch popup-theme-preview--${theme.value}`}
-                    ></span>
-                  </button>
-                ))}
-              </div>
-            )}
+          <div className="popup-setting">
+            <label className="popup-toggle-label">
+              <input
+                type="checkbox"
+                checked={allowMultipleFilters}
+                onChange={handleAllowMultipleFiltersChange}
+                className="popup-toggle-input"
+              />
+              <span className="popup-toggle-switch"></span>
+              <span className="popup-toggle-text">Combine filters</span>
+            </label>
           </div>
-        </div>
+        </section>
 
-        <div className="popup-setting popup-combine-setting">
-          <span className="popup-theme-label">Combine filters with</span>
-          <div className="popup-segmented" role="radiogroup" aria-label="Combine filters with">
-            {FILTER_COMBINE_MODES.map((mode) => (
+        <section className="popup-settings-group">
+          <h3 className="popup-section-title">Appearance</h3>
+
+          <div className="popup-setting popup-theme-setting">
+            <span className="popup-theme-label">Color theme</span>
+            <div className="popup-theme-picker" ref={themePickerRef}>
               <button
-                key={mode.value}
                 type="button"
-                role="radio"
-                aria-checked={mode.value === filterCombineMode}
-                title={mode.hint}
-                className={`popup-segmented-option${mode.value === filterCombineMode ? ' popup-segmented-option--selected' : ''}`}
-                onClick={() => void handleFilterCombineModeChange(mode.value)}
+                className="popup-theme-trigger"
+                aria-haspopup="true"
+                aria-expanded={isThemePaletteOpen}
+                onClick={() => setIsThemePaletteOpen((isOpen) => !isOpen)}
               >
-                {mode.label}
+                <span
+                  aria-hidden="true"
+                  className={`popup-theme-trigger-preview popup-theme-preview--${selectedTheme.value}`}
+                ></span>
+                <span className="popup-theme-trigger-label">{selectedTheme.label}</span>
+                <span aria-hidden="true" className="popup-theme-chevron"></span>
               </button>
-            ))}
+
+              {isThemePaletteOpen && (
+                <div className="popup-theme-palette" role="radiogroup" aria-label="Color theme">
+                  {COLOR_THEMES.map((theme) => (
+                    <button
+                      key={theme.value}
+                      type="button"
+                      role="radio"
+                      aria-checked={theme.value === colorTheme}
+                      aria-label={theme.label}
+                      title={theme.label}
+                      className={`popup-theme-swatch-button${theme.value === colorTheme ? ' popup-theme-swatch-button--selected' : ''}`}
+                      onClick={() => void handleColorThemeChange(theme.value)}
+                    >
+                      <span
+                        aria-hidden="true"
+                        className={`popup-theme-swatch popup-theme-preview--${theme.value}`}
+                      ></span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        </section>
 
-        <h3 className="popup-section-title popup-section-title--days-in-status">Days in status</h3>
+        <section className="popup-settings-group">
+          <h3 className="popup-section-title">Days in status</h3>
 
-        <div className="popup-setting">
-          <label className="popup-toggle-label">
-            <input
-              type="checkbox"
-              checked={showCreated}
-              onChange={handleShowCreatedChange}
-              className="popup-toggle-input"
-            />
-            <span className="popup-toggle-switch"></span>
-            <span className="popup-toggle-text">Show Created tag</span>
-          </label>
-        </div>
-
-        <div className="popup-setting">
-          <label className="popup-toggle-label">
-            <input
-              type="checkbox"
-              checked={createdTagColored}
-              onChange={handleCreatedTagColoredChange}
-              className="popup-toggle-input"
-            />
-            <span className="popup-toggle-switch"></span>
-            <span className="popup-toggle-text">Color Created tag</span>
-          </label>
-        </div>
-
-        <div className="popup-setting">
-          <label className="popup-toggle-label">
-            <input
-              type="checkbox"
-              checked={compactFormat}
-              onChange={handleCompactFormatChange}
-              className="popup-toggle-input"
-            />
-            <span className="popup-toggle-switch"></span>
-            <span className="popup-toggle-text">Use compact format</span>
-          </label>
-        </div>
-
-        <div className="popup-setting popup-setting-thresholds">
-          <div className="popup-threshold-row">
-            <span className="popup-threshold-indicator popup-threshold-indicator--yellow"></span>
-            <label className="popup-threshold-label">Warning after</label>
-            <input
-              type="text"
-              value={thresholdYellowInput}
-              onChange={handleThresholdYellowChange}
-              onBlur={handleThresholdYellowBlur}
-              placeholder={lastUserYellowValue > 0 ? lastUserYellowValue.toString() : ''}
-              className="popup-input popup-input-threshold"
-            />
-            <span className="popup-threshold-unit">days</span>
+          <div className="popup-setting">
+            <label className="popup-toggle-label">
+              <input
+                type="checkbox"
+                checked={showCreated}
+                onChange={handleShowCreatedChange}
+                className="popup-toggle-input"
+              />
+              <span className="popup-toggle-switch"></span>
+              <span className="popup-toggle-text">Show Created tag</span>
+            </label>
           </div>
 
-          <div className="popup-threshold-row">
-            <span className="popup-threshold-indicator popup-threshold-indicator--red"></span>
-            <label className="popup-threshold-label">Stale after</label>
-            <input
-              type="text"
-              value={thresholdRedInput}
-              onChange={handleThresholdRedChange}
-              onBlur={handleThresholdRedBlur}
-              placeholder={lastUserRedValue > 0 ? lastUserRedValue.toString() : ''}
-              className="popup-input popup-input-threshold"
-            />
-            <span className="popup-threshold-unit">days</span>
+          <div className="popup-setting">
+            <label className="popup-toggle-label">
+              <input
+                type="checkbox"
+                checked={createdTagColored}
+                onChange={handleCreatedTagColoredChange}
+                className="popup-toggle-input"
+              />
+              <span className="popup-toggle-switch"></span>
+              <span className="popup-toggle-text">Color Created tag</span>
+            </label>
           </div>
-        </div>
+
+          <div className="popup-setting">
+            <label className="popup-toggle-label">
+              <input
+                type="checkbox"
+                checked={compactFormat}
+                onChange={handleCompactFormatChange}
+                className="popup-toggle-input"
+              />
+              <span className="popup-toggle-switch"></span>
+              <span className="popup-toggle-text">Use compact format</span>
+            </label>
+          </div>
+
+          <div className="popup-setting popup-setting-thresholds">
+            <div className="popup-threshold-row">
+              <span className="popup-threshold-indicator popup-threshold-indicator--yellow"></span>
+              <label className="popup-threshold-label">Warning after</label>
+              <input
+                type="text"
+                value={thresholdYellowInput}
+                onChange={handleThresholdYellowChange}
+                onBlur={handleThresholdYellowBlur}
+                placeholder={lastUserYellowValue > 0 ? lastUserYellowValue.toString() : ''}
+                className="popup-input popup-input-threshold"
+              />
+              <span className="popup-threshold-unit">days</span>
+            </div>
+
+            <div className="popup-threshold-row">
+              <span className="popup-threshold-indicator popup-threshold-indicator--red"></span>
+              <label className="popup-threshold-label">Stale after</label>
+              <input
+                type="text"
+                value={thresholdRedInput}
+                onChange={handleThresholdRedChange}
+                onBlur={handleThresholdRedBlur}
+                placeholder={lastUserRedValue > 0 ? lastUserRedValue.toString() : ''}
+                className="popup-input popup-input-threshold"
+              />
+              <span className="popup-threshold-unit">days</span>
+            </div>
+          </div>
+        </section>
       </div>
 
       <div className="popup-footer">

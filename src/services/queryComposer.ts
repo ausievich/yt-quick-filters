@@ -1,12 +1,8 @@
-import { FilterCombineMode } from '../types';
-
 /**
- * Builds and inspects board queries that combine several quick filters with `and` or `or`.
+ * Builds and inspects board queries that combine several quick filters with `and`.
  * Only an explicit top-level operator separates clauses; anything inside quotes, braces
  * or parentheses is kept intact.
  */
-
-type Operator = FilterCombineMode;
 
 export function normalizeQuery(query: string): string {
   return query
@@ -20,7 +16,7 @@ function isOperatorBoundary(char: string | undefined): boolean {
   return char === undefined || /[\s()]/.test(char);
 }
 
-function isOperatorAt(query: string, index: number, operator: Operator): boolean {
+function isOperatorAt(query: string, index: number, operator: 'and' | 'or'): boolean {
   return (
     query.slice(index, index + operator.length).toLowerCase() === operator &&
     isOperatorBoundary(query[index - 1]) &&
@@ -28,7 +24,7 @@ function isOperatorAt(query: string, index: number, operator: Operator): boolean
   );
 }
 
-function splitTopLevel(query: string, operator: Operator): string[] {
+function splitTopLevel(query: string, operator: 'and' | 'or'): string[] {
   const parts: string[] = [];
   let start = 0;
   let parenDepth = 0;
@@ -104,38 +100,29 @@ function clauseKey(query: string): string {
 }
 
 /**
- * Splits a query into its top-level clauses for the given operator. When splitting
- * on `and`, a query with a top-level `or` stays a single clause, because `and`
- * binds tighter than `or`.
+ * Splits a query into its top-level `and` clauses. A query with a top-level `or`
+ * stays a single clause, because `and` binds tighter than `or`.
  */
-export function splitClauses(query: string, operator: Operator): string[] {
+export function splitClauses(query: string): string[] {
   const unwrapped = unwrap(query);
   if (!unwrapped) return [];
 
-  if (operator === 'and' && splitTopLevel(unwrapped, 'or').length > 1) return [unwrapped];
+  if (splitTopLevel(unwrapped, 'or').length > 1) return [unwrapped];
 
-  return splitTopLevel(unwrapped, operator).map(unwrap).filter(Boolean);
+  return splitTopLevel(unwrapped, 'and').map(unwrap).filter(Boolean);
 }
 
-export function combineQueries(queries: string[], operator: Operator): string {
+export function combineQueries(queries: string[]): string {
   const clauses = queries.map(unwrap).filter(Boolean);
   if (clauses.length <= 1) return clauses[0] ?? '';
-  return clauses.map((clause) => `(${clause})`).join(` ${operator} `);
-}
-
-export function isSameQuery(a: string, b: string): boolean {
-  return clauseKey(a) === clauseKey(b);
+  return clauses.map((clause) => `(${clause})`).join(' and ');
 }
 
 /**
  * Returns the indices of filters applied by the query: an exact match wins,
  * otherwise every filter that matches one of the query's clauses.
  */
-export function getActiveFilterIndices(
-  filters: { query: string }[],
-  query: string,
-  operator: Operator,
-): Set<number> {
+export function getActiveFilterIndices(filters: { query: string }[], query: string): Set<number> {
   const queryKey = clauseKey(query);
   const active = new Set<number>();
   if (!queryKey) return active;
@@ -147,7 +134,7 @@ export function getActiveFilterIndices(
   });
   if (active.size > 0) return active;
 
-  const clauseKeys = new Set(splitClauses(query, operator).map(clauseKey));
+  const clauseKeys = new Set(splitClauses(query).map(clauseKey));
   filterKeys.forEach((key, index) => {
     if (key && clauseKeys.has(key)) active.add(index);
   });
@@ -159,18 +146,14 @@ export function getActiveFilterIndices(
  * Adds the filter to the query as an extra clause, or removes it if it is
  * already one of the clauses.
  */
-export function toggleFilterInQuery(
-  query: string,
-  filterQuery: string,
-  operator: Operator,
-): string {
+export function toggleFilterInQuery(query: string, filterQuery: string): string {
   const filterKey = clauseKey(filterQuery);
   if (!filterKey) return query.trim();
   if (clauseKey(query) === filterKey) return '';
 
-  const clauses = splitClauses(query, operator);
+  const clauses = splitClauses(query);
   const remaining = clauses.filter((clause) => clauseKey(clause) !== filterKey);
 
-  if (remaining.length < clauses.length) return combineQueries(remaining, operator);
-  return combineQueries([...clauses, filterQuery], operator);
+  if (remaining.length < clauses.length) return combineQueries(remaining);
+  return combineQueries([...clauses, filterQuery]);
 }
