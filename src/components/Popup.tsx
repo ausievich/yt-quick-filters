@@ -346,7 +346,7 @@ const Popup: React.FC = () => {
         <section className="popup-settings-group">
           <h3 className="popup-section-title">Quick filters</h3>
 
-          <div className="popup-setting">
+          <div className="popup-setting popup-combine-setting">
             <label className="popup-toggle-label">
               <input
                 type="checkbox"
@@ -357,6 +357,20 @@ const Popup: React.FC = () => {
               <span className="popup-toggle-switch"></span>
               <span className="popup-toggle-text">Combine filters</span>
             </label>
+            <span
+              className="popup-help-trigger"
+              role="img"
+              tabIndex={0}
+              aria-label="More information about combining filters"
+              aria-describedby="combine-filters-help"
+            >
+              <span aria-hidden="true" className="popup-help-icon">
+                ?
+              </span>
+            </span>
+            <span id="combine-filters-help" role="tooltip" className="popup-help-tooltip">
+              Select several filters at once. They are combined with AND.
+            </span>
           </div>
         </section>
 
