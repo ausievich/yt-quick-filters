@@ -4,6 +4,8 @@
  * Use: browser_run_code_unsafe { filename: "<workspace>/.../regression-delete-filter.js" }
  */
 async (page) => {
+  await page.setViewportSize({ width: 1600, height: 1000 });
+
   const clearActiveFilter = async () => {
     const hadActive = await page.evaluate(() => {
       const active = document.querySelector('#ytqf-bar button.btn.active');

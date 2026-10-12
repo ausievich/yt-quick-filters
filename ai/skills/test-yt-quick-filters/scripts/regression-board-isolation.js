@@ -6,13 +6,18 @@
  * content script while preserving saved values in the same browser tab.
  */
 async (page) => {
-  const assets = await page.evaluate(() => ({
-    js: [...document.scripts].find((script) => script.textContent?.includes('ytqf-bar'))
-      ?.textContent,
-    css: [...document.querySelectorAll('style')].find((style) =>
-      style.textContent?.includes('#ytqf-bar'),
-    )?.textContent,
-  }));
+  const assets = await page.evaluate(() => {
+    const storedAssets = sessionStorage.getItem('__ytqfTestAssets');
+    if (storedAssets) return JSON.parse(storedAssets);
+
+    return {
+      js: [...document.scripts].find((script) => script.textContent?.includes('ytqf-bar'))
+        ?.textContent,
+      css: [...document.querySelectorAll('style')].find((style) =>
+        style.textContent?.includes('#ytqf-bar'),
+      )?.textContent,
+    };
+  });
   if (!assets.js || !assets.css) {
     return { passed: false, reason: 'Inject the extension before running this scenario' };
   }
