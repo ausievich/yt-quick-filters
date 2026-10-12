@@ -41,6 +41,9 @@ const COLOR_THEMES: ColorThemeOption[] = [
   { value: 'coral-reef', label: 'Coral Reef' },
   { value: 'citrus-pop', label: 'Citrus Pop' },
   { value: 'orchid-mint', label: 'Orchid Mint' },
+  { value: 'sakura-matcha', label: 'Sakura & Matcha' },
+  { value: 'aizome-persimmon', label: 'Aizome & Persimmon' },
+  { value: 'sumi-gold', label: 'Sumi & Gold' },
 ];
 
 const Popup: React.FC = () => {

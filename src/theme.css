@@ -387,6 +387,61 @@
   --ytqf-shadow: 76, 45, 113;
 }
 
+/* Japanese-inspired contrast palettes. */
+:root[data-ytqf-theme='sakura-matcha'] {
+  --ytqf-canvas: 255, 247, 248;
+  --ytqf-theme-surface: 255, 255, 255;
+  --ytqf-sidebar: 224, 239, 205;
+  --ytqf-theme-text: 67, 54, 43;
+  --ytqf-secondary: 110, 96, 78;
+  --ytqf-theme-border: 176, 207, 152;
+  --ytqf-theme-accent: 190, 64, 93;
+  --ytqf-theme-accent-hover: 157, 45, 71;
+  --ytqf-hover: 235, 247, 222;
+  --ytqf-selected: 210, 234, 184;
+  --ytqf-success: 50, 131, 82;
+  --ytqf-warning: 190, 133, 36;
+  --ytqf-error: 186, 53, 68;
+  --ytqf-purple: 121, 82, 168;
+  --ytqf-shadow: 93, 58, 63;
+}
+
+:root[data-ytqf-theme='aizome-persimmon'] {
+  --ytqf-canvas: 241, 245, 255;
+  --ytqf-theme-surface: 255, 255, 255;
+  --ytqf-sidebar: 255, 229, 212;
+  --ytqf-theme-text: 35, 54, 80;
+  --ytqf-secondary: 75, 93, 119;
+  --ytqf-theme-border: 236, 180, 141;
+  --ytqf-theme-accent: 194, 76, 46;
+  --ytqf-theme-accent-hover: 159, 55, 33;
+  --ytqf-hover: 255, 236, 223;
+  --ytqf-selected: 250, 211, 184;
+  --ytqf-success: 38, 132, 92;
+  --ytqf-warning: 198, 128, 7;
+  --ytqf-error: 187, 53, 64;
+  --ytqf-purple: 80, 82, 176;
+  --ytqf-shadow: 35, 54, 80;
+}
+
+:root[data-ytqf-theme='sumi-gold'] {
+  --ytqf-canvas: 31, 31, 34;
+  --ytqf-theme-surface: 40, 39, 42;
+  --ytqf-sidebar: 50, 43, 31;
+  --ytqf-theme-text: 238, 233, 220;
+  --ytqf-secondary: 194, 183, 159;
+  --ytqf-theme-border: 101, 86, 55;
+  --ytqf-theme-accent: 205, 157, 57;
+  --ytqf-theme-accent-hover: 232, 184, 76;
+  --ytqf-hover: 64, 54, 35;
+  --ytqf-selected: 83, 68, 38;
+  --ytqf-success: 110, 167, 117;
+  --ytqf-warning: 224, 179, 76;
+  --ytqf-error: 215, 111, 104;
+  --ytqf-purple: 185, 146, 215;
+  --ytqf-shadow: 12, 11, 10;
+}
+
 :root[data-ytqf-theme='ocean'],
 :root[data-ytqf-theme='graphite'],
 :root[data-ytqf-theme='pine'],
@@ -406,7 +461,10 @@
 :root[data-ytqf-theme='watermelon'],
 :root[data-ytqf-theme='coral-reef'],
 :root[data-ytqf-theme='citrus-pop'],
-:root[data-ytqf-theme='orchid-mint'] {
+:root[data-ytqf-theme='orchid-mint'],
+:root[data-ytqf-theme='sakura-matcha'],
+:root[data-ytqf-theme='aizome-persimmon'],
+:root[data-ytqf-theme='sumi-gold'] {
   /* Keep text-bearing content and cards neutral; tint only the surrounding UI. */
   --ytqf-content-surface: 255, 255, 255;
   --ring-content-background-color: rgb(var(--ytqf-content-surface));
@@ -417,6 +475,11 @@
   --ring-popup-background-components: var(--ytqf-content-surface);
   --ring-sidebar-background-color: rgb(var(--ytqf-sidebar));
   --ring-sidebar-background-components: var(--ytqf-sidebar);
+  /* The persistent left navigation uses YouTrack tokens rather than Ring ones. */
+  --yt-app-background: rgb(var(--ytqf-sidebar));
+  --yt-app-background-dark: rgb(var(--ytqf-canvas));
+  --yt-app-text-color: rgb(var(--ytqf-theme-text));
+  --yt-app-text-grey-mid: rgb(var(--ytqf-secondary));
   --ring-secondary-background-color: rgb(var(--ytqf-content-surface));
   --ring-secondary-background-components: var(--ytqf-content-surface);
   --ring-text-color: rgb(var(--ytqf-theme-text));
@@ -545,7 +608,8 @@
 
 /* Dark themes use off-white text and a clear, low-glare link tone. */
 :root[data-ytqf-theme='graphite'],
-:root[data-ytqf-theme='pine'] {
+:root[data-ytqf-theme='pine'],
+:root[data-ytqf-theme='sumi-gold'] {
   --ytqf-content-surface: var(--ytqf-theme-surface);
   --ring-white-text-color: rgb(246, 247, 248);
   --ring-white-text-components: 246, 247, 248;

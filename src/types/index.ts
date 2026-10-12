@@ -81,7 +81,10 @@ export type ColorTheme =
   | 'watermelon'
   | 'coral-reef'
   | 'citrus-pop'
-  | 'orchid-mint';
+  | 'orchid-mint'
+  | 'sakura-matcha'
+  | 'aizome-persimmon'
+  | 'sumi-gold';
 
 export interface DaysInStatusSettings {
   hideCreated: boolean;
