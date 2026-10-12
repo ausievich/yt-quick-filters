@@ -23,6 +23,7 @@ const COLOR_THEMES: ColorThemeOption[] = [
   { value: 'ring', label: 'YouTrack' },
   { value: 'graphite', label: 'Graphite' },
   { value: 'pine', label: 'Pine' },
+  { value: 'sumi-gold', label: 'Sumi Gold' },
   { value: 'ocean', label: 'Ocean' },
   { value: 'harbor', label: 'Harbor' },
   { value: 'arctic', label: 'Arctic' },
@@ -37,13 +38,7 @@ const COLOR_THEMES: ColorThemeOption[] = [
   { value: 'forest', label: 'Forest' },
   { value: 'mint', label: 'Mint' },
   { value: 'slate', label: 'Slate' },
-  { value: 'watermelon', label: 'Watermelon' },
-  { value: 'coral-reef', label: 'Coral Reef' },
-  { value: 'citrus-pop', label: 'Citrus Pop' },
-  { value: 'orchid-mint', label: 'Orchid Mint' },
-  { value: 'sakura-matcha', label: 'Sakura & Matcha' },
-  { value: 'aizome-persimmon', label: 'Aizome & Persimmon' },
-  { value: 'sumi-gold', label: 'Sumi & Gold' },
+  { value: 'violet-classic', label: 'Violet Classic' },
 ];
 
 const Popup: React.FC = () => {

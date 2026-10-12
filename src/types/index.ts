@@ -78,12 +78,7 @@ export type ColorTheme =
   | 'raspberry'
   | 'slate'
   | 'cocoa'
-  | 'watermelon'
-  | 'coral-reef'
-  | 'citrus-pop'
-  | 'orchid-mint'
-  | 'sakura-matcha'
-  | 'aizome-persimmon'
+  | 'violet-classic'
   | 'sumi-gold';
 
 export interface DaysInStatusSettings {

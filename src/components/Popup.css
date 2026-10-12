@@ -206,12 +206,18 @@
   background: linear-gradient(135deg, rgb(29, 40, 38) 0 50%, var(--swatch) 50%);
 }
 
+.popup-theme-preview--sumi-gold {
+  --swatch: rgb(205, 157, 57);
+  background: linear-gradient(135deg, rgb(31, 31, 34) 0 50%, var(--swatch) 50%);
+}
+
 .popup-theme-preview--ocean {
   --swatch: rgb(0, 124, 181);
   background: var(--swatch);
 }
 
-.popup-theme-preview--violet {
+.popup-theme-preview--violet,
+.popup-theme-preview--violet-classic {
   --swatch: rgb(103, 66, 178);
   background: var(--swatch);
 }
@@ -274,41 +280,6 @@
 .popup-theme-preview--cocoa {
   --swatch: rgb(121, 79, 54);
   background: var(--swatch);
-}
-
-.popup-theme-preview--watermelon {
-  --swatch: rgb(185, 52, 105);
-  background: linear-gradient(135deg, rgb(216, 244, 231) 0 50%, var(--swatch) 50%);
-}
-
-.popup-theme-preview--coral-reef {
-  --swatch: rgb(205, 79, 59);
-  background: linear-gradient(135deg, rgb(106, 206, 202) 0 50%, var(--swatch) 50%);
-}
-
-.popup-theme-preview--citrus-pop {
-  --swatch: rgb(137, 101, 0);
-  background: linear-gradient(135deg, rgb(235, 229, 255) 0 50%, var(--swatch) 50%);
-}
-
-.popup-theme-preview--orchid-mint {
-  --swatch: rgb(112, 63, 176);
-  background: linear-gradient(135deg, rgb(217, 245, 235) 0 50%, var(--swatch) 50%);
-}
-
-.popup-theme-preview--sakura-matcha {
-  --swatch: rgb(190, 64, 93);
-  background: linear-gradient(135deg, rgb(224, 239, 205) 0 50%, var(--swatch) 50%);
-}
-
-.popup-theme-preview--aizome-persimmon {
-  --swatch: rgb(194, 76, 46);
-  background: linear-gradient(135deg, rgb(58, 80, 128) 0 50%, var(--swatch) 50%);
-}
-
-.popup-theme-preview--sumi-gold {
-  --swatch: rgb(205, 157, 57);
-  background: linear-gradient(135deg, rgb(31, 31, 34) 0 50%, var(--swatch) 50%);
 }
 
 .popup-section-title--days-in-status {
