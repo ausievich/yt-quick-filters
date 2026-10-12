@@ -18,8 +18,19 @@ async (page) => {
   await page.getByRole('link', { name: 'Agile Boards' }).waitFor({ timeout: 15000 });
   await page.getByText('Welcome to YouTrack!').waitFor({ timeout: 15000 });
 
-  await page.evaluate(() => {
+  await page.addStyleTag({ content: assets.css });
+  const client = await page.context().newCDPSession(page);
+  await client.send('Page.enable');
+  const { frameTree } = await client.send('Page.getFrameTree');
+  const { executionContextId } = await client.send('Page.createIsolatedWorld', {
+    frameId: frameTree.frame.id,
+    worldName: 'ytqf-dashboard-navigation-test',
+    grantUniveralAccess: true,
+  });
+
+  const chromeMock = `(() => {
     const store = { sync: {}, local: {} };
+    const listeners = new Set();
     const storageArea = (area) => ({
       get: (keys, callback) => {
         const names = Array.isArray(keys)
@@ -34,28 +45,62 @@ async (page) => {
         return Promise.resolve(values);
       },
       set: (items, callback) => {
-        Object.assign(store[area], structuredClone(items));
+        const changes = {};
+        for (const [key, value] of Object.entries(items)) {
+          const oldValue = structuredClone(store[area][key]);
+          store[area][key] = structuredClone(value);
+          changes[key] = { oldValue, newValue: structuredClone(value) };
+        }
+        listeners.forEach((listener) => listener(changes, area));
         callback?.();
         return Promise.resolve();
       },
     });
-    // Keep Chrome's built-in page APIs so YouTrack's own navigation still works.
-    window.chrome ??= {};
-    window.chrome.runtime = {
-      id: 'ytqf-dashboard-navigation-test',
-      onMessage: { addListener: () => {} },
+    window.chrome = {
+      runtime: {
+        id: 'ytqf-dashboard-navigation-test',
+        onMessage: { addListener: () => {} },
+      },
+      storage: {
+        sync: storageArea('sync'),
+        local: storageArea('local'),
+        onChanged: {
+          addListener: (listener) => listeners.add(listener),
+          removeListener: (listener) => listeners.delete(listener),
+        },
+      },
     };
-    window.chrome.storage = { sync: storageArea('sync'), local: storageArea('local') };
-  });
+  })();`;
 
-  await page.addStyleTag({ content: assets.css });
-  await page.addScriptTag({ content: assets.js });
-  const before = await page.evaluate(() => ({
-    path: location.pathname,
-    appCount: document.querySelectorAll('#ytqf-app').length,
-    barCount: document.querySelectorAll('#ytqf-bar').length,
-    started: window.__ytqfStarted === true,
-  }));
+  const mockResult = await client.send('Runtime.evaluate', {
+    contextId: executionContextId,
+    expression: chromeMock,
+    awaitPromise: true,
+  });
+  const bundleResult = await client.send('Runtime.evaluate', {
+    contextId: executionContextId,
+    expression: assets.js,
+    awaitPromise: true,
+  });
+  if (mockResult.exceptionDetails || bundleResult.exceptionDetails) {
+    throw new Error('Failed to inject the extension in an isolated world');
+  }
+  const getStarted = async () => {
+    const result = await client.send('Runtime.evaluate', {
+      contextId: executionContextId,
+      expression: 'window.__ytqfStarted === true',
+      returnByValue: true,
+    });
+    return result.result.value === true;
+  };
+  const before = {
+    ...(await page.evaluate(() => ({
+      path: location.pathname,
+      appCount: document.querySelectorAll('#ytqf-app').length,
+      barCount: document.querySelectorAll('#ytqf-bar').length,
+    }))),
+    started: await getStarted(),
+  };
 
   const marker = `ytqf-dashboard-navigation-${Date.now()}`;
   await page.evaluate((value) => {
@@ -67,16 +112,18 @@ async (page) => {
     timeout: 15000,
   });
 
-  const after = await page.evaluate(() => ({
-    path: location.pathname,
-    appCount: document.querySelectorAll('#ytqf-app').length,
-    barCount: document.querySelectorAll('#ytqf-bar').length,
-    started: window.__ytqfStarted === true,
-    marker: window.__ytqfNavigationMarker,
-    filterLabels: [...document.querySelectorAll('#ytqf-bar .ytqf-filter .lbl')].map((item) =>
-      item.textContent.trim(),
-    ),
-  }));
+  const after = {
+    ...(await page.evaluate(() => ({
+      path: location.pathname,
+      appCount: document.querySelectorAll('#ytqf-app').length,
+      barCount: document.querySelectorAll('#ytqf-bar').length,
+      marker: window.__ytqfNavigationMarker,
+      filterLabels: [...document.querySelectorAll('#ytqf-bar .ytqf-filter .lbl')].map((item) =>
+        item.textContent.trim(),
+      ),
+    }))),
+    started: await getStarted(),
+  };
 
   return {
     before,

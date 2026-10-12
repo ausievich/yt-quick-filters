@@ -33,8 +33,19 @@ async (page) => {
       throw new Error(`Board ${id} redirected to ${page.url()}`);
     }
 
-    await page.evaluate((key) => {
-      const read = () => JSON.parse(sessionStorage.getItem(key));
+    await page.addStyleTag({ content: assets.css });
+    const client = await page.context().newCDPSession(page);
+    await client.send('Page.enable');
+    const { frameTree } = await client.send('Page.getFrameTree');
+    const { executionContextId } = await client.send('Page.createIsolatedWorld', {
+      frameId: frameTree.frame.id,
+      worldName: 'ytqf-board-isolation-test',
+      grantUniveralAccess: true,
+    });
+    const chromeMock = `(() => {
+      const storageKey = ${JSON.stringify(storageKey)};
+      const listeners = new Set();
+      const read = () => JSON.parse(sessionStorage.getItem(storageKey));
       const storageArea = (area) => ({
         get: (keys, callback) => {
           const names = Array.isArray(keys)
@@ -51,20 +62,43 @@ async (page) => {
         },
         set: (items, callback) => {
           const saved = read();
-          Object.assign(saved[area], structuredClone(items));
-          sessionStorage.setItem(key, JSON.stringify(saved));
+          const changes = {};
+          for (const [key, value] of Object.entries(items)) {
+            const oldValue = structuredClone(saved[area][key]);
+            saved[area][key] = structuredClone(value);
+            changes[key] = { oldValue, newValue: structuredClone(value) };
+          }
+          sessionStorage.setItem(storageKey, JSON.stringify(saved));
+          listeners.forEach((listener) => listener(changes, area));
           callback?.();
           return Promise.resolve();
         },
       });
       window.chrome = {
         runtime: { id: 'ytqf-board-isolation-test', onMessage: { addListener: () => {} } },
-        storage: { sync: storageArea('sync'), local: storageArea('local') },
+        storage: {
+          sync: storageArea('sync'),
+          local: storageArea('local'),
+          onChanged: {
+            addListener: (listener) => listeners.add(listener),
+            removeListener: (listener) => listeners.delete(listener),
+          },
+        },
       };
-    }, storageKey);
-
-    await page.addStyleTag({ content: assets.css });
-    await page.addScriptTag({ content: assets.js });
+    })();`;
+    const mockResult = await client.send('Runtime.evaluate', {
+      contextId: executionContextId,
+      expression: chromeMock,
+      awaitPromise: true,
+    });
+    const bundleResult = await client.send('Runtime.evaluate', {
+      contextId: executionContextId,
+      expression: assets.js,
+      awaitPromise: true,
+    });
+    if (mockResult.exceptionDetails || bundleResult.exceptionDetails) {
+      throw new Error('Failed to inject the extension in an isolated world');
+    }
     await page.locator('#ytqf-bar .ytqf-filter .lbl', { hasText: 'My Tasks' }).waitFor();
   };
 

@@ -5,6 +5,8 @@
  * browser_run_code_unsafe and this file's absolute path as `filename`.
  */
 async (page) => {
+  await page.setViewportSize({ width: 1600, height: 1000 });
+
   const labels = ['QA drag alpha', 'QA drag beta'];
   const filterButtons = page.locator('#ytqf-bar .ytqf-filter');
 
