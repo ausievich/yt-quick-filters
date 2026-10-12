@@ -49,6 +49,15 @@ async (page) => {
 
   await page.addStyleTag({ path: `${extRoot}/dist/content.css` });
   await page.addScriptTag({ path: `${extRoot}/dist/content.js` });
+  await page.evaluate(() => {
+    const js = [...document.scripts].find((script) =>
+      script.textContent?.includes('ytqf-bar'),
+    )?.textContent;
+    const css = [...document.querySelectorAll('style')].find((style) =>
+      style.textContent?.includes('#ytqf-bar'),
+    )?.textContent;
+    sessionStorage.setItem('__ytqfTestAssets', JSON.stringify({ js, css }));
+  });
   await page.waitForTimeout(3500);
 
   const hasFilterBar = (await page.locator('#ytqf-bar').count()) > 0;
@@ -63,6 +72,7 @@ Run **after** inject. Use `browser_run_code_unsafe` with `filename` (absolute pa
 | Script                                     | Checks                                                  |
 | ------------------------------------------ | ------------------------------------------------------- |
 | `scripts/regression-suggestor.js`          | Suggestor closes after `state: {In progress}`           |
+| `scripts/regression-multiple-filters.js`   | Selected filters combine with `and`                     |
 | `scripts/regression-toggle-off.js`         | Toggle off clears query                                 |
 | `scripts/regression-query-types.js`        | Must-pass query types + suggestor closed                |
 | `scripts/regression-days-in-status.js`     | Days In Status on, tags on cards                        |
@@ -76,8 +86,8 @@ It starts the content script on Dashboards, uses YouTrack's Agile Boards link,
 and verifies the document did not reload before the filter bar appeared.
 
 Run `regression-board-isolation.js` last. It captures the already-injected
-content script and CSS, then re-injects them after each board navigation with
-one mock storage state shared across the run.
+content script and CSS from the test setup, then re-injects them after each
+board navigation with one mock storage state shared across the run.
 
 ## Default regression (suggestor closes)
 

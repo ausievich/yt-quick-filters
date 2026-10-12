@@ -7,6 +7,8 @@ export const DEFAULT_THRESHOLD_YELLOW = 14;
 export const DEFAULT_THRESHOLD_RED = 60;
 export const DEFAULT_COMPACT_FORMAT = true;
 export const DEFAULT_COLOR_THEME: ColorTheme = 'ring';
+export const DEFAULT_ALLOW_MULTIPLE_FILTERS = false;
+export const ALLOW_MULTIPLE_FILTERS_KEY = 'ytqf_allowMultipleFilters';
 
 export class StorageService {
   private static instance: StorageService;
@@ -128,6 +130,14 @@ export class StorageService {
 
   public async setColorTheme(theme: ColorTheme): Promise<void> {
     return this.setStorageValue('ytqf_colorTheme', theme);
+  }
+
+  public async getAllowMultipleFilters(): Promise<boolean> {
+    return this.getStorageValue(ALLOW_MULTIPLE_FILTERS_KEY, DEFAULT_ALLOW_MULTIPLE_FILTERS);
+  }
+
+  public async setAllowMultipleFilters(enabled: boolean): Promise<void> {
+    return this.setStorageValue(ALLOW_MULTIPLE_FILTERS_KEY, enabled);
   }
 
   public async getHideCreatedTag(): Promise<boolean> {

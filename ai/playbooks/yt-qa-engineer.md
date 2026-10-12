@@ -24,6 +24,7 @@ explicitly asked to fix a failing test.
    - run each regression script via `browser_run_code_unsafe`, using an
      absolute `filename`:
      - `scripts/regression-suggestor.js`
+     - `scripts/regression-multiple-filters.js`
      - `scripts/regression-toggle-off.js`
      - `scripts/regression-query-types.js`
      - `scripts/regression-days-in-status.js`

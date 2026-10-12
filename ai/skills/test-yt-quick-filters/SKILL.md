@@ -48,6 +48,7 @@ E2E Progress:
 - [ ] Confirm `hasFilterBar: true`
 - [ ] `browser_run_code_unsafe` → critical scenarios (absolute `filename`, all `passed: true`):
   - `scripts/regression-suggestor.js`
+  - `scripts/regression-multiple-filters.js`
   - `scripts/regression-toggle-off.js`
   - `scripts/regression-query-types.js`
   - `scripts/regression-days-in-status.js`
@@ -71,6 +72,7 @@ Run **after** inject via `browser_run_code_unsafe` with absolute `filename`. Eac
 | Script                             | What it checks                                         |
 | ---------------------------------- | ------------------------------------------------------ |
 | `regression-suggestor.js`          | Suggestor closes after applying `state: {In progress}` |
+| `regression-multiple-filters.js`   | Selected filters combine with `and`                    |
 | `regression-toggle-off.js`         | Second click on active filter clears query             |
 | `regression-query-types.js`        | Must-pass queries apply with suggestor closed          |
 | `regression-days-in-status.js`     | Days In Status toggles on, tags appear on cards        |

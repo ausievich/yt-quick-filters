@@ -6,7 +6,7 @@ import './FilterBar.css';
 
 export const FilterBar: React.FC<FilterBarProps> = ({
   filters,
-  activeFilter,
+  activeFilterIndices,
   onFilterClick,
   onAddFilter,
   onContextMenu,
@@ -35,7 +35,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         return (
           <button
             key={`${fingerprint}:${occurrence}`}
-            className={`btn ytqf-filter ${activeFilter === filter ? 'active' : ''} ${className}`}
+            className={`btn ytqf-filter ${activeFilterIndices.has(index) ? 'active' : ''} ${className}`}
             title={filter.query}
             onClick={() => onFilterClick(filter.query)}
             onContextMenu={(e) => onContextMenu(e, filter, index)}

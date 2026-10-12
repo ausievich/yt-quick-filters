@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import { Filter } from '../types';
-import { StorageService } from '../services/storage';
+import {
+  StorageService,
+  ALLOW_MULTIPLE_FILTERS_KEY,
+  DEFAULT_ALLOW_MULTIPLE_FILTERS,
+} from '../services/storage';
 import { UtilsService } from '../services/utils';
 import { YouTrackVersionService } from '../services/youTrackVersion';
 import { useQueryParams } from '../hooks/useQueryParams';
@@ -9,6 +13,11 @@ import { FilterBar } from './FilterBar';
 import { FilterModal } from './FilterModal';
 import { ContextMenu } from './ContextMenu';
 import { DaysInStatusUI } from '../services/daysInStatusUI';
+import {
+  getActiveFilterIndices,
+  normalizeQuery,
+  toggleFilterInQuery,
+} from '../services/queryComposer';
 
 interface ContextMenuState {
   isOpen: boolean;
@@ -40,6 +49,9 @@ const reorderFilters = (filters: Filter[], from: number, to: number): Filter[] =
 export const QuickFiltersApp: React.FC = () => {
   const [filters, setFilters] = useState<Filter[]>([]);
   const [optimisticQuery, setOptimisticQuery] = useState<string | null>(null);
+  const [allowMultipleFilters, setAllowMultipleFilters] = useState<boolean>(
+    DEFAULT_ALLOW_MULTIPLE_FILTERS,
+  );
   const [contextMenu, setContextMenu] = useState<ContextMenuState>({
     isOpen: false,
     x: 0,
@@ -110,6 +122,24 @@ export const QuickFiltersApp: React.FC = () => {
     setOptimisticQuery(null);
   }, [currentQuery]);
 
+  // Follow the setting, including changes made from the popup while the board is open.
+  useEffect(() => {
+    void storageService.getAllowMultipleFilters().then(setAllowMultipleFilters);
+
+    const handleStorageChange = (
+      changes: Record<string, chrome.storage.StorageChange>,
+      areaName: string,
+    ) => {
+      const change = changes[ALLOW_MULTIPLE_FILTERS_KEY];
+      if (areaName === 'sync' && change) {
+        setAllowMultipleFilters(change.newValue ?? DEFAULT_ALLOW_MULTIPLE_FILTERS);
+      }
+    };
+
+    chrome.storage.onChanged.addListener(handleStorageChange);
+    return () => chrome.storage.onChanged.removeListener(handleStorageChange);
+  }, [storageService]);
+
   // Initialize DaysInStatusUI
   useEffect(() => {
     const initDaysInStatus = async () => {
@@ -123,18 +153,21 @@ export const QuickFiltersApp: React.FC = () => {
     };
   }, [daysInStatusUI]);
 
+  const effectiveQuery = optimisticQuery ?? currentQuery;
+
   const handleFilterClick = useCallback(
     (query: string) => {
-      // If clicked on already active filter, deactivate it (toggle)
-      if (utilsService.normalizeQuery(currentQuery) === utilsService.normalizeQuery(query)) {
-        setOptimisticQuery('');
-        void utilsService.setQuery('');
-      } else {
-        setOptimisticQuery(query);
-        void utilsService.setQuery(query);
+      let nextQuery = query;
+      if (allowMultipleFilters) {
+        nextQuery = toggleFilterInQuery(effectiveQuery, query);
+      } else if (normalizeQuery(effectiveQuery) === normalizeQuery(query)) {
+        nextQuery = '';
       }
+
+      setOptimisticQuery(nextQuery);
+      void utilsService.setQuery(nextQuery);
     },
-    [utilsService, currentQuery],
+    [utilsService, effectiveQuery, allowMultipleFilters],
   );
 
   const handleAddFilter = useCallback(() => {
@@ -244,9 +277,13 @@ export const QuickFiltersApp: React.FC = () => {
     [modal.isEdit, storageService, loadFilters, handleModalClose],
   );
 
-  // Determine active filter based on current query
-  const effectiveQuery = optimisticQuery ?? currentQuery;
-  const activeFilter = utilsService.findActiveFilter(filters, effectiveQuery);
+  // With the setting off, preserve the original one-active-filter behaviour.
+  const singleActiveFilterIndex = filters.findIndex(
+    (filter) => normalizeQuery(filter.query) === normalizeQuery(effectiveQuery),
+  );
+  const activeFilterIndices = allowMultipleFilters
+    ? getActiveFilterIndices(filters, effectiveQuery)
+    : new Set(singleActiveFilterIndex >= 0 ? [singleActiveFilterIndex] : []);
 
   return (
     <>
@@ -255,7 +292,7 @@ export const QuickFiltersApp: React.FC = () => {
         ReactDOM.createPortal(
           <FilterBar
             filters={filters}
-            activeFilter={activeFilter}
+            activeFilterIndices={activeFilterIndices}
             onFilterClick={handleFilterClick}
             onAddFilter={handleAddFilter}
             onContextMenu={handleContextMenu}
@@ -266,7 +303,7 @@ export const QuickFiltersApp: React.FC = () => {
       ) : (
         <FilterBar
           filters={filters}
-          activeFilter={activeFilter}
+          activeFilterIndices={activeFilterIndices}
           onFilterClick={handleFilterClick}
           onAddFilter={handleAddFilter}
           onContextMenu={handleContextMenu}
