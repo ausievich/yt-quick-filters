@@ -282,6 +282,21 @@
   background: var(--swatch);
 }
 
+.popup-theme-preview--nord {
+  --swatch: rgb(94, 129, 172);
+  background: linear-gradient(135deg, rgb(46, 52, 64) 0 50%, var(--swatch) 50%);
+}
+
+.popup-theme-preview--dracula {
+  --swatch: rgb(124, 92, 200);
+  background: linear-gradient(135deg, rgb(40, 42, 54) 0 50%, var(--swatch) 50%);
+}
+
+.popup-theme-preview--teal-peach {
+  --swatch: rgb(15, 134, 134);
+  background: linear-gradient(135deg, rgb(255, 236, 226) 0 50%, var(--swatch) 50%);
+}
+
 .popup-section-title--days-in-status {
   margin-top: 0;
 }

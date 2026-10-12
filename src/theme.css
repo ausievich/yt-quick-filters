@@ -350,6 +350,60 @@
   --ytqf-shadow: 82, 56, 40;
 }
 
+:root[data-ytqf-theme='nord'] {
+  --ytqf-canvas: 46, 52, 64;
+  --ytqf-theme-surface: 59, 66, 82;
+  --ytqf-sidebar: 43, 48, 59;
+  --ytqf-theme-text: 216, 222, 233;
+  --ytqf-secondary: 154, 165, 184;
+  --ytqf-theme-border: 76, 86, 106;
+  --ytqf-theme-accent: 94, 129, 172;
+  --ytqf-theme-accent-hover: 81, 112, 150;
+  --ytqf-hover: 67, 76, 94;
+  --ytqf-selected: 76, 86, 106;
+  --ytqf-success: 163, 190, 140;
+  --ytqf-warning: 235, 203, 139;
+  --ytqf-error: 208, 120, 128;
+  --ytqf-purple: 180, 142, 173;
+  --ytqf-shadow: 20, 24, 32;
+}
+
+:root[data-ytqf-theme='dracula'] {
+  --ytqf-canvas: 40, 42, 54;
+  --ytqf-theme-surface: 48, 50, 66;
+  --ytqf-sidebar: 33, 34, 44;
+  --ytqf-theme-text: 244, 244, 238;
+  --ytqf-secondary: 175, 180, 205;
+  --ytqf-theme-border: 68, 71, 90;
+  --ytqf-theme-accent: 124, 92, 200;
+  --ytqf-theme-accent-hover: 105, 74, 178;
+  --ytqf-hover: 56, 58, 76;
+  --ytqf-selected: 68, 71, 90;
+  --ytqf-success: 80, 190, 120;
+  --ytqf-warning: 241, 196, 98;
+  --ytqf-error: 232, 108, 118;
+  --ytqf-purple: 189, 147, 249;
+  --ytqf-shadow: 10, 10, 16;
+}
+
+:root[data-ytqf-theme='teal-peach'] {
+  --ytqf-canvas: 244, 251, 250;
+  --ytqf-theme-surface: 255, 255, 255;
+  --ytqf-sidebar: 255, 236, 226;
+  --ytqf-theme-text: 31, 58, 60;
+  --ytqf-secondary: 80, 108, 110;
+  --ytqf-theme-border: 164, 212, 206;
+  --ytqf-theme-accent: 15, 134, 134;
+  --ytqf-theme-accent-hover: 10, 108, 108;
+  --ytqf-hover: 222, 243, 240;
+  --ytqf-selected: 195, 231, 225;
+  --ytqf-success: 40, 134, 90;
+  --ytqf-warning: 190, 120, 20;
+  --ytqf-error: 186, 56, 70;
+  --ytqf-purple: 118, 80, 170;
+  --ytqf-shadow: 40, 70, 70;
+}
+
 :root[data-ytqf-theme='ocean'],
 :root[data-ytqf-theme='graphite'],
 :root[data-ytqf-theme='pine'],
@@ -367,6 +421,9 @@
 :root[data-ytqf-theme='raspberry'],
 :root[data-ytqf-theme='slate'],
 :root[data-ytqf-theme='cocoa'],
+:root[data-ytqf-theme='nord'],
+:root[data-ytqf-theme='dracula'],
+:root[data-ytqf-theme='teal-peach'],
 :root[data-ytqf-theme='violet-classic'] {
   /* Keep regular themes neutral; Violet Classic restores the original model below. */
   --ytqf-content-surface: 255, 255, 255;
@@ -507,7 +564,9 @@
 /* Dark themes use off-white text and a clear, low-glare link tone. */
 :root[data-ytqf-theme='graphite'],
 :root[data-ytqf-theme='pine'],
-:root[data-ytqf-theme='sumi-gold'] {
+:root[data-ytqf-theme='sumi-gold'],
+:root[data-ytqf-theme='nord'],
+:root[data-ytqf-theme='dracula'] {
   --ytqf-content-surface: var(--ytqf-theme-surface);
   --ring-white-text-color: rgb(246, 247, 248);
   --ring-white-text-components: 246, 247, 248;

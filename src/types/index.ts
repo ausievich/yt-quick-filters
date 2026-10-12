@@ -78,6 +78,9 @@ export type ColorTheme =
   | 'raspberry'
   | 'slate'
   | 'cocoa'
+  | 'nord'
+  | 'dracula'
+  | 'teal-peach'
   | 'violet-classic'
   | 'sumi-gold';
 
