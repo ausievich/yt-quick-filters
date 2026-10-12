@@ -369,7 +369,7 @@ const Popup: React.FC = () => {
               </span>
             </span>
             <span id="combine-filters-help" role="tooltip" className="popup-help-tooltip">
-              Select several filters at once. They are combined with AND.
+              Select several filters at once.
             </span>
           </div>
         </section>
