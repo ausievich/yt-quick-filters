@@ -404,6 +404,168 @@
   --ytqf-shadow: 40, 70, 70;
 }
 
+:root[data-ytqf-theme='tokyo-night'] {
+  --ytqf-canvas: 26, 27, 38;
+  --ytqf-theme-surface: 36, 40, 59;
+  --ytqf-sidebar: 22, 22, 30;
+  --ytqf-theme-text: 192, 202, 245;
+  --ytqf-secondary: 144, 153, 190;
+  --ytqf-theme-border: 59, 66, 97;
+  --ytqf-theme-accent: 80, 118, 214;
+  --ytqf-theme-accent-hover: 64, 98, 190;
+  --ytqf-hover: 41, 46, 66;
+  --ytqf-selected: 52, 59, 88;
+  --ytqf-success: 128, 190, 110;
+  --ytqf-warning: 224, 175, 104;
+  --ytqf-error: 224, 108, 130;
+  --ytqf-purple: 187, 154, 247;
+  --ytqf-shadow: 8, 8, 14;
+}
+
+:root[data-ytqf-theme='midnight-ember'] {
+  --ytqf-canvas: 24, 21, 20;
+  --ytqf-theme-surface: 34, 30, 28;
+  --ytqf-sidebar: 20, 17, 16;
+  --ytqf-theme-text: 240, 230, 220;
+  --ytqf-secondary: 190, 172, 155;
+  --ytqf-theme-border: 80, 62, 50;
+  --ytqf-theme-accent: 201, 92, 38;
+  --ytqf-theme-accent-hover: 226, 114, 58;
+  --ytqf-hover: 52, 40, 34;
+  --ytqf-selected: 74, 52, 40;
+  --ytqf-success: 120, 170, 110;
+  --ytqf-warning: 230, 175, 80;
+  --ytqf-error: 220, 95, 90;
+  --ytqf-purple: 180, 140, 200;
+  --ytqf-shadow: 8, 6, 5;
+}
+
+:root[data-ytqf-theme='gruvbox-dark'] {
+  --ytqf-canvas: 40, 40, 40;
+  --ytqf-theme-surface: 50, 48, 47;
+  --ytqf-sidebar: 29, 32, 33;
+  --ytqf-theme-text: 235, 219, 178;
+  --ytqf-secondary: 189, 174, 147;
+  --ytqf-theme-border: 80, 73, 69;
+  --ytqf-theme-accent: 215, 153, 33;
+  --ytqf-theme-accent-hover: 250, 189, 47;
+  --ytqf-hover: 60, 56, 54;
+  --ytqf-selected: 80, 73, 69;
+  --ytqf-success: 160, 170, 60;
+  --ytqf-warning: 250, 189, 47;
+  --ytqf-error: 230, 90, 70;
+  --ytqf-purple: 200, 130, 170;
+  --ytqf-shadow: 10, 10, 10;
+}
+
+:root[data-ytqf-theme='deep-sea'] {
+  --ytqf-canvas: 14, 31, 34;
+  --ytqf-theme-surface: 20, 42, 46;
+  --ytqf-sidebar: 11, 25, 28;
+  --ytqf-theme-text: 214, 236, 234;
+  --ytqf-secondary: 140, 176, 174;
+  --ytqf-theme-border: 40, 80, 84;
+  --ytqf-theme-accent: 20, 150, 140;
+  --ytqf-theme-accent-hover: 32, 178, 166;
+  --ytqf-hover: 28, 56, 60;
+  --ytqf-selected: 36, 76, 80;
+  --ytqf-success: 90, 190, 130;
+  --ytqf-warning: 224, 180, 80;
+  --ytqf-error: 224, 110, 110;
+  --ytqf-purple: 160, 140, 210;
+  --ytqf-shadow: 3, 10, 12;
+}
+
+:root[data-ytqf-theme='catppuccin-latte'] {
+  --ytqf-canvas: 239, 241, 245;
+  --ytqf-theme-surface: 255, 255, 255;
+  --ytqf-sidebar: 225, 228, 244;
+  --ytqf-theme-text: 76, 79, 105;
+  --ytqf-secondary: 108, 111, 133;
+  --ytqf-theme-border: 188, 192, 204;
+  --ytqf-theme-accent: 92, 100, 220;
+  --ytqf-theme-accent-hover: 72, 80, 196;
+  --ytqf-hover: 232, 234, 248;
+  --ytqf-selected: 210, 214, 240;
+  --ytqf-success: 50, 140, 50;
+  --ytqf-warning: 190, 120, 20;
+  --ytqf-error: 190, 40, 70;
+  --ytqf-purple: 136, 57, 239;
+  --ytqf-shadow: 76, 79, 105;
+}
+
+:root[data-ytqf-theme='solarized-light'] {
+  --ytqf-canvas: 253, 246, 227;
+  --ytqf-theme-surface: 255, 255, 255;
+  --ytqf-sidebar: 238, 232, 213;
+  --ytqf-theme-text: 53, 76, 84;
+  --ytqf-secondary: 101, 123, 131;
+  --ytqf-theme-border: 211, 203, 180;
+  --ytqf-theme-accent: 38, 139, 210;
+  --ytqf-theme-accent-hover: 28, 115, 178;
+  --ytqf-hover: 245, 238, 215;
+  --ytqf-selected: 232, 224, 198;
+  --ytqf-success: 100, 130, 0;
+  --ytqf-warning: 170, 120, 0;
+  --ytqf-error: 220, 50, 47;
+  --ytqf-purple: 108, 113, 196;
+  --ytqf-shadow: 88, 110, 117;
+}
+
+:root[data-ytqf-theme='lavender-honey'] {
+  --ytqf-canvas: 250, 247, 255;
+  --ytqf-theme-surface: 255, 255, 255;
+  --ytqf-sidebar: 238, 231, 252;
+  --ytqf-theme-text: 52, 41, 78;
+  --ytqf-secondary: 100, 88, 130;
+  --ytqf-theme-border: 205, 192, 235;
+  --ytqf-theme-accent: 184, 118, 0;
+  --ytqf-theme-accent-hover: 150, 94, 0;
+  --ytqf-hover: 245, 238, 255;
+  --ytqf-selected: 226, 214, 248;
+  --ytqf-success: 42, 128, 88;
+  --ytqf-warning: 180, 112, 10;
+  --ytqf-error: 184, 54, 80;
+  --ytqf-purple: 112, 63, 176;
+  --ytqf-shadow: 70, 50, 110;
+}
+
+:root[data-ytqf-theme='paper'] {
+  --ytqf-canvas: 250, 248, 243;
+  --ytqf-theme-surface: 255, 255, 255;
+  --ytqf-sidebar: 240, 236, 228;
+  --ytqf-theme-text: 40, 38, 35;
+  --ytqf-secondary: 100, 95, 88;
+  --ytqf-theme-border: 214, 208, 196;
+  --ytqf-theme-accent: 70, 66, 60;
+  --ytqf-theme-accent-hover: 40, 38, 35;
+  --ytqf-hover: 240, 236, 228;
+  --ytqf-selected: 226, 221, 209;
+  --ytqf-success: 52, 120, 82;
+  --ytqf-warning: 170, 110, 20;
+  --ytqf-error: 178, 52, 60;
+  --ytqf-purple: 110, 76, 160;
+  --ytqf-shadow: 60, 55, 48;
+}
+
+:root[data-ytqf-theme='mint-cream'] {
+  --ytqf-canvas: 245, 252, 248;
+  --ytqf-theme-surface: 255, 255, 255;
+  --ytqf-sidebar: 220, 243, 232;
+  --ytqf-theme-text: 28, 56, 44;
+  --ytqf-secondary: 74, 106, 92;
+  --ytqf-theme-border: 170, 214, 194;
+  --ytqf-theme-accent: 160, 40, 80;
+  --ytqf-theme-accent-hover: 130, 28, 64;
+  --ytqf-hover: 228, 246, 237;
+  --ytqf-selected: 200, 234, 216;
+  --ytqf-success: 36, 130, 80;
+  --ytqf-warning: 184, 118, 14;
+  --ytqf-error: 190, 50, 60;
+  --ytqf-purple: 118, 78, 170;
+  --ytqf-shadow: 40, 80, 60;
+}
+
 :root[data-ytqf-theme='ocean'],
 :root[data-ytqf-theme='graphite'],
 :root[data-ytqf-theme='pine'],
@@ -424,6 +586,15 @@
 :root[data-ytqf-theme='nord'],
 :root[data-ytqf-theme='dracula'],
 :root[data-ytqf-theme='teal-peach'],
+:root[data-ytqf-theme='tokyo-night'],
+:root[data-ytqf-theme='midnight-ember'],
+:root[data-ytqf-theme='gruvbox-dark'],
+:root[data-ytqf-theme='deep-sea'],
+:root[data-ytqf-theme='catppuccin-latte'],
+:root[data-ytqf-theme='solarized-light'],
+:root[data-ytqf-theme='lavender-honey'],
+:root[data-ytqf-theme='paper'],
+:root[data-ytqf-theme='mint-cream'],
 :root[data-ytqf-theme='violet-classic'] {
   /* Keep regular themes neutral; Violet Classic restores the original model below. */
   --ytqf-content-surface: 255, 255, 255;
@@ -566,7 +737,11 @@
 :root[data-ytqf-theme='pine'],
 :root[data-ytqf-theme='sumi-gold'],
 :root[data-ytqf-theme='nord'],
-:root[data-ytqf-theme='dracula'] {
+:root[data-ytqf-theme='dracula'],
+:root[data-ytqf-theme='tokyo-night'],
+:root[data-ytqf-theme='midnight-ember'],
+:root[data-ytqf-theme='gruvbox-dark'],
+:root[data-ytqf-theme='deep-sea'] {
   --ytqf-content-surface: var(--ytqf-theme-surface);
   --ring-white-text-color: rgb(246, 247, 248);
   --ring-white-text-components: 246, 247, 248;

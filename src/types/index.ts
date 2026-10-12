@@ -81,6 +81,15 @@ export type ColorTheme =
   | 'nord'
   | 'dracula'
   | 'teal-peach'
+  | 'tokyo-night'
+  | 'midnight-ember'
+  | 'gruvbox-dark'
+  | 'deep-sea'
+  | 'catppuccin-latte'
+  | 'solarized-light'
+  | 'lavender-honey'
+  | 'paper'
+  | 'mint-cream'
   | 'violet-classic'
   | 'sumi-gold';
 
