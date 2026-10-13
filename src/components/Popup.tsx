@@ -20,34 +20,42 @@ type ColorThemeOption = {
 };
 
 const COLOR_THEMES: ColorThemeOption[] = [
+  // Four themes per row to match the palette grid: light families first, then dark.
+  // Default and violets
   { value: 'ring', label: 'YouTrack' },
-  { value: 'graphite', label: 'Graphite' },
-  { value: 'pine', label: 'Pine' },
+  { value: 'violet-classic', label: 'Violet Classic' },
+  { value: 'violet', label: 'Violet' },
+  { value: 'indigo', label: 'Indigo' },
+  // Cool blues
+  { value: 'arctic', label: 'Arctic' },
   { value: 'ocean', label: 'Ocean' },
   { value: 'harbor', label: 'Harbor' },
-  { value: 'arctic', label: 'Arctic' },
-  { value: 'indigo', label: 'Indigo' },
-  { value: 'violet', label: 'Violet' },
-  { value: 'rose', label: 'Rose' },
-  { value: 'raspberry', label: 'Raspberry' },
+  { value: 'slate', label: 'Slate' },
+  // Greens
+  { value: 'mint', label: 'Mint' },
+  { value: 'forest', label: 'Forest' },
+  { value: 'teal-peach', label: 'Teal Peach' },
+  { value: 'mint-cream', label: 'Mint Cream' },
+  // Warm
+  { value: 'amber', label: 'Amber' },
   { value: 'sunset', label: 'Sunset' },
   { value: 'terracotta', label: 'Terracotta' },
-  { value: 'amber', label: 'Amber' },
   { value: 'cocoa', label: 'Cocoa' },
-  { value: 'nord', label: 'Nord' },
-  { value: 'dracula', label: 'Dracula' },
-  { value: 'teal-peach', label: 'Teal Peach' },
-  { value: 'tokyo-night', label: 'Tokyo Night' },
-  { value: 'midnight-ember', label: 'Midnight Ember' },
-  { value: 'gruvbox-dark', label: 'Gruvbox Dark' },
-  { value: 'deep-sea', label: 'Deep Sea' },
-  { value: 'catppuccin-latte', label: 'Latte' },
+  // Pinks and paper
+  { value: 'rose', label: 'Rose' },
+  { value: 'raspberry', label: 'Raspberry' },
   { value: 'paper', label: 'Paper' },
-  { value: 'mint-cream', label: 'Mint Cream' },
-  { value: 'forest', label: 'Forest' },
-  { value: 'mint', label: 'Mint' },
-  { value: 'slate', label: 'Slate' },
-  { value: 'violet-classic', label: 'Violet Classic' },
+  { value: 'catppuccin-latte', label: 'Latte' },
+  // Dark warm
+  { value: 'graphite', label: 'Graphite' },
+  { value: 'gruvbox-dark', label: 'Gruvbox Dark' },
+  { value: 'midnight-ember', label: 'Midnight Ember' },
+  { value: 'dracula', label: 'Dracula' },
+  // Dark cool
+  { value: 'tokyo-night', label: 'Tokyo Night' },
+  { value: 'nord', label: 'Nord' },
+  { value: 'deep-sea', label: 'Deep Sea' },
+  { value: 'pine', label: 'Pine' },
 ];
 
 const Popup: React.FC = () => {
