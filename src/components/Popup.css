@@ -312,7 +312,7 @@
   background: linear-gradient(135deg, rgb(14, 31, 34) 0 50%, var(--swatch) 50%);
 }
 
-.popup-theme-preview--catppuccin-latte {
+.popup-theme-preview--latte {
   --swatch: rgb(92, 100, 220);
   background: linear-gradient(135deg, rgb(225, 228, 244) 0 50%, var(--swatch) 50%);
 }

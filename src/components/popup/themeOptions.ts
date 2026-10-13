@@ -31,7 +31,7 @@ export const COLOR_THEMES: ColorThemeOption[] = [
   { value: 'rose', label: 'Rose' },
   { value: 'raspberry', label: 'Raspberry' },
   { value: 'paper', label: 'Paper' },
-  { value: 'catppuccin-latte', label: 'Latte' },
+  { value: 'latte', label: 'Latte' },
   // Dark warm
   { value: 'graphite', label: 'Graphite' },
   { value: 'gruvbox-dark', label: 'Gruvbox Dark' },

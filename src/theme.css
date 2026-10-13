@@ -458,7 +458,7 @@
   --ytqf-shadow: 3, 10, 12;
 }
 
-:root[data-ytqf-theme='catppuccin-latte'] {
+:root[data-ytqf-theme='latte'] {
   --ytqf-canvas: 239, 241, 245;
   --ytqf-theme-surface: 255, 255, 255;
   --ytqf-sidebar: 225, 228, 244;
@@ -535,7 +535,7 @@
 :root[data-ytqf-theme='midnight-ember'],
 :root[data-ytqf-theme='gruvbox-dark'],
 :root[data-ytqf-theme='deep-sea'],
-:root[data-ytqf-theme='catppuccin-latte'],
+:root[data-ytqf-theme='latte'],
 :root[data-ytqf-theme='paper'],
 :root[data-ytqf-theme='mint-cream'],
 :root[data-ytqf-theme='violet-classic'] {

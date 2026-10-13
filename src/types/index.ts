@@ -85,7 +85,7 @@ export type ColorTheme =
   | 'midnight-ember'
   | 'gruvbox-dark'
   | 'deep-sea'
-  | 'catppuccin-latte'
+  | 'latte'
   | 'paper'
   | 'mint-cream'
   | 'violet-classic';
