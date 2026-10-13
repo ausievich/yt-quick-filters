@@ -86,12 +86,9 @@ export type ColorTheme =
   | 'gruvbox-dark'
   | 'deep-sea'
   | 'catppuccin-latte'
-  | 'solarized-light'
-  | 'lavender-honey'
   | 'paper'
   | 'mint-cream'
-  | 'violet-classic'
-  | 'sumi-gold';
+  | 'violet-classic';
 
 export interface DaysInStatusSettings {
   hideCreated: boolean;

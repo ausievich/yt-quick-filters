@@ -80,24 +80,6 @@
   --ytqf-shadow: 5, 12, 10;
 }
 
-:root[data-ytqf-theme='sumi-gold'] {
-  --ytqf-canvas: 31, 31, 34;
-  --ytqf-theme-surface: 40, 39, 42;
-  --ytqf-sidebar: 50, 43, 31;
-  --ytqf-theme-text: 238, 233, 220;
-  --ytqf-secondary: 194, 183, 159;
-  --ytqf-theme-border: 101, 86, 55;
-  --ytqf-theme-accent: 205, 157, 57;
-  --ytqf-theme-accent-hover: 232, 184, 76;
-  --ytqf-hover: 64, 54, 35;
-  --ytqf-selected: 83, 68, 38;
-  --ytqf-success: 110, 167, 117;
-  --ytqf-warning: 224, 179, 76;
-  --ytqf-error: 215, 111, 104;
-  --ytqf-purple: 185, 146, 215;
-  --ytqf-shadow: 12, 11, 10;
-}
-
 :root[data-ytqf-theme='ocean'] {
   --ytqf-canvas: 240, 249, 255;
   --ytqf-theme-surface: 255, 255, 255;
@@ -494,42 +476,6 @@
   --ytqf-shadow: 76, 79, 105;
 }
 
-:root[data-ytqf-theme='solarized-light'] {
-  --ytqf-canvas: 253, 246, 227;
-  --ytqf-theme-surface: 255, 255, 255;
-  --ytqf-sidebar: 238, 232, 213;
-  --ytqf-theme-text: 53, 76, 84;
-  --ytqf-secondary: 101, 123, 131;
-  --ytqf-theme-border: 211, 203, 180;
-  --ytqf-theme-accent: 38, 139, 210;
-  --ytqf-theme-accent-hover: 28, 115, 178;
-  --ytqf-hover: 245, 238, 215;
-  --ytqf-selected: 232, 224, 198;
-  --ytqf-success: 100, 130, 0;
-  --ytqf-warning: 170, 120, 0;
-  --ytqf-error: 220, 50, 47;
-  --ytqf-purple: 108, 113, 196;
-  --ytqf-shadow: 88, 110, 117;
-}
-
-:root[data-ytqf-theme='lavender-honey'] {
-  --ytqf-canvas: 250, 247, 255;
-  --ytqf-theme-surface: 255, 255, 255;
-  --ytqf-sidebar: 238, 231, 252;
-  --ytqf-theme-text: 52, 41, 78;
-  --ytqf-secondary: 100, 88, 130;
-  --ytqf-theme-border: 205, 192, 235;
-  --ytqf-theme-accent: 184, 118, 0;
-  --ytqf-theme-accent-hover: 150, 94, 0;
-  --ytqf-hover: 245, 238, 255;
-  --ytqf-selected: 226, 214, 248;
-  --ytqf-success: 42, 128, 88;
-  --ytqf-warning: 180, 112, 10;
-  --ytqf-error: 184, 54, 80;
-  --ytqf-purple: 112, 63, 176;
-  --ytqf-shadow: 70, 50, 110;
-}
-
 :root[data-ytqf-theme='paper'] {
   --ytqf-canvas: 250, 248, 243;
   --ytqf-theme-surface: 255, 255, 255;
@@ -569,7 +515,6 @@
 :root[data-ytqf-theme='ocean'],
 :root[data-ytqf-theme='graphite'],
 :root[data-ytqf-theme='pine'],
-:root[data-ytqf-theme='sumi-gold'],
 :root[data-ytqf-theme='violet'],
 :root[data-ytqf-theme='forest'],
 :root[data-ytqf-theme='sunset'],
@@ -591,8 +536,6 @@
 :root[data-ytqf-theme='gruvbox-dark'],
 :root[data-ytqf-theme='deep-sea'],
 :root[data-ytqf-theme='catppuccin-latte'],
-:root[data-ytqf-theme='solarized-light'],
-:root[data-ytqf-theme='lavender-honey'],
 :root[data-ytqf-theme='paper'],
 :root[data-ytqf-theme='mint-cream'],
 :root[data-ytqf-theme='violet-classic'] {
@@ -760,7 +703,6 @@
 /* Dark themes use off-white text and a clear, low-glare link tone. */
 :root[data-ytqf-theme='graphite'],
 :root[data-ytqf-theme='pine'],
-:root[data-ytqf-theme='sumi-gold'],
 :root[data-ytqf-theme='nord'],
 :root[data-ytqf-theme='dracula'],
 :root[data-ytqf-theme='tokyo-night'],

@@ -206,11 +206,6 @@
   background: linear-gradient(135deg, rgb(29, 40, 38) 0 50%, var(--swatch) 50%);
 }
 
-.popup-theme-preview--sumi-gold {
-  --swatch: rgb(205, 157, 57);
-  background: linear-gradient(135deg, rgb(31, 31, 34) 0 50%, var(--swatch) 50%);
-}
-
 .popup-theme-preview--ocean {
   --swatch: rgb(0, 124, 181);
   background: var(--swatch);
@@ -320,16 +315,6 @@
 .popup-theme-preview--catppuccin-latte {
   --swatch: rgb(92, 100, 220);
   background: linear-gradient(135deg, rgb(225, 228, 244) 0 50%, var(--swatch) 50%);
-}
-
-.popup-theme-preview--solarized-light {
-  --swatch: rgb(38, 139, 210);
-  background: linear-gradient(135deg, rgb(238, 232, 213) 0 50%, var(--swatch) 50%);
-}
-
-.popup-theme-preview--lavender-honey {
-  --swatch: rgb(184, 118, 0);
-  background: linear-gradient(135deg, rgb(238, 231, 252) 0 50%, var(--swatch) 50%);
 }
 
 .popup-theme-preview--paper {
