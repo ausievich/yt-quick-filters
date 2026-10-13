@@ -62,6 +62,8 @@ export interface DaysInStatusInfo {
 
 export type ColorTheme =
   | 'ring'
+  | 'graphite'
+  | 'pine'
   | 'ocean'
   | 'violet'
   | 'forest'
@@ -75,7 +77,18 @@ export type ColorTheme =
   | 'terracotta'
   | 'raspberry'
   | 'slate'
-  | 'cocoa';
+  | 'cocoa'
+  | 'nord'
+  | 'dracula'
+  | 'teal-peach'
+  | 'tokyo-night'
+  | 'midnight-ember'
+  | 'gruvbox-dark'
+  | 'deep-sea'
+  | 'latte'
+  | 'paper'
+  | 'mint-cream'
+  | 'violet-classic';
 
 export interface DaysInStatusSettings {
   hideCreated: boolean;

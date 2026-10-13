@@ -196,12 +196,23 @@
   background: linear-gradient(135deg, rgb(0, 128, 229) 0 50%, rgb(255, 255, 255) 50%);
 }
 
+.popup-theme-preview--graphite {
+  --swatch: rgb(193, 151, 108);
+  background: linear-gradient(135deg, rgb(42, 39, 37) 0 50%, var(--swatch) 50%);
+}
+
+.popup-theme-preview--pine {
+  --swatch: rgb(95, 172, 142);
+  background: linear-gradient(135deg, rgb(29, 40, 38) 0 50%, var(--swatch) 50%);
+}
+
 .popup-theme-preview--ocean {
   --swatch: rgb(0, 124, 181);
   background: var(--swatch);
 }
 
-.popup-theme-preview--violet {
+.popup-theme-preview--violet,
+.popup-theme-preview--violet-classic {
   --swatch: rgb(103, 66, 178);
   background: var(--swatch);
 }
@@ -264,6 +275,60 @@
 .popup-theme-preview--cocoa {
   --swatch: rgb(121, 79, 54);
   background: var(--swatch);
+}
+
+.popup-theme-preview--nord {
+  --swatch: rgb(94, 129, 172);
+  background: linear-gradient(135deg, rgb(46, 52, 64) 0 50%, var(--swatch) 50%);
+}
+
+.popup-theme-preview--dracula {
+  --swatch: rgb(124, 92, 200);
+  background: linear-gradient(135deg, rgb(40, 42, 54) 0 50%, var(--swatch) 50%);
+}
+
+.popup-theme-preview--teal-peach {
+  --swatch: rgb(15, 134, 134);
+  background: linear-gradient(135deg, rgb(255, 236, 226) 0 50%, var(--swatch) 50%);
+}
+
+.popup-theme-preview--tokyo-night {
+  --swatch: rgb(80, 118, 214);
+  background: linear-gradient(135deg, rgb(26, 27, 38) 0 50%, var(--swatch) 50%);
+}
+
+.popup-theme-preview--midnight-ember {
+  --swatch: rgb(201, 92, 38);
+  background: linear-gradient(135deg, rgb(24, 21, 20) 0 50%, var(--swatch) 50%);
+}
+
+.popup-theme-preview--gruvbox-dark {
+  --swatch: rgb(215, 153, 33);
+  background: linear-gradient(135deg, rgb(40, 40, 40) 0 50%, var(--swatch) 50%);
+}
+
+.popup-theme-preview--deep-sea {
+  --swatch: rgb(20, 150, 140);
+  background: linear-gradient(135deg, rgb(14, 31, 34) 0 50%, var(--swatch) 50%);
+}
+
+.popup-theme-preview--latte {
+  --swatch: rgb(92, 100, 220);
+  background: linear-gradient(135deg, rgb(225, 228, 244) 0 50%, var(--swatch) 50%);
+}
+
+.popup-theme-preview--paper {
+  --swatch: rgb(70, 66, 60);
+  background: linear-gradient(135deg, rgb(240, 236, 228) 0 50%, var(--swatch) 50%);
+}
+
+.popup-theme-preview--mint-cream {
+  --swatch: rgb(160, 40, 80);
+  background: linear-gradient(135deg, rgb(220, 243, 232) 0 50%, var(--swatch) 50%);
+}
+
+.popup-section-title--days-in-status {
+  margin-top: 0;
 }
 
 .popup-toggle-label {
