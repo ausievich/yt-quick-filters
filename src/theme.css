@@ -598,6 +598,7 @@
 :root[data-ytqf-theme='violet-classic'] {
   /* Keep regular themes neutral; Violet Classic restores the original model below. */
   --ytqf-content-surface: 255, 255, 255;
+  --ytqf-tint: 26%;
   --ring-content-background-color: rgb(var(--ytqf-content-surface));
   --ring-content-background-components: var(--ytqf-content-surface);
   --ring-navigation-background-color: rgb(var(--ytqf-canvas));
@@ -673,13 +674,13 @@
   --ring-success-container-light-components: var(--ytqf-hover);
   --ring-added-background-color: color-mix(
     in srgb,
-    rgb(var(--ytqf-success)) 26%,
+    rgb(var(--ytqf-success)) var(--ytqf-tint),
     rgb(var(--ytqf-content-surface))
   );
   --ring-added-background-components: var(--ytqf-success);
   --ring-added-subtle-background-color: color-mix(
     in srgb,
-    rgb(var(--ytqf-success)) 16%,
+    rgb(var(--ytqf-success)) calc(var(--ytqf-tint) * 0.6),
     rgb(var(--ytqf-content-surface))
   );
   --ring-added-subtle-background-components: var(--ytqf-success);
@@ -691,7 +692,7 @@
   --ring-warning-components: var(--ytqf-warning);
   --ring-warning-background-color: color-mix(
     in srgb,
-    rgb(var(--ytqf-warning)) 28%,
+    rgb(var(--ytqf-warning)) var(--ytqf-tint),
     rgb(var(--ytqf-content-surface))
   );
   --ring-warning-background-components: var(--ytqf-warning);
@@ -711,13 +712,13 @@
   --ring-error-container-light-components: var(--ytqf-hover);
   --ring-removed-background-color: color-mix(
     in srgb,
-    rgb(var(--ytqf-error)) 26%,
+    rgb(var(--ytqf-error)) var(--ytqf-tint),
     rgb(var(--ytqf-content-surface))
   );
   --ring-removed-background-components: var(--ytqf-error);
   --ring-removed-subtle-background-color: color-mix(
     in srgb,
-    rgb(var(--ytqf-error)) 16%,
+    rgb(var(--ytqf-error)) calc(var(--ytqf-tint) * 0.6),
     rgb(var(--ytqf-content-surface))
   );
   --ring-removed-subtle-background-components: var(--ytqf-error);
@@ -729,7 +730,7 @@
   --ring-purple-text-components: var(--ytqf-purple);
   --ring-purple-background-color: color-mix(
     in srgb,
-    rgb(var(--ytqf-purple)) 26%,
+    rgb(var(--ytqf-purple)) var(--ytqf-tint),
     rgb(var(--ytqf-content-surface))
   );
   --ring-purple-background-components: var(--ytqf-purple);
@@ -767,6 +768,7 @@
 :root[data-ytqf-theme='gruvbox-dark'],
 :root[data-ytqf-theme='deep-sea'] {
   --ytqf-content-surface: var(--ytqf-theme-surface);
+  --ytqf-tint: 45%;
   --ring-white-text-color: rgb(246, 247, 248);
   --ring-white-text-components: 246, 247, 248;
   --ring-link-color: rgb(137, 202, 234);
