@@ -20,27 +20,45 @@ async (page) => {
   const extRoot = 'EXT_ROOT';
 
   await page.evaluate(() => {
-    const store = {};
+    const syncStore = {};
+    const localStore = {};
+    const storageChangeListeners = [];
     const clone = (value) => (value === undefined ? undefined : structuredClone(value));
+    const createStorageArea = (store, areaName) => ({
+      get: (keys, cb) => {
+        const result = {};
+        const list = Array.isArray(keys)
+          ? keys
+          : typeof keys === 'string'
+            ? [keys]
+            : Object.keys(keys || {});
+        for (const key of list) result[key] = clone(store[key]);
+        if (cb) cb(result);
+        return Promise.resolve(result);
+      },
+      set: (items, cb) => {
+        const changes = {};
+        for (const [key, value] of Object.entries(items)) {
+          const oldValue = clone(store[key]);
+          const newValue = clone(value);
+          store[key] = newValue;
+          changes[key] = { oldValue, newValue: clone(newValue) };
+        }
+        for (const listener of storageChangeListeners) listener(changes, areaName);
+        if (cb) cb();
+        return Promise.resolve();
+      },
+    });
     window.chrome = {
       runtime: { id: 'ytqf-test', onMessage: { addListener: () => {} } },
       storage: {
-        sync: {
-          get: (keys, cb) => {
-            const result = {};
-            const list = Array.isArray(keys)
-              ? keys
-              : typeof keys === 'string'
-                ? [keys]
-                : Object.keys(keys || {});
-            for (const key of list) result[key] = clone(store[key]);
-            if (cb) cb(result);
-            return Promise.resolve(result);
-          },
-          set: (items, cb) => {
-            for (const [key, value] of Object.entries(items)) store[key] = clone(value);
-            if (cb) cb();
-            return Promise.resolve();
+        sync: createStorageArea(syncStore, 'sync'),
+        local: createStorageArea(localStore, 'local'),
+        onChanged: {
+          addListener: (listener) => storageChangeListeners.push(listener),
+          removeListener: (listener) => {
+            const index = storageChangeListeners.indexOf(listener);
+            if (index >= 0) storageChangeListeners.splice(index, 1);
           },
         },
       },
