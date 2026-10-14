@@ -15,6 +15,15 @@ Its authoritative instructions are:
 The workflow uses Playwright MCP against a live YouTrack agile board. It tests
 the injected content script, not a full browser-extension installation.
 
+## Task tracking
+
+Track this project's work on the owner's YouTrack agile board:
+
+- https://ausievich.youtrack.cloud/agiles/204-2/current
+
+Create and maintain project tasks on this board when the owner asks for task
+tracking work.
+
 ## Layout
 
 - `ai/` — version-controlled, tool-neutral source of truth.
