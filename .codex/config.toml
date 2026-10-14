@@ -1,0 +1,5 @@
+[mcp_servers.youtrack]
+url = "https://ausievich.youtrack.cloud/mcp?tools=search_issues,get_issue,get_issue_fields_schema,create_issue,update_issue"
+auth = "oauth"
+default_tools_approval_mode = "writes"
+tool_timeout_sec = 60
