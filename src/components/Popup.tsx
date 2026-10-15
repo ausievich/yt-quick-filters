@@ -84,22 +84,30 @@ const Popup: React.FC = () => {
           />
           <ToggleSetting
             checked={settings.showCreated}
+            disabled={!settings.showDaysInStatusButton}
             label="Show Created tag"
             onChange={settings.handleShowCreatedChange}
           />
           <ToggleSetting
             checked={settings.createdTagColored}
+            disabled={!settings.showDaysInStatusButton}
             label="Color Created tag"
             onChange={settings.handleCreatedTagColoredChange}
           />
 
-          <div className="popup-setting popup-setting-thresholds">
+          <div
+            className={`popup-setting popup-setting-thresholds ${
+              !settings.showDaysInStatusButton ? 'popup-setting--disabled' : ''
+            }`}
+            aria-disabled={!settings.showDaysInStatusButton}
+          >
             <div className="popup-threshold-row">
               <span className="popup-threshold-indicator popup-threshold-indicator--yellow"></span>
               <label className="popup-threshold-label">Warning after</label>
               <input
                 type="text"
                 value={settings.thresholdYellowInput}
+                disabled={!settings.showDaysInStatusButton}
                 onChange={settings.handleThresholdYellowChange}
                 onBlur={() => void settings.handleThresholdYellowBlur()}
                 placeholder={
@@ -116,6 +124,7 @@ const Popup: React.FC = () => {
               <input
                 type="text"
                 value={settings.thresholdRedInput}
+                disabled={!settings.showDaysInStatusButton}
                 onChange={settings.handleThresholdRedChange}
                 onBlur={() => void settings.handleThresholdRedBlur()}
                 placeholder={
