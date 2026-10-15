@@ -75,8 +75,13 @@ const Popup: React.FC = () => {
         </section>
 
         <section className="popup-settings-group">
-          <h3 className="popup-section-title">Days in status</h3>
+          <h3 className="popup-section-title">Time badges</h3>
 
+          <ToggleSetting
+            checked={settings.showDaysInStatusButton}
+            label="Show time badges button"
+            onChange={settings.handleShowDaysInStatusButtonChange}
+          />
           <ToggleSetting
             checked={settings.showCreated}
             label="Show Created tag"
@@ -86,11 +91,6 @@ const Popup: React.FC = () => {
             checked={settings.createdTagColored}
             label="Color Created tag"
             onChange={settings.handleCreatedTagColoredChange}
-          />
-          <ToggleSetting
-            checked={settings.compactFormat}
-            label="Use compact format"
-            onChange={settings.handleCompactFormatChange}
           />
 
           <div className="popup-setting popup-setting-thresholds">

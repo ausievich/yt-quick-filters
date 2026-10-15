@@ -1,16 +1,11 @@
 import { DaysInStatusSettings } from '../types';
-import {
-  StorageService,
-  DEFAULT_THRESHOLD_RED,
-  DEFAULT_THRESHOLD_YELLOW,
-  DEFAULT_COMPACT_FORMAT,
-} from './storage';
+import { StorageService, DEFAULT_THRESHOLD_RED, DEFAULT_THRESHOLD_YELLOW } from './storage';
 
 const DEFAULT_DAYS_IN_STATUS_SETTINGS: DaysInStatusSettings = {
+  showDaysInStatusButton: false,
   hideCreated: false,
   thresholdYellow: DEFAULT_THRESHOLD_YELLOW,
   thresholdRed: DEFAULT_THRESHOLD_RED,
-  compactFormat: DEFAULT_COMPACT_FORMAT,
   createdTagColored: false,
 };
 

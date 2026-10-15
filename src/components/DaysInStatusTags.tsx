@@ -15,14 +15,12 @@ export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataL
   const [hideCreated, setHideCreated] = useState<boolean>(false);
   const [thresholdYellow, setThresholdYellow] = useState<number>(14);
   const [thresholdRed, setThresholdRed] = useState<number>(60);
-  const [compactFormat, setCompactFormat] = useState<boolean>(false);
   const [createdTagColored, setCreatedTagColored] = useState<boolean>(false);
 
   const applySettings = (settings: DaysInStatusSettings) => {
     setHideCreated(settings.hideCreated);
     setThresholdYellow(settings.thresholdYellow);
     setThresholdRed(settings.thresholdRed);
-    setCompactFormat(settings.compactFormat);
     setCreatedTagColored(settings.createdTagColored);
   };
 
@@ -132,12 +130,7 @@ export const DaysInStatusTags: React.FC<DaysInStatusProps> = ({ issueId, onDataL
     // Always use calendar days for consistency
     const calendarDays = getCalendarDays(diffMs);
 
-    if (!compactFormat) {
-      // For non-compact format, show calendar days
-      return calendarDays.toString();
-    }
-
-    // For compact format, use actual time for minutes/hours, calendar days for days+
+    // Use actual time for minutes/hours, calendar days for days+
     const minutes = Math.floor(diffMs / (1000 * 60));
     const hours = Math.floor(diffMs / (1000 * 60 * 60));
 

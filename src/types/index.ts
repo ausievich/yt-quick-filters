@@ -91,9 +91,9 @@ export type ColorTheme =
   | 'violet-classic';
 
 export interface DaysInStatusSettings {
+  showDaysInStatusButton: boolean;
   hideCreated: boolean;
   thresholdYellow: number;
   thresholdRed: number;
-  compactFormat: boolean;
   createdTagColored: boolean;
 }

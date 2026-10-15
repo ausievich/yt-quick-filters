@@ -17,12 +17,12 @@ export const usePopupSettings = () => {
   const storageService = useMemo(() => StorageService.getInstance(), []);
   const [colorTheme, setColorTheme] = useState<ColorTheme>('ring');
   const [allowMultipleFilters, setAllowMultipleFilters] = useState(false);
+  const [showDaysInStatusButton, setShowDaysInStatusButton] = useState(false);
   const [showCreated, setShowCreated] = useState(true);
   const [thresholdYellowInput, setThresholdYellowInput] = useState('');
   const [thresholdRedInput, setThresholdRedInput] = useState('');
   const [lastUserYellowValue, setLastUserYellowValue] = useState(DEFAULT_THRESHOLD_YELLOW);
   const [lastUserRedValue, setLastUserRedValue] = useState(DEFAULT_THRESHOLD_RED);
-  const [compactFormat, setCompactFormat] = useState(false);
   const [createdTagColored, setCreatedTagColored] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -46,10 +46,10 @@ export const usePopupSettings = () => {
       try {
         const colorThemeValue = await storageService.getColorTheme();
         const allowMultipleFiltersValue = await storageService.getAllowMultipleFilters();
+        const showDaysInStatusButtonValue = await storageService.getShowDaysInStatusButton();
         const hideCreatedValue = await storageService.getHideCreatedTag();
         const thresholdYellowValue = await storageService.getDaysInStatusThresholdYellow();
         const thresholdRedValue = await storageService.getDaysInStatusThresholdRed();
-        const compactFormatValue = await storageService.getDaysInStatusCompactFormat();
         const createdTagColoredValue = await storageService.getCreatedTagColored();
         const normalizedYellow =
           thresholdYellowValue > 0 ? thresholdYellowValue : DEFAULT_THRESHOLD_YELLOW;
@@ -63,12 +63,12 @@ export const usePopupSettings = () => {
           await storageService.setColorTheme(selectedTheme);
         }
         setAllowMultipleFilters(allowMultipleFiltersValue);
+        setShowDaysInStatusButton(showDaysInStatusButtonValue);
         setShowCreated(!hideCreatedValue);
         setThresholdYellowInput(normalizedYellow.toString());
         setThresholdRedInput(normalizedRed.toString());
         setLastUserYellowValue(normalizedYellow);
         setLastUserRedValue(normalizedRed);
-        setCompactFormat(compactFormatValue);
         setCreatedTagColored(createdTagColoredValue);
       } catch (error) {
         console.error('Failed to load settings:', error);
@@ -109,6 +109,16 @@ export const usePopupSettings = () => {
     [notifyContentScript, storageService],
   );
 
+  const handleShowDaysInStatusButtonChange = useCallback(
+    async (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.checked;
+      setShowDaysInStatusButton(value);
+      await storageService.setShowDaysInStatusButton(value);
+      await notifyContentScript({ showDaysInStatusButton: value });
+    },
+    [notifyContentScript, storageService],
+  );
+
   const handleAllowMultipleFiltersChange = useCallback(
     async (event: React.ChangeEvent<HTMLInputElement>) => {
       const value = event.target.checked;
@@ -116,16 +126,6 @@ export const usePopupSettings = () => {
       await storageService.setAllowMultipleFilters(value);
     },
     [storageService],
-  );
-
-  const handleCompactFormatChange = useCallback(
-    async (event: React.ChangeEvent<HTMLInputElement>) => {
-      const value = event.target.checked;
-      setCompactFormat(value);
-      await storageService.setDaysInStatusCompactFormat(value);
-      await notifyContentScript({ compactFormat: value });
-    },
-    [notifyContentScript, storageService],
   );
 
   const handleCreatedTagColoredChange = useCallback(
@@ -235,12 +235,11 @@ export const usePopupSettings = () => {
   return {
     allowMultipleFilters,
     colorTheme,
-    compactFormat,
     createdTagColored,
     handleAllowMultipleFiltersChange,
     handleColorThemeChange,
-    handleCompactFormatChange,
     handleCreatedTagColoredChange,
+    handleShowDaysInStatusButtonChange,
     handleShowCreatedChange,
     handleThresholdRedBlur,
     handleThresholdRedChange,
@@ -250,6 +249,7 @@ export const usePopupSettings = () => {
     lastUserRedValue,
     lastUserYellowValue,
     showCreated,
+    showDaysInStatusButton,
     thresholdRedInput,
     thresholdYellowInput,
   };
