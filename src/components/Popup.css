@@ -471,7 +471,7 @@
 
 .popup-setting-thresholds {
   display: flex;
-  margin-top: 16px;
+  margin-top: 8px;
   flex-direction: column;
   gap: 8px;
 }
