@@ -58,11 +58,32 @@ const Popup: React.FC = () => {
               Select several filters at once.
             </span>
           </div>
-          <ToggleSetting
-            checked={settings.saveFiltersFromSearch}
-            label="Save filters from search"
-            onChange={settings.handleSaveFiltersFromSearchChange}
-          />
+          <div className="popup-setting popup-combine-setting">
+            <label className="popup-toggle-label">
+              <input
+                type="checkbox"
+                checked={settings.saveFiltersFromSearch}
+                onChange={settings.handleSaveFiltersFromSearchChange}
+                className="popup-toggle-input"
+              />
+              <span className="popup-toggle-switch"></span>
+              <span className="popup-toggle-text">Save filters from search</span>
+            </label>
+            <span
+              className="popup-help-trigger"
+              role="img"
+              tabIndex={0}
+              aria-label="More information about saving filters from search"
+              aria-describedby="save-filters-from-search-help"
+            >
+              <span aria-hidden="true" className="popup-help-icon">
+                ?
+              </span>
+            </span>
+            <span id="save-filters-from-search-help" role="tooltip" className="popup-help-tooltip">
+              Save the current search query as a quick filter.
+            </span>
+          </div>
         </section>
 
         <section className="popup-settings-group">
