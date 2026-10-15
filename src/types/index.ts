@@ -43,6 +43,7 @@ export interface SaveFilterButtonProps {
 export interface FilterBarProps {
   filters: Filter[];
   activeFilterIndices: Set<number>;
+  showAddFilter: boolean;
   onFilterClick: (query: string) => void;
   onAddFilter: () => void;
   onContextMenu: (e: React.MouseEvent, item: Filter, index: number) => void;

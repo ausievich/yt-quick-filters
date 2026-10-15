@@ -8,6 +8,8 @@ export const DEFAULT_THRESHOLD_RED = 60;
 export const DEFAULT_COLOR_THEME: ColorTheme = 'ring';
 export const DEFAULT_ALLOW_MULTIPLE_FILTERS = false;
 export const ALLOW_MULTIPLE_FILTERS_KEY = 'ytqf_allowMultipleFilters';
+export const DEFAULT_SAVE_FILTERS_FROM_SEARCH = false;
+export const SAVE_FILTERS_FROM_SEARCH_KEY = 'ytqf_saveFiltersFromSearch';
 
 export class StorageService {
   private static instance: StorageService;
@@ -137,6 +139,14 @@ export class StorageService {
 
   public async setAllowMultipleFilters(enabled: boolean): Promise<void> {
     return this.setStorageValue(ALLOW_MULTIPLE_FILTERS_KEY, enabled);
+  }
+
+  public async getSaveFiltersFromSearch(): Promise<boolean> {
+    return this.getStorageValue(SAVE_FILTERS_FROM_SEARCH_KEY, DEFAULT_SAVE_FILTERS_FROM_SEARCH);
+  }
+
+  public async setSaveFiltersFromSearch(enabled: boolean): Promise<void> {
+    return this.setStorageValue(SAVE_FILTERS_FROM_SEARCH_KEY, enabled);
   }
 
   public async getHideCreatedTag(): Promise<boolean> {

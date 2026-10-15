@@ -17,6 +17,7 @@ export const usePopupSettings = () => {
   const storageService = useMemo(() => StorageService.getInstance(), []);
   const [colorTheme, setColorTheme] = useState<ColorTheme>('ring');
   const [allowMultipleFilters, setAllowMultipleFilters] = useState(false);
+  const [saveFiltersFromSearch, setSaveFiltersFromSearch] = useState(false);
   const [showDaysInStatusButton, setShowDaysInStatusButton] = useState(false);
   const [showCreated, setShowCreated] = useState(true);
   const [thresholdYellowInput, setThresholdYellowInput] = useState('');
@@ -46,6 +47,7 @@ export const usePopupSettings = () => {
       try {
         const colorThemeValue = await storageService.getColorTheme();
         const allowMultipleFiltersValue = await storageService.getAllowMultipleFilters();
+        const saveFiltersFromSearchValue = await storageService.getSaveFiltersFromSearch();
         const showDaysInStatusButtonValue = await storageService.getShowDaysInStatusButton();
         const hideCreatedValue = await storageService.getHideCreatedTag();
         const thresholdYellowValue = await storageService.getDaysInStatusThresholdYellow();
@@ -63,6 +65,7 @@ export const usePopupSettings = () => {
           await storageService.setColorTheme(selectedTheme);
         }
         setAllowMultipleFilters(allowMultipleFiltersValue);
+        setSaveFiltersFromSearch(saveFiltersFromSearchValue);
         setShowDaysInStatusButton(showDaysInStatusButtonValue);
         setShowCreated(!hideCreatedValue);
         setThresholdYellowInput(normalizedYellow.toString());
@@ -124,6 +127,15 @@ export const usePopupSettings = () => {
       const value = event.target.checked;
       setAllowMultipleFilters(value);
       await storageService.setAllowMultipleFilters(value);
+    },
+    [storageService],
+  );
+
+  const handleSaveFiltersFromSearchChange = useCallback(
+    async (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.checked;
+      setSaveFiltersFromSearch(value);
+      await storageService.setSaveFiltersFromSearch(value);
     },
     [storageService],
   );
@@ -237,6 +249,7 @@ export const usePopupSettings = () => {
     colorTheme,
     createdTagColored,
     handleAllowMultipleFiltersChange,
+    handleSaveFiltersFromSearchChange,
     handleColorThemeChange,
     handleCreatedTagColoredChange,
     handleShowDaysInStatusButtonChange,
@@ -250,6 +263,7 @@ export const usePopupSettings = () => {
     lastUserYellowValue,
     showCreated,
     showDaysInStatusButton,
+    saveFiltersFromSearch,
     thresholdRedInput,
     thresholdYellowInput,
   };

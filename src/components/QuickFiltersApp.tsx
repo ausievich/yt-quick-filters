@@ -5,6 +5,8 @@ import {
   StorageService,
   ALLOW_MULTIPLE_FILTERS_KEY,
   DEFAULT_ALLOW_MULTIPLE_FILTERS,
+  DEFAULT_SAVE_FILTERS_FROM_SEARCH,
+  SAVE_FILTERS_FROM_SEARCH_KEY,
 } from '../services/storage';
 import { UtilsService } from '../services/utils';
 import { YouTrackVersionService } from '../services/youTrackVersion';
@@ -52,6 +54,9 @@ export const QuickFiltersApp: React.FC = () => {
   const [optimisticQuery, setOptimisticQuery] = useState<string | null>(null);
   const [allowMultipleFilters, setAllowMultipleFilters] = useState<boolean>(
     DEFAULT_ALLOW_MULTIPLE_FILTERS,
+  );
+  const [saveFiltersFromSearch, setSaveFiltersFromSearch] = useState<boolean>(
+    DEFAULT_SAVE_FILTERS_FROM_SEARCH,
   );
   const [contextMenu, setContextMenu] = useState<ContextMenuState>({
     isOpen: false,
@@ -134,14 +139,28 @@ export const QuickFiltersApp: React.FC = () => {
   // Follow the setting, including changes made from the popup while the board is open.
   useEffect(() => {
     void storageService.getAllowMultipleFilters().then(setAllowMultipleFilters);
+    void storageService.getSaveFiltersFromSearch().then(setSaveFiltersFromSearch);
 
     const handleStorageChange = (
       changes: Record<string, chrome.storage.StorageChange>,
       areaName: string,
     ) => {
-      const change = changes[ALLOW_MULTIPLE_FILTERS_KEY];
-      if (areaName === 'sync' && change) {
-        setAllowMultipleFilters(change.newValue ?? DEFAULT_ALLOW_MULTIPLE_FILTERS);
+      if (areaName !== 'sync') {
+        return;
+      }
+
+      const allowMultipleFiltersChange = changes[ALLOW_MULTIPLE_FILTERS_KEY];
+      if (allowMultipleFiltersChange) {
+        setAllowMultipleFilters(
+          allowMultipleFiltersChange.newValue ?? DEFAULT_ALLOW_MULTIPLE_FILTERS,
+        );
+      }
+
+      const saveFiltersFromSearchChange = changes[SAVE_FILTERS_FROM_SEARCH_KEY];
+      if (saveFiltersFromSearchChange) {
+        setSaveFiltersFromSearch(
+          saveFiltersFromSearchChange.newValue ?? DEFAULT_SAVE_FILTERS_FROM_SEARCH,
+        );
       }
     };
 
@@ -307,7 +326,7 @@ export const QuickFiltersApp: React.FC = () => {
     ? getActiveFilterIndices(filters, effectiveQuery)
     : new Set(singleActiveFilterIndex >= 0 ? [singleActiveFilterIndex] : []);
   const canSaveFromSearch =
-    effectiveQuery.trim() !== '' && singleActiveFilterIndex === -1;
+    saveFiltersFromSearch && effectiveQuery.trim() !== '' && singleActiveFilterIndex === -1;
 
   return (
     <>
@@ -317,6 +336,7 @@ export const QuickFiltersApp: React.FC = () => {
           <FilterBar
             filters={filters}
             activeFilterIndices={activeFilterIndices}
+            showAddFilter={!saveFiltersFromSearch}
             onFilterClick={handleFilterClick}
             onAddFilter={handleAddFilter}
             onContextMenu={handleContextMenu}
@@ -328,6 +348,7 @@ export const QuickFiltersApp: React.FC = () => {
         <FilterBar
           filters={filters}
           activeFilterIndices={activeFilterIndices}
+          showAddFilter={!saveFiltersFromSearch}
           onFilterClick={handleFilterClick}
           onAddFilter={handleAddFilter}
           onContextMenu={handleContextMenu}

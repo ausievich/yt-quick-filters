@@ -58,6 +58,11 @@ const Popup: React.FC = () => {
               Select several filters at once.
             </span>
           </div>
+          <ToggleSetting
+            checked={settings.saveFiltersFromSearch}
+            label="Save filters from search"
+            onChange={settings.handleSaveFiltersFromSearchChange}
+          />
         </section>
 
         <section className="popup-settings-group">

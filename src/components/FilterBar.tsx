@@ -7,6 +7,7 @@ import './FilterBar.css';
 export const FilterBar: React.FC<FilterBarProps> = ({
   filters,
   activeFilterIndices,
+  showAddFilter,
   onFilterClick,
   onAddFilter,
   onContextMenu,
@@ -21,9 +22,11 @@ export const FilterBar: React.FC<FilterBarProps> = ({
     <div id="ytqf-bar" ref={containerRef} className={isDragging ? 'is-dragging' : undefined}>
       <DaysInStatusButton />
 
-      <button className="btn ghost" onClick={onAddFilter}>
-        Add filter...
-      </button>
+      {showAddFilter && (
+        <button className="btn ghost" onClick={onAddFilter}>
+          Add filter...
+        </button>
+      )}
 
       {filters.map((filter, index) => {
         const fingerprint = JSON.stringify([filter.label, filter.query]);
