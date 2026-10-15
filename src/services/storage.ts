@@ -5,7 +5,6 @@ const DEFAULT_FILTERS: Filter[] = [{ label: 'My Tasks', query: 'Assignee: me' }]
 
 export const DEFAULT_THRESHOLD_YELLOW = 14;
 export const DEFAULT_THRESHOLD_RED = 60;
-export const DEFAULT_COMPACT_FORMAT = true;
 export const DEFAULT_COLOR_THEME: ColorTheme = 'ring';
 export const DEFAULT_ALLOW_MULTIPLE_FILTERS = false;
 export const ALLOW_MULTIPLE_FILTERS_KEY = 'ytqf_allowMultipleFilters';
@@ -186,12 +185,12 @@ export class StorageService {
     return this.setStorageValue('ytqf_thresholdRed', threshold);
   }
 
-  public async getDaysInStatusCompactFormat(): Promise<boolean> {
-    return this.getStorageValue('ytqf_compactFormat', DEFAULT_COMPACT_FORMAT);
+  public async getShowDaysInStatusButton(): Promise<boolean> {
+    return this.getStorageValue('ytqf_showDaysInStatusButton', false);
   }
 
-  public async setDaysInStatusCompactFormat(enabled: boolean): Promise<void> {
-    return this.setStorageValue('ytqf_compactFormat', enabled);
+  public async setShowDaysInStatusButton(show: boolean): Promise<void> {
+    return this.setStorageValue('ytqf_showDaysInStatusButton', show);
   }
 
   public async getCreatedTagColored(): Promise<boolean> {
@@ -206,18 +205,18 @@ export class StorageService {
     return new Promise((resolve) => {
       chrome.storage.sync.get(
         [
+          'ytqf_showDaysInStatusButton',
           'ytqf_hideCreatedTag',
           'ytqf_thresholdYellow',
           'ytqf_thresholdRed',
-          'ytqf_compactFormat',
           'ytqf_createdTagColored',
         ],
         (data) => {
           resolve({
+            showDaysInStatusButton: data.ytqf_showDaysInStatusButton ?? false,
             hideCreated: data.ytqf_hideCreatedTag ?? false,
             thresholdYellow: data.ytqf_thresholdYellow ?? DEFAULT_THRESHOLD_YELLOW,
             thresholdRed: data.ytqf_thresholdRed ?? DEFAULT_THRESHOLD_RED,
-            compactFormat: data.ytqf_compactFormat ?? DEFAULT_COMPACT_FORMAT,
             createdTagColored: data.ytqf_createdTagColored ?? false,
           });
         },

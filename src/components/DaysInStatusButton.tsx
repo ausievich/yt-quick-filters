@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { StorageService } from '../services/storage';
 import { DaysInStatusUI } from '../services/daysInStatusUI';
+import { DaysInStatusSettingsService } from '../services/daysInStatusSettings';
 import { YouTrackAPIClient } from '../services/youTrackAPIClient';
 import { TokenManager } from '../services/tokenManager';
 import './DaysInStatusButton.css';
 
 export const DaysInStatusButton: React.FC = () => {
   const [showDaysInStatus, setShowDaysInStatus] = useState<boolean>(false);
+  const [showButton, setShowButton] = useState<boolean>(false);
 
   const storageService = StorageService.getInstance();
   const daysInStatusUI = DaysInStatusUI.getInstance();
@@ -27,7 +29,7 @@ export const DaysInStatusButton: React.FC = () => {
     };
 
     checkToken();
-  }, []);
+  }, [tokenManager]);
 
   // Load days in status state
   useEffect(() => {
@@ -35,13 +37,26 @@ export const DaysInStatusButton: React.FC = () => {
       try {
         const enabled = await storageService.getDaysInStatusEnabled();
         setShowDaysInStatus(enabled);
-        daysInStatusUI.setEnabled(enabled);
       } catch (error) {
         console.error('Failed to load days in status state:', error);
       }
     };
     loadDaysInStatusState();
   }, [storageService, daysInStatusUI]);
+
+  useEffect(
+    () =>
+      DaysInStatusSettingsService.getInstance().subscribe((settings) =>
+        setShowButton(settings.showDaysInStatusButton),
+      ),
+    [],
+  );
+
+  // A hidden button leaves no way to switch the tags off, so hiding it also
+  // pauses them. The stored on/off state is preserved and returns with the button.
+  useEffect(() => {
+    daysInStatusUI.setEnabled(showDaysInStatus && showButton);
+  }, [showDaysInStatus, showButton, daysInStatusUI]);
 
   const handleToggleDaysInStatus = async () => {
     const newState = !showDaysInStatus;
@@ -58,7 +73,6 @@ export const DaysInStatusButton: React.FC = () => {
     }
 
     setShowDaysInStatus(newState);
-    daysInStatusUI.setEnabled(newState);
 
     try {
       await storageService.setDaysInStatusEnabled(newState);
@@ -67,12 +81,14 @@ export const DaysInStatusButton: React.FC = () => {
     }
   };
 
+  if (!showButton) return null;
+
   return (
     <>
       <button
         className={`ytqf-days-button ${showDaysInStatus ? 'active' : 'ghost'}`}
         onClick={handleToggleDaysInStatus}
-        title={'Days in status'}
+        title="Time badges"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

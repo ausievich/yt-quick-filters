@@ -380,6 +380,15 @@
   transform: translateX(10px);
 }
 
+.popup-setting--disabled {
+  opacity: 0.5;
+}
+
+.popup-setting--disabled .popup-toggle-label,
+.popup-setting--disabled .popup-toggle-switch {
+  cursor: not-allowed;
+}
+
 .popup-toggle-text {
   font-size: 13px;
   color: rgb(39, 40, 46);
@@ -462,7 +471,7 @@
 
 .popup-setting-thresholds {
   display: flex;
-  margin-top: 16px;
+  margin-top: 8px;
   flex-direction: column;
   gap: 8px;
 }
@@ -478,7 +487,7 @@
   height: 12px;
   border-radius: 50%;
   flex-shrink: 0;
-  margin-left: 4px;
+  margin-left: 6px;
   margin-right: 8px;
 }
 
@@ -535,6 +544,10 @@
 .popup-input:focus {
   outline: none;
   border-color: rgb(128, 198, 255);
+}
+
+.popup-input:disabled {
+  cursor: not-allowed;
 }
 
 /* Number input spinners are not needed as we use type="text" */

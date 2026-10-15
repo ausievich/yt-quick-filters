@@ -75,31 +75,39 @@ const Popup: React.FC = () => {
         </section>
 
         <section className="popup-settings-group">
-          <h3 className="popup-section-title">Days in status</h3>
+          <h3 className="popup-section-title">Time badges</h3>
 
           <ToggleSetting
+            checked={settings.showDaysInStatusButton}
+            label="Show time badges button"
+            onChange={settings.handleShowDaysInStatusButtonChange}
+          />
+          <ToggleSetting
             checked={settings.showCreated}
+            disabled={!settings.showDaysInStatusButton}
             label="Show Created tag"
             onChange={settings.handleShowCreatedChange}
           />
           <ToggleSetting
             checked={settings.createdTagColored}
+            disabled={!settings.showDaysInStatusButton}
             label="Color Created tag"
             onChange={settings.handleCreatedTagColoredChange}
           />
-          <ToggleSetting
-            checked={settings.compactFormat}
-            label="Use compact format"
-            onChange={settings.handleCompactFormatChange}
-          />
 
-          <div className="popup-setting popup-setting-thresholds">
+          <div
+            className={`popup-setting popup-setting-thresholds ${
+              !settings.showDaysInStatusButton ? 'popup-setting--disabled' : ''
+            }`}
+            aria-disabled={!settings.showDaysInStatusButton}
+          >
             <div className="popup-threshold-row">
               <span className="popup-threshold-indicator popup-threshold-indicator--yellow"></span>
               <label className="popup-threshold-label">Warning after</label>
               <input
                 type="text"
                 value={settings.thresholdYellowInput}
+                disabled={!settings.showDaysInStatusButton}
                 onChange={settings.handleThresholdYellowChange}
                 onBlur={() => void settings.handleThresholdYellowBlur()}
                 placeholder={
@@ -116,6 +124,7 @@ const Popup: React.FC = () => {
               <input
                 type="text"
                 value={settings.thresholdRedInput}
+                disabled={!settings.showDaysInStatusButton}
                 onChange={settings.handleThresholdRedChange}
                 onBlur={() => void settings.handleThresholdRedBlur()}
                 placeholder={

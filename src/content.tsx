@@ -36,10 +36,10 @@ const initializeSettingsMessageBridge = (): void => {
 
     const settingsService = DaysInStatusSettingsService.getInstance();
     settingsService.update({
+      showDaysInStatusButton: message.showDaysInStatusButton,
       hideCreated: message.hideCreated,
       thresholdYellow: message.thresholdYellow,
       thresholdRed: message.thresholdRed,
-      compactFormat: message.compactFormat,
       createdTagColored: message.createdTagColored,
     });
   });
