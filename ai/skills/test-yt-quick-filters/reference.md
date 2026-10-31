@@ -15,6 +15,7 @@ Read the block below, replace `EXT_ROOT` with the repo root (absolute path, forw
 
 Requires `npm run build` first.
 
+<!-- prettier-ignore -->
 ```javascript
 async (page) => {
   const extRoot = 'EXT_ROOT';
@@ -80,7 +81,7 @@ async (page) => {
 
   const hasFilterBar = (await page.locator('#ytqf-bar').count()) > 0;
   return { injected: true, hasFilterBar, url: page.url() };
-};
+}
 ```
 
 ## Regression scenarios
