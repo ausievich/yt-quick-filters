@@ -1,10 +1,10 @@
 {
   "extensionName": {
-    "message": "عوامل التصفية السريعة في YouTrack",
+    "message": "المرشحات السريعة في YouTrack",
     "description": "اسم الإضافة المعروض في Chrome ومتجر Chrome الإلكتروني."
   },
   "extensionDescription": {
-    "message": "أضف أزرار عوامل التصفية السريعة إلى لوحات YouTrack Agile. اعرض علامتي Created وUpdated على البطاقات.",
+    "message": "أضف أزرار المرشحات السريعة إلى لوحات YouTrack Agile. اعرض علامتي Created وUpdated على البطاقات.",
     "description": "الوصف المختصر للإضافة المعروض في Chrome ومتجر Chrome الإلكتروني."
   }
 }
