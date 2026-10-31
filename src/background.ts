@@ -7,8 +7,8 @@ import {
 import { DEFAULT_ALLOW_MULTIPLE_FILTERS, DEFAULT_COLOR_THEME } from './services/storage';
 
 // PostHog project API key (a public write-only key). Leave empty to disable sending.
-const POSTHOG_API_KEY = '';
-const POSTHOG_CAPTURE_URL = 'https://us.i.posthog.com/capture/';
+const POSTHOG_API_KEY = 'phc_pgvSJmRAXvPDE4fkv4cbLuJFsjWd9BW3tso8PUrrxchj';
+const POSTHOG_CAPTURE_URL = 'https://eu.i.posthog.com/capture/';
 const INSTALL_ID_KEY = 'ytqf_analyticsInstallId';
 const SNAPSHOT_SENT_AT_KEY = 'ytqf_analyticsSnapshotSentAt';
 const SNAPSHOT_INTERVAL_MS = 24 * 60 * 60 * 1000;
