@@ -36,3 +36,6 @@ artifacts/
 *.log
 coverage/
 .playwright-mcp/
+
+# Cloudflare Wrangler local state
+.wrangler/

@@ -1,0 +1,10 @@
+{
+  "extensionName": {
+    "message": "מסננים מהירים של YouTrack",
+    "description": "שם התוסף המוצג ב-Chrome ובחנות האינטרנט של Chrome."
+  },
+  "extensionDescription": {
+    "message": "הוסיפו לחצני סינון מהיר ללוחות Agile של YouTrack. הציגו תגיות Created ו-Updated בכרטיסים.",
+    "description": "התיאור הקצר של התוסף המוצג ב-Chrome ובחנות האינטרנט של Chrome."
+  }
+}

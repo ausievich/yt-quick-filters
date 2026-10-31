@@ -103,7 +103,7 @@ const Popup: React.FC = () => {
           >
             <div className="popup-threshold-row">
               <span className="popup-threshold-indicator popup-threshold-indicator--yellow"></span>
-              <label className="popup-threshold-label">Warning after</label>
+              <label className="popup-threshold-label">Yellow after</label>
               <input
                 type="text"
                 value={settings.thresholdYellowInput}
@@ -120,7 +120,7 @@ const Popup: React.FC = () => {
 
             <div className="popup-threshold-row">
               <span className="popup-threshold-indicator popup-threshold-indicator--red"></span>
-              <label className="popup-threshold-label">Stale after</label>
+              <label className="popup-threshold-label">Red after</label>
               <input
                 type="text"
                 value={settings.thresholdRedInput}
