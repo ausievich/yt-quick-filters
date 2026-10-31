@@ -1,5 +1,5 @@
 import { createWriteStream } from 'node:fs';
-import { cp, mkdir, readFile, rm } from 'node:fs/promises';
+import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ZipArchive } from 'archiver';
@@ -16,6 +16,14 @@ const stagingDirectory = path.join(artifactsDirectory, `.staging-${target}`);
 
 const readManifest = async () =>
   JSON.parse(await readFile(path.join(rootDirectory, 'manifest.json'), 'utf8'));
+
+// Chrome runs the background as a service worker; Firefox MV3 only supports background scripts.
+const adaptManifestForTarget = (manifest) => {
+  if (target !== 'firefox') return manifest;
+
+  const { service_worker: serviceWorker, ...background } = manifest.background;
+  return { ...manifest, background: { ...background, scripts: [serviceWorker] } };
+};
 
 const getSourceFiles = () => [
   'README.md',
@@ -62,6 +70,13 @@ const packageExtension = async () => {
       await cp(path.join(rootDirectory, file), path.join(stagingDirectory, file), {
         recursive: true,
       });
+    }
+
+    if (target !== 'source') {
+      await writeFile(
+        path.join(stagingDirectory, 'manifest.json'),
+        `${JSON.stringify(adaptManifestForTarget(manifest), null, 2)}\n`,
+      );
     }
 
     const bytes = await createArchive(stagingDirectory, archivePath);
