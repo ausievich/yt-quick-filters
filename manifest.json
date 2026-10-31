@@ -10,11 +10,15 @@
       "id": "yt-quick-filters@ausievich.dev",
       "strict_min_version": "128.0",
       "data_collection_permissions": {
-        "required": ["none"]
+        "required": ["technicalAndInteraction"]
       }
     }
   },
   "permissions": ["storage"],
+  "background": {
+    "service_worker": "dist/background.js",
+    "scripts": ["dist/background.js"]
+  },
   "action": {
     "default_popup": "public/popup.html",
     "default_icon": {
