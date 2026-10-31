@@ -14,7 +14,8 @@ export type AnalyticsEventName =
 // YouTrack URLs or domains, projects, issues, users or tokens.
 export interface AnalyticsProperties {
   action?: string;
-  filter_count?: number;
+  // filter_created, filter_duplicated, filter_deleted: filters on the current board afterwards.
+  board_filter_count?: number;
   enabled?: boolean;
   // settings_snapshot only: current settings, no thresholds or user-entered text.
   combine_filters?: boolean;
@@ -27,7 +28,7 @@ export interface AnalyticsProperties {
 
 export const ALLOWED_PROPERTY_KEYS: readonly (keyof AnalyticsProperties)[] = [
   'action',
-  'filter_count',
+  'board_filter_count',
   'enabled',
   'combine_filters',
   'time_badges_button',

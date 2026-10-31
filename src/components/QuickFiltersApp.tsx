@@ -170,10 +170,7 @@ export const QuickFiltersApp: React.FC = () => {
             filters.findIndex((filter) => normalizeQuery(filter.query) === normalizeQuery(query)),
           )
         : normalizeQuery(effectiveQuery) === normalizeQuery(query);
-      trackEvent('filter_toggled', {
-        action: wasActive ? 'removed' : 'applied',
-        filter_count: filters.length,
-      });
+      trackEvent('filter_toggled', { action: wasActive ? 'removed' : 'applied' });
 
       setOptimisticQuery(nextQuery);
       void utilsService.setQuery(nextQuery);
@@ -229,7 +226,7 @@ export const QuickFiltersApp: React.FC = () => {
       closeContextMenu();
       try {
         await storageService.duplicateFilter(index);
-        trackEvent('filter_duplicated', { filter_count: filters.length + 1 });
+        trackEvent('filter_duplicated', { board_filter_count: filters.length + 1 });
         await loadFilters();
       } catch (error) {
         console.error('Failed to duplicate filter:', error);
@@ -243,7 +240,7 @@ export const QuickFiltersApp: React.FC = () => {
       closeContextMenu();
       try {
         await storageService.deleteFilter(index);
-        trackEvent('filter_deleted', { filter_count: Math.max(filters.length - 1, 0) });
+        trackEvent('filter_deleted', { board_filter_count: Math.max(filters.length - 1, 0) });
         await loadFilters();
       } catch (error) {
         console.error('Failed to delete filter:', error);
@@ -258,13 +255,13 @@ export const QuickFiltersApp: React.FC = () => {
 
       try {
         await storageService.moveFilter(from, to);
-        trackEvent('filters_reordered', { filter_count: filters.length });
+        trackEvent('filters_reordered');
       } catch (error) {
         console.error('Failed to reorder filter:', error);
         await loadFilters();
       }
     },
-    [storageService, loadFilters, filters.length],
+    [storageService, loadFilters],
   );
 
   const handleModalClose = useCallback(() => {
@@ -279,10 +276,10 @@ export const QuickFiltersApp: React.FC = () => {
       try {
         if (modal.isEdit && typeof index === 'number') {
           await storageService.updateFilter(index, { label: name, query });
-          trackEvent('filter_edited', { filter_count: filters.length });
+          trackEvent('filter_edited');
         } else {
           await storageService.addFilter({ label: name, query });
-          trackEvent('filter_created', { filter_count: filters.length + 1 });
+          trackEvent('filter_created', { board_filter_count: filters.length + 1 });
         }
         await loadFilters();
         handleModalClose();
