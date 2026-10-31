@@ -14,14 +14,20 @@ const SNAPSHOT_SENT_AT_KEY = 'ytqf_analyticsSnapshotSentAt';
 const SNAPSHOT_INTERVAL_MS = 24 * 60 * 60 * 1000;
 const FILTERS_KEY_PREFIX = 'ytQuickFilters_';
 
-const getInstallId = async (): Promise<string> => {
-  const stored = await chrome.storage.local.get(INSTALL_ID_KEY);
-  const existing = stored[INSTALL_ID_KEY];
-  if (typeof existing === 'string' && existing) return existing;
+let installIdPromise: Promise<string> | undefined;
 
-  const id = crypto.randomUUID();
-  await chrome.storage.local.set({ [INSTALL_ID_KEY]: id });
-  return id;
+// Memoized so concurrent callers (startup, install, messages) never generate two ids.
+const getInstallId = (): Promise<string> => {
+  installIdPromise ??= (async () => {
+    const stored = await chrome.storage.local.get(INSTALL_ID_KEY);
+    const existing = stored[INSTALL_ID_KEY];
+    if (typeof existing === 'string' && existing) return existing;
+
+    const id = crypto.randomUUID();
+    await chrome.storage.local.set({ [INSTALL_ID_KEY]: id });
+    return id;
+  })();
+  return installIdPromise;
 };
 
 const pickAllowedProperties = (properties: AnalyticsProperties): AnalyticsProperties =>
@@ -88,10 +94,16 @@ const sendSettingsSnapshotIfDue = async (): Promise<void> => {
   });
 };
 
+let snapshotInFlight: Promise<void> | undefined;
+
 const trySendSettingsSnapshot = (): void => {
-  sendSettingsSnapshotIfDue().catch((error) => {
-    console.warn('Failed to send settings snapshot:', error);
-  });
+  snapshotInFlight ??= sendSettingsSnapshotIfDue()
+    .catch((error) => {
+      console.warn('Failed to send settings snapshot:', error);
+    })
+    .finally(() => {
+      snapshotInFlight = undefined;
+    });
 };
 
 chrome.runtime.onStartup.addListener(trySendSettingsSnapshot);
