@@ -7,7 +7,8 @@ export type AnalyticsEventName =
   | 'filters_reordered'
   | 'combine_filters_changed'
   | 'days_in_status_changed'
-  | 'theme_changed';
+  | 'theme_changed'
+  | 'settings_snapshot';
 
 // Only these properties may ever leave the extension. Never add filter names or queries,
 // YouTrack URLs or domains, projects, issues, users or tokens.
@@ -15,7 +16,26 @@ export interface AnalyticsProperties {
   action?: string;
   filter_count?: number;
   enabled?: boolean;
+  // settings_snapshot only: current settings, no thresholds or user-entered text.
+  combine_filters?: boolean;
+  time_badges_button?: boolean;
+  created_tag?: boolean;
+  created_tag_colored?: boolean;
+  theme?: string;
+  total_filter_count?: number;
 }
+
+export const ALLOWED_PROPERTY_KEYS: readonly (keyof AnalyticsProperties)[] = [
+  'action',
+  'filter_count',
+  'enabled',
+  'combine_filters',
+  'time_badges_button',
+  'created_tag',
+  'created_tag_colored',
+  'theme',
+  'total_filter_count',
+];
 
 export const ANALYTICS_MESSAGE_TYPE = 'YTQF_ANALYTICS_EVENT';
 
