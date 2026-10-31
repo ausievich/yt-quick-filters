@@ -31,3 +31,8 @@ tracking work.
 - `.agents/skills` — not a generic fallback; it's Codex/ChatGPT's documented
   skill-discovery path (see
   https://learn.chatgpt.com/docs/build-skills), symlinked to `ai/skills`.
+
+## Commits and pull requests
+
+Do not add `Co-Authored-By` trailers or "Generated with ..." attribution lines
+to commit messages or pull request descriptions.
