@@ -13,6 +13,7 @@ import { FilterBar } from './FilterBar';
 import { FilterModal } from './FilterModal';
 import { ContextMenu } from './ContextMenu';
 import { DaysInStatusUI } from '../services/daysInStatusUI';
+import { trackEvent } from '../services/analytics';
 import {
   getActiveFilterIndices,
   normalizeQuery,
@@ -164,6 +165,8 @@ export const QuickFiltersApp: React.FC = () => {
         nextQuery = '';
       }
 
+      trackEvent('filter_toggled');
+
       setOptimisticQuery(nextQuery);
       void utilsService.setQuery(nextQuery);
     },
@@ -218,12 +221,13 @@ export const QuickFiltersApp: React.FC = () => {
       closeContextMenu();
       try {
         await storageService.duplicateFilter(index);
+        trackEvent('filter_duplicated', { board_filter_count: filters.length + 1 });
         await loadFilters();
       } catch (error) {
         console.error('Failed to duplicate filter:', error);
       }
     },
-    [closeContextMenu, storageService, loadFilters],
+    [closeContextMenu, storageService, loadFilters, filters.length],
   );
 
   const handleDeleteFilter = useCallback(
@@ -231,12 +235,13 @@ export const QuickFiltersApp: React.FC = () => {
       closeContextMenu();
       try {
         await storageService.deleteFilter(index);
+        trackEvent('filter_deleted', { board_filter_count: Math.max(filters.length - 1, 0) });
         await loadFilters();
       } catch (error) {
         console.error('Failed to delete filter:', error);
       }
     },
-    [closeContextMenu, storageService, loadFilters],
+    [closeContextMenu, storageService, loadFilters, filters.length],
   );
 
   const handleReorderFilter = useCallback(
@@ -245,6 +250,7 @@ export const QuickFiltersApp: React.FC = () => {
 
       try {
         await storageService.moveFilter(from, to);
+        trackEvent('filters_reordered');
       } catch (error) {
         console.error('Failed to reorder filter:', error);
         await loadFilters();
@@ -265,8 +271,10 @@ export const QuickFiltersApp: React.FC = () => {
       try {
         if (modal.isEdit && typeof index === 'number') {
           await storageService.updateFilter(index, { label: name, query });
+          trackEvent('filter_edited');
         } else {
           await storageService.addFilter({ label: name, query });
+          trackEvent('filter_created', { board_filter_count: filters.length + 1 });
         }
         await loadFilters();
         handleModalClose();
@@ -274,7 +282,7 @@ export const QuickFiltersApp: React.FC = () => {
         console.error('Failed to save filter:', error);
       }
     },
-    [modal.isEdit, storageService, loadFilters, handleModalClose],
+    [modal.isEdit, storageService, loadFilters, handleModalClose, filters.length],
   );
 
   // With the setting off, preserve the original one-active-filter behaviour.

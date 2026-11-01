@@ -4,7 +4,7 @@
     "description": "Název rozšíření zobrazený v Chromu a Chrome Web Storu."
   },
   "extensionDescription": {
-    "message": "Přidejte tlačítka rychlých filtrů na agilní nástěnky YouTrack. Na kartách zobrazujte štítky Created a Updated.",
+    "message": "Přidejte tlačítka rychlých filtrů na agilní nástěnky YouTrack.",
     "description": "Krátký popis rozšíření zobrazený v Chromu a Chrome Web Storu."
   }
 }
