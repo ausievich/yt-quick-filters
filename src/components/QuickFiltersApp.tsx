@@ -165,17 +165,12 @@ export const QuickFiltersApp: React.FC = () => {
         nextQuery = '';
       }
 
-      const wasActive = allowMultipleFilters
-        ? getActiveFilterIndices(filters, effectiveQuery).has(
-            filters.findIndex((filter) => normalizeQuery(filter.query) === normalizeQuery(query)),
-          )
-        : normalizeQuery(effectiveQuery) === normalizeQuery(query);
-      trackEvent('filter_toggled', { action: wasActive ? 'removed' : 'applied' });
+      trackEvent('filter_toggled');
 
       setOptimisticQuery(nextQuery);
       void utilsService.setQuery(nextQuery);
     },
-    [utilsService, effectiveQuery, allowMultipleFilters, filters],
+    [utilsService, effectiveQuery, allowMultipleFilters],
   );
 
   const handleAddFilter = useCallback(() => {
