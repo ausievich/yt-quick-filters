@@ -4,7 +4,7 @@
     "description": "Chrome ve Chrome Web Mağazası'nda gösterilen uzantının adı."
   },
   "extensionDescription": {
-    "message": "YouTrack Agile panolarına hızlı filtre düğmeleri ekleyin. Kartlarda Created ve Updated etiketlerini görüntüleyin.",
+    "message": "YouTrack Agile panolarına hızlı filtre düğmeleri ekleyin.",
     "description": "Chrome ve Chrome Web Mağazası'nda gösterilen uzantının kısa açıklaması."
   }
 }
