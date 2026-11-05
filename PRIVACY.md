@@ -1,4 +1,4 @@
-# Privacy Policy for YouTrack Quick Filters
+# Privacy Policy
 
 _Last updated: November 5, 2026_
 
@@ -10,7 +10,7 @@ The extension stores your quick filters and preferences in your browser's extens
 
 ## Anonymous usage analytics
 
-The extension sends limited, anonymous usage analytics to [PostHog](https://posthog.com/) in the EU to understand which features are used and to improve the extension. These events include a randomly generated installation ID, the extension version, feature actions, aggregate filter counts, and non-sensitive settings such as the selected theme.
+The extension sends limited, anonymous usage analytics to [PostHog](https://posthog.com/) to understand which features are used and to improve the extension. These events include a randomly generated installation ID, the extension version, feature actions, aggregate filter counts, and non-sensitive settings such as the selected color theme.
 
 The extension does **not** send filter names or queries, YouTrack URLs or domains, projects, issues, users, access tokens, or the content of YouTrack pages to PostHog. IP addresses and other connection metadata may be processed by PostHog to receive requests, under [PostHog's Privacy Policy](https://posthog.com/privacy).
 
