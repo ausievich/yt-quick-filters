@@ -4,7 +4,7 @@ YouTrack Quick Filters is a browser extension that adds reusable quick filters t
 
 ## Data stored on the device
 
-The extension stores quick filters and preferences in the browser's extension storage. To make authenticated YouTrack API requests, it may also store the access token obtained from the active YouTrack session. This data remains on the device and is not transmitted to the developer or to any analytics provider.
+The extension stores quick filters and preferences in the browser's extension storage. To make authenticated YouTrack API requests, it may also store the access token obtained from the active YouTrack session. This data remains on the device and is not transmitted to the developer or to any third party.
 
 ## Anonymous usage analytics
 
