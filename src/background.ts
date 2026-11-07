@@ -38,8 +38,28 @@ const pickAllowedProperties = (properties: AnalyticsProperties): AnalyticsProper
     ]),
   );
 
+type FirefoxApi = {
+  runtime?: { getBrowserInfo?: unknown };
+  permissions?: { contains?: (permissions: object) => Promise<boolean> };
+};
+
+// Firefox treats analytics as an optional data collection permission the user can decline.
+// Chrome has no such permission, so analytics stay on there. Chrome also exposes a `browser`
+// global now, so Firefox is detected by `runtime.getBrowserInfo`, which only Firefox has.
+const isAnalyticsAllowed = async (): Promise<boolean> => {
+  const firefox = (globalThis as { browser?: FirefoxApi }).browser;
+  if (!firefox?.runtime?.getBrowserInfo || !firefox.permissions?.contains) return true;
+
+  try {
+    return await firefox.permissions.contains({ data_collection: ['technicalAndInteraction'] });
+  } catch {
+    // Firefox versions without data collection permissions reject the unknown key.
+    return true;
+  }
+};
+
 const sendEvent = async (event: string, properties: AnalyticsProperties): Promise<void> => {
-  if (!POSTHOG_API_KEY) return;
+  if (!POSTHOG_API_KEY || !(await isAnalyticsAllowed())) return;
 
   const body = {
     api_key: POSTHOG_API_KEY,
@@ -73,7 +93,7 @@ chrome.runtime.onMessage.addListener((message: Partial<AnalyticsMessage> | undef
 
 // Current settings, sent at most once a day, so we see what people have set and not only what they click.
 const sendSettingsSnapshotIfDue = async (): Promise<void> => {
-  if (!POSTHOG_API_KEY) return;
+  if (!POSTHOG_API_KEY || !(await isAnalyticsAllowed())) return;
 
   const { [SNAPSHOT_SENT_AT_KEY]: sentAt } = await chrome.storage.local.get(SNAPSHOT_SENT_AT_KEY);
   if (typeof sentAt === 'number' && Date.now() - sentAt < SNAPSHOT_INTERVAL_MS) return;

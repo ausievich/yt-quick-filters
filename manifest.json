@@ -10,7 +10,8 @@
       "id": "yt-quick-filters@ausievich.dev",
       "strict_min_version": "128.0",
       "data_collection_permissions": {
-        "required": ["technicalAndInteraction"]
+        "required": ["none"],
+        "optional": ["technicalAndInteraction"]
       }
     }
   },
