@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { trackEvent } from '../services/analytics';
 import { StorageService } from '../services/storage';
 import { DaysInStatusUI } from '../services/daysInStatusUI';
 import { DaysInStatusSettingsService } from '../services/daysInStatusSettings';
@@ -76,6 +77,7 @@ export const DaysInStatusButton: React.FC = () => {
 
     try {
       await storageService.setDaysInStatusEnabled(newState);
+      trackEvent('days_in_status_changed', { action: 'badges_toggle', enabled: newState });
     } catch (error) {
       console.error('Failed to save days in status state:', error);
     }

@@ -4,7 +4,7 @@
     "description": "Namnet på tillägget som visas i Chrome och Chrome Web Store."
   },
   "extensionDescription": {
-    "message": "Lägg till knappar för snabbfilter på YouTrack Agile-tavlor. Visa taggarna Created och Updated på kort.",
+    "message": "Lägg till knappar för snabbfilter på YouTrack Agile-tavlor.",
     "description": "Den korta beskrivningen av tillägget som visas i Chrome och Chrome Web Store."
   }
 }

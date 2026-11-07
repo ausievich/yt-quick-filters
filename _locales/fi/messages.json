@@ -4,7 +4,7 @@
     "description": "Laajennuksen nimi, joka näkyy Chromessa ja Chrome Web Storessa."
   },
   "extensionDescription": {
-    "message": "Lisää pikasuodatinpainikkeita YouTrackin Agile-tauluihin. Näytä korteissa Created- ja Updated-tunnisteet.",
+    "message": "Lisää pikasuodatinpainikkeita YouTrackin Agile-tauluihin.",
     "description": "Laajennuksen lyhyt kuvaus, joka näkyy Chromessa ja Chrome Web Storessa."
   }
 }

@@ -6,6 +6,7 @@ import {
 } from '../services/storage';
 import { ColorTheme, DaysInStatusSettings } from '../types';
 import { COLOR_THEMES } from '../components/popup/themeOptions';
+import { trackEvent } from '../services/analytics';
 
 type ThresholdKey = 'thresholdYellow' | 'thresholdRed';
 type ThresholdStorageUpdater = (value: number) => Promise<void>;
@@ -86,6 +87,7 @@ export const usePopupSettings = () => {
 
       setColorTheme(value);
       await storageService.setColorTheme(value);
+      trackEvent('theme_changed', { action: value });
 
       try {
         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -114,6 +116,7 @@ export const usePopupSettings = () => {
       const value = event.target.checked;
       setShowDaysInStatusButton(value);
       await storageService.setShowDaysInStatusButton(value);
+      trackEvent('days_in_status_changed', { action: 'button_visibility', enabled: value });
       await notifyContentScript({ showDaysInStatusButton: value });
     },
     [notifyContentScript, storageService],
@@ -124,6 +127,7 @@ export const usePopupSettings = () => {
       const value = event.target.checked;
       setAllowMultipleFilters(value);
       await storageService.setAllowMultipleFilters(value);
+      trackEvent('combine_filters_changed', { enabled: value });
     },
     [storageService],
   );
