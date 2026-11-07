@@ -1,12 +1,10 @@
 # Privacy Policy
 
-_Last updated: November 5, 2026_
-
 YouTrack Quick Filters is a browser extension that adds reusable quick filters to YouTrack Agile boards.
 
-## Data stored on your device
+## Data stored locally
 
-The extension stores your quick filters and preferences in your browser's extension storage. To make authenticated YouTrack API requests, it may also store the access token obtained from your active YouTrack session. This data stays in your browser and is not sent to the developer or to analytics providers.
+Saved quick filters, preferences and, where needed for authenticated YouTrack API requests, the access token of the active YouTrack session are stored in the browser's extension storage. This data remains on the device and is not transmitted to the developer or to any analytics provider.
 
 ## Anonymous usage analytics
 
@@ -16,8 +14,8 @@ The extension does **not** send filter names or queries, YouTrack URLs or domain
 
 ## Sharing and retention
 
-We share the analytics data described above only with PostHog as our analytics service provider. We do not sell user data or use it for advertising. Analytics data is retained only as long as needed to improve and maintain the extension.
+Analytics data is shared only with PostHog, the analytics service provider. User data is not sold and is not used for advertising. Analytics data is retained only as long as needed to improve and maintain the extension.
 
-## Your choices and contact
+## Contact and data removal
 
-You can remove the extension and its locally stored data through your browser's extension settings. For privacy questions or requests, please open an issue at [github.com/ausievich/yt-quick-filters](https://github.com/ausievich/yt-quick-filters/issues).
+Locally stored data is removed when the extension is uninstalled via the browser's extension settings. Privacy questions and requests can be raised by opening an issue at [github.com/ausievich/yt-quick-filters](https://github.com/ausievich/yt-quick-filters/issues).
