@@ -39,8 +39,7 @@ const pickAllowedProperties = (properties: AnalyticsProperties): AnalyticsProper
   );
 
 // Firefox 140+ treats analytics as an optional data collection permission the user can decline,
-// and reports the granted ones in `data_collection`. Browsers without that permission (Chrome,
-// older Firefox) have no such field, so there is no choice to respect and analytics stay on.
+// and reports the granted ones in `data_collection`.
 const isAnalyticsAllowed = async (): Promise<boolean> => {
   try {
     const granted = (await chrome.permissions.getAll()) as { data_collection?: string[] };
