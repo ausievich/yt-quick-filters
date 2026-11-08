@@ -4,7 +4,7 @@
     "description": "Laienduse nimi, mida kuvatakse Chrome'is ja Chrome'i veebipoes."
   },
   "extensionDescription": {
-    "message": "Lisage YouTracki Agile-tahvlitele kiirfiltri nupud. Kuvage kaartidel Created- ja Updated-sildid.",
+    "message": "Lisage YouTracki Agile-tahvlitele kiirfiltri nupud.",
     "description": "Laienduse lühikirjeldus, mida kuvatakse Chrome'is ja Chrome'i veebipoes."
   }
 }

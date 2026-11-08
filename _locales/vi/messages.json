@@ -4,7 +4,7 @@
     "description": "Tên tiện ích mở rộng hiển thị trong Chrome và Cửa hàng Chrome trực tuyến."
   },
   "extensionDescription": {
-    "message": "Thêm các nút bộ lọc nhanh vào bảng Agile của YouTrack. Hiển thị nhãn Created và Updated trên các thẻ công việc.",
+    "message": "Thêm các nút bộ lọc nhanh vào bảng Agile của YouTrack.",
     "description": "Mô tả ngắn về tiện ích mở rộng hiển thị trong Chrome và Cửa hàng Chrome trực tuyến."
   }
 }
