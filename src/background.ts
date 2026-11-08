@@ -38,20 +38,14 @@ const pickAllowedProperties = (properties: AnalyticsProperties): AnalyticsProper
     ]),
   );
 
-type FirefoxApi = {
-  runtime?: { getBrowserInfo?: unknown };
-  permissions?: { contains?: (permissions: object) => Promise<boolean> };
-};
-
-// Firefox treats analytics as an optional data collection permission the user can decline.
-// Chrome has no such permission, so analytics stay on there. Chrome also exposes a `browser`
-// global now, so Firefox is detected by `runtime.getBrowserInfo`, which only Firefox has.
+// Firefox 140+ treats analytics as an optional data collection permission the user can decline,
+// and reports the granted ones in `data_collection`. Browsers without that permission (Chrome,
+// older Firefox) have no such field, so there is no choice to respect and analytics stay on.
 const isAnalyticsAllowed = async (): Promise<boolean> => {
-  const firefox = (globalThis as { browser?: FirefoxApi }).browser;
-  if (!firefox?.runtime?.getBrowserInfo || !firefox.permissions?.contains) return true;
-
   try {
-    return await firefox.permissions.contains({ data_collection: ['technicalAndInteraction'] });
+    const granted = (await chrome.permissions.getAll()) as { data_collection?: string[] };
+    if (!Array.isArray(granted.data_collection)) return true;
+    return granted.data_collection.includes('technicalAndInteraction');
   } catch {
     // Firefox versions without data collection permissions reject the unknown key.
     return true;
